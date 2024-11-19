@@ -11,7 +11,7 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.2
         version: 5.1.2(astro@4.16.11(rollup@4.25.0)(typescript@5.6.3))(tailwindcss@3.4.14)
-      '@fontsource-variable/lora':
+      '@fontsource-variable/petrona':
         specifier: ^5.1.0
         version: 5.1.0
       astro:
@@ -278,8 +278,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/lora@5.1.0':
-    resolution: {integrity: sha512-dYb/q3hMuabXDy3yHTtjIn+nzYIJ+jguULrPelHPBfGFlvwTI0HAETP+tZm/0aRISD7q2nWTK3tQA8GFZRDTmg==}
+  '@fontsource-variable/petrona@5.1.0':
+    resolution: {integrity: sha512-Z+VUOn57w7k6Xb78+mdnww/wk9AmsmoVLd7ifx7s01xU0Dc2eETFKTV7PJAyDFc3EF8HiY2PZ31cbTEHNpI/4A==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -2081,7 +2081,7 @@ snapshots:
   '@esbuild/win32-x64@0.21.5':
     optional: true
 
-  '@fontsource-variable/lora@5.1.0': {}
+  '@fontsource-variable/petrona@5.1.0': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
