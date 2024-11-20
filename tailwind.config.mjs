@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         default: "#FEFDFA",
+        accent: "#2E6F40",
       },
       fontFamily: {
         serif: ['"Petrona Variable"', ...defaultTheme.fontFamily.serif],
