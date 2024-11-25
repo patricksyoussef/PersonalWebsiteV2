@@ -1,11 +1,12 @@
 ---
-import Header from "../components/Header/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <BaseLayout title="Home">
   <Header />
-  <div class="grid gap-2 grid-cols-1 auto-rows-fr sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <div class="py-common grid gap-common grid-cols-1 auto-rows-fr sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
     <div class="row-span-2 pb-2 sm:col-span-2 lg:aspect-square"></div>
     <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2 pb-2"></div>
     <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
@@ -14,4 +15,5 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2"></div>
     <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
   </div>
+  <Footer />
 </BaseLayout>
