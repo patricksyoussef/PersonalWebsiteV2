@@ -1,0 +1,16 @@
+---
+import ResumeButton from "./ResumeButton.astro";
+import TitleName from "./TitleName.astro";
+import NavItems from "./NavItems.astro";
+import Underline from "../Underline.astro";
+---
+
+<Underline>
+  <div class="py-2">
+    <div class="flex justify-between items-center">
+      <TitleName path="/" text="Patrick" />
+      <NavItems />
+      <ResumeButton path="/PatrickYoussefResume.pdf" text="Resume" />
+    </div>
+  </div>
+</Underline>

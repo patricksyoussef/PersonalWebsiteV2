@@ -1,6 +1,5 @@
 ---
-import "@fontsource-variable/petrona/wght.css";
-import "@fontsource-variable/petrona/wght-italic.css";
+import "@fontsource-variable/dm-sans/opsz.css";
 
 const { title } = Astro.props;
 const pageTitle = title ? `${title} | Patrick Youssef` : "Patrick Youssef";
@@ -10,13 +9,14 @@ const pageTitle = title ? `${title} | Patrick Youssef` : "Patrick Youssef";
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon_rocket.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
   </head>
-  <body class="bg-default font-serif">
+  <body class="bg-background font-sans">
     <div class="h-2 bg-accent"></div>
-    <div class="max-w-base w-full mx-auto p-6">
-      <div><slot /></div>
+    <div class="max-w-base w-full mx-auto px-6">
+      <div class="text-3xl"><slot /></div>
     </div>
   </body>
 </html>

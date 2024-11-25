@@ -1,0 +1,10 @@
+---
+const { path, text } = Astro.props;
+---
+
+<a href={path}>
+  <span class="flex font-medium text-2xl/4">
+    <div>{text}</div>
+    <div class="text-accent">.</div>
+  </span>
+</a>

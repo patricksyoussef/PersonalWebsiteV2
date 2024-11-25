@@ -1,18 +1,17 @@
 ---
+import Header from "../components/Header/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Home">
-  <p>
-    Hey, I'm Patrick 👋 I build sustainable solutions to real-world problems for
-    an exciting future.
-  </p>
-  <p>
-    Previously, I completed my Computer Science MS and developed Simulation
-    Software @ SpaceX.
-  </p>
-  <p>
-    Currently, I'm a Software Engineer II working on Simulations for Autonomy @
-    Rivian!
-  </p>
+  <Header />
+  <div class="grid gap-2 grid-cols-1 auto-rows-fr sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="row-span-2 pb-2 sm:col-span-2 lg:aspect-square"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2 pb-2"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2"></div>
+    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
+  </div>
 </BaseLayout>

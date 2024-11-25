@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        default: "#FEFDFA",
-        accent: "#2E6F40",
+        background: "#FEFDFA",
+        accent: "#2563eb",
       },
       fontFamily: {
-        serif: ['"Petrona Variable"', ...defaultTheme.fontFamily.serif],
+        sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.serif],
       },
       maxWidth: {
         base: "1500px",
