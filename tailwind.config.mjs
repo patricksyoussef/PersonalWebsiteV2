@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#FEFDFA",
+        background: "#FDFDFD",
         accent: "#2563eb",
         edge: colors.gray[500],
       },
@@ -19,7 +19,7 @@ export default {
         base: "1500px",
       },
       spacing: {
-        common: "0.75rem",
+        common: "0.5rem",
       },
     },
   },

@@ -1,0 +1,16 @@
+---
+export const sizes = {
+  small: "",
+  medium: "sm:col-span-2 pb-2",
+  large: "row-span-2 sm:col-span-2 lg:aspect-square",
+  wide: "sm:col-span-2",
+};
+
+const { size = "small", className = "" } = Astro.props;
+
+const sizeClass = sizes[size] || "";
+---
+
+<div class={`${sizeClass} ${className}`}>
+  <slot />
+</div>

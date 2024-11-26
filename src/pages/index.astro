@@ -1,19 +1,28 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/Header/Header.astro";
-import Footer from "../components/Footer.astro";
+import Bento from "../components/Bento/Bento.astro";
+import BentoCard from "../components/Bento/Cards/BentoCard.astro";
+import BlogCard from "../components/Bento/Cards/BlogCard.astro";
+import Hero from "../components/Hero/Hero.astro";
 ---
 
 <BaseLayout title="Home">
-  <Header />
-  <div class="py-common grid gap-common grid-cols-1 auto-rows-fr sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    <div class="row-span-2 pb-2 sm:col-span-2 lg:aspect-square"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2 pb-2"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg sm:col-span-2"></div>
-    <div class="bg-blue-100 border-2 border-black rounded-lg"></div>
-  </div>
-  <Footer />
+  <Bento>
+    <BentoCard size="large">
+      <Hero />
+    </BentoCard>
+    <BlogCard size="medium" />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard size="medium" />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard />
+    <BlogCard size="medium" />
+    <BlogCard />
+    <BlogCard />
+  </Bento>
 </BaseLayout>

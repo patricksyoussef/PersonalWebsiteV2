@@ -1,0 +1,9 @@
+---
+import BentoCard from "./BentoCard.astro";
+
+const { size = "small", extraStyles = "" } = Astro.props;
+---
+
+<BentoCard size={size} className={`border-[1px] border-edge rounded-lg hover:bg-blue-200 ${extraStyles}`}>
+  <slot />
+</BentoCard>
