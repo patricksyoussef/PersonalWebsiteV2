@@ -2,9 +2,9 @@
 import Socials from "./Socials.astro";
 import "./styles.css";
 
-import { getEntry } from "astro:content";
+import { getEntry, render } from "astro:content";
 const entry = await getEntry("supplements", "hero");
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 ---
 
 <div class="text-4xl p-4 pl-0 flex flex-col space-y-8 font-light text-gray-600 leading-normal">
