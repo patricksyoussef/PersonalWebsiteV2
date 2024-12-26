@@ -1,11 +1,5 @@
 ---
 ---
-Hey, I'm **Patrick** 👋, welcome!
+Hey, I’m Patrick 👋 I build engineering solutions that are scalable, adaptable, and meaningful — creating technology that can make a lasting impact.
 
-I enjoy building sustainable solutions to difficult real-world problems, currently a **Simulation Software Engineer II** helping to solve **Autonomy @ Rivian**.
-
-Previously, I completed my Computer Science MS and developed **Simulation Software @ SpaceX** in pursuit of the first private crewed-launches.
-
-In my free time I enjoy writing new blog posts, divulging on spurious topics off my head, and being extra technical about my coffee and baking hobbies.
-
-Something about getting in touch...
+I hold a Computer Science MS and have experience developing Simulation Software at SpaceX. Currently, as a Software Engineer II at Rivian, I work on autonomous vehicle systems simulation.

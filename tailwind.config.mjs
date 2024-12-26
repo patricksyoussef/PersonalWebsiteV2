@@ -8,8 +8,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#FDFDFD",
-        accent: "#2563eb",
+        background: "rgba(37, 99, 235, 0.02)",
+        accent: "rgba(37, 99, 235, 1.0)",
         edge: colors.gray[500],
       },
       fontFamily: {
@@ -19,7 +19,7 @@ export default {
         base: "1500px",
       },
       spacing: {
-        common: "0.5rem",
+        common: "0.75rem",
       },
     },
   },
