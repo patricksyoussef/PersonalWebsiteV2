@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "rgba(37, 99, 235, 0.02)",
+        background: "rgba(37, 99, 235, 0.01)",
         accent: "rgba(37, 99, 235, 1.0)",
         edge: colors.gray[500],
       },
