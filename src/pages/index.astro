@@ -1,16 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Bento from "../components/Bento/Bento.astro";
-import BentoCard from "../components/Bento/Cards/BentoCard.astro";
 import BlogCard from "../components/Bento/Cards/BlogCard.astro";
 import Hero from "../components/Hero/Hero.astro";
 ---
 
 <BaseLayout title="Home">
   <Bento>
-    <BentoCard size="large">
-      <Hero />
-    </BentoCard>
+    <Hero />
     <BlogCard size="medium" />
     <BlogCard />
     <BlogCard />
