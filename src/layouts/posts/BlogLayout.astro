@@ -1,8 +1,12 @@
 ---
 import BaseLayout from "../BaseLayout.astro";
-const { frontmatter } = Astro.props;
+import { render } from "astro:content";
+
+const { entry } = Astro.props;
+const frontmatter = entry.data;
+const { Content } = await render(entry);
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <div>{frontmatter.date}</div>
+  <Content />
 </BaseLayout>
