@@ -28,6 +28,11 @@ const elements = [
     props: { entry: entry },
   })),
 ];
+
+// Sort Entries
+elements.sort((a, b) => {
+  return new Date(b.props.entry.data.date) - new Date(a.props.entry.data.date);
+});
 ---
 
 <BaseLayout title="Home">

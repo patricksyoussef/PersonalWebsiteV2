@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content";
 
-export const isPublished = (entry) => entry.data.draft !== true;
+export const isPublished = (entry) => entry.data.published === true;
 export const isPinned = (entry) => entry.data.pinned === true;
 
 // General retrieve / filter for collections
@@ -10,8 +10,21 @@ export async function getFilteredEntries(collectionName, filters = []) {
 }
 
 // Assume we only want published entries
-export function getPublishedEntries(collectionName, pinned = false) {
+export async function getPublishedEntries(
+  collectionName,
+  pinned = false,
+  dateSort = true,
+) {
   let filters = [isPublished, ...(pinned ? [isPinned] : [])];
-  let entities = getFilteredEntries(collectionName, filters);
+  let entities = await getFilteredEntries(collectionName, filters);
+  if (dateSort) {
+    entities = sortEntries(entities);
+  }
   return entities;
+}
+
+export function sortEntries(entries) {
+  return entries.sort((a, b) => {
+    return new Date(b.data.date) - new Date(a.data.date);
+  });
 }

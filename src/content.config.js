@@ -9,7 +9,7 @@ function createBaseSchema() {
     date: z.date(), // Publication date
     description: z.string().optional(), // A brief summary of the post
     tags: z.array(z.string()).default([]), // Array of strings, defaults to empty
-    draft: z.boolean().default(false), // Defaults to false
+    published: z.boolean().default(true), // Defaults to true
     pinned: z.boolean().default(false), // Defaults to false
   });
 }

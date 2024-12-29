@@ -7,5 +7,5 @@ const path = `/blog/${entry.data.slug}`;
 ---
 
 <BentoCard size={size} path={path} className={`border-[1px] border-edge rounded-lg hover:bg-blue-200`} extraStyle={extraStyle}>
-  <div>This is some blog content</div>
+  <div>{entry.data.title}</div>
 </BentoCard>
