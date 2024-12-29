@@ -6,12 +6,12 @@ export const sizes = {
   wide: "sm:col-span-2",
 };
 
-const { size = "small", className = "", path } = Astro.props;
+const { size = "small", className = "", path, extraStyle = "" } = Astro.props;
 const sizeClass = sizes[size] || "";
 ---
 
-<div class={`${sizeClass} ${className}`}>
-  <a href={path} class="w-fit h-fit">
+<div class={`${sizeClass} ${className} ${extraStyle}`}>
+  <a href={path}>
     <slot />
   </a>
 </div>

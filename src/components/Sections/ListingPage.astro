@@ -1,24 +1,43 @@
 ---
 import { getPublishedEntries } from "../../utils";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import BentoCard from "../Bento/Cards/BentoCard.astro";
 import Bento from "../Bento/Bento.astro";
+import BlogCard from "../Bento/Cards/BlogCard.astro";
+import ProjectCard from "../Bento/Cards/ProjectCard.astro";
+import MusingsCard from "../Bento/Cards/MusingsCard.astro";
 
 // Retrieve requested collection
 const { collectionName, title, subtitle, flavorText } = Astro.props;
 
 // Extract all blog posts from collections
 const content = await getPublishedEntries(collectionName, false);
+
+// Determine Component to Render
+const componentMap = {
+  blog: BlogCard,
+  projects: ProjectCard,
+  musings: MusingsCard,
+};
+const Component = componentMap[collectionName];
+
+// Fix Aspect Ratio
+const aspectRatios = {
+  blog: "aspect-[1/1]",
+  projects: "aspect-[2/1]",
+  musings: "aspect-[1/1]",
+};
+const aspectRatio = aspectRatios[collectionName];
 ---
 
 <BaseLayout title={title}>
+  <div class="w-[50%] pb-2">
+    <span class="flex text-[5rem] font-[200]">
+      <div>{subtitle}</div>
+      <div class="text-accent">.</div>
+    </span>
+    <div class="text-[1.25rem]">{flavorText}</div>
+  </div>
   <Bento>
-    <BentoCard size="medium">
-      <h1>{subtitle}</h1>
-      <div>{flavorText}</div>
-    </BentoCard>
-    <BentoCard>
-      <ul>{content.map((entry) => <a href={`/${collectionName}/${entry.data.slug}`}>{entry.data.title}</a>)}</ul>
-    </BentoCard>
+    {content.map((entry) => <Component extraStyle={aspectRatio} entry={entry} />)}
   </Bento>
 </BaseLayout>
