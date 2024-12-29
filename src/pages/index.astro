@@ -2,24 +2,37 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Bento from "../components/Bento/Bento.astro";
 import BlogCard from "../components/Bento/Cards/BlogCard.astro";
+import ProjectCard from "../components/Bento/Cards/ProjectCard.astro";
+import MusingsCard from "../components/Bento/Cards/MusingsCard.astro";
 import Hero from "../components/Hero/Hero.astro";
+
+import { getPublishedEntries } from "../utils";
+
+// Fetch Pinned Posts
+let blogs = await getPublishedEntries("blog", true);
+let projects = await getPublishedEntries("projects", true);
+let musings = await getPublishedEntries("musings", true);
+
+// Map Posts to Components
+const elements = [
+  ...blogs.map((entry) => ({
+    component: BlogCard,
+    props: { entry: entry },
+  })),
+  ...projects.map((entry) => ({
+    component: ProjectCard,
+    props: { entry: entry },
+  })),
+  ...musings.map((entry) => ({
+    component: MusingsCard,
+    props: { entry: entry },
+  })),
+];
 ---
 
 <BaseLayout title="Home">
   <Bento>
     <Hero />
-    <BlogCard size="medium" />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard size="medium" />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard />
-    <BlogCard size="medium" />
-    <BlogCard />
-    <BlogCard />
+    {elements.map(({ component: Component, props }) => <Component {...props} />)}
   </Bento>
 </BaseLayout>

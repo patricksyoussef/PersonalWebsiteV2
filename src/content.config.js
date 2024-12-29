@@ -16,7 +16,19 @@ function createBaseSchema() {
 
 // Create the blog collection using our schema
 const blog = defineCollection({
-  loader: glob({ pattern: ["**/*.md"], base: "./src/content/blog" }),
+  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/blog" }),
+  schema: createBaseSchema(),
+});
+
+// Create the projects collection using our schema
+const projects = defineCollection({
+  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/projects" }),
+  schema: createBaseSchema(),
+});
+
+// Create the musings collection using our schema
+const musings = defineCollection({
+  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/musings" }),
   schema: createBaseSchema(),
 });
 
@@ -25,4 +37,4 @@ const supplements = defineCollection({
   loader: glob({ pattern: ["*.md"], base: "./src/content/supplements" }),
 });
 
-export const collections = { blog, supplements };
+export const collections = { blog, projects, musings, supplements };

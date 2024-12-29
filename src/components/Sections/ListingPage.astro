@@ -1,0 +1,24 @@
+---
+import { getPublishedEntries } from "../../utils";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BentoCard from "../Bento/Cards/BentoCard.astro";
+import Bento from "../Bento/Bento.astro";
+
+// Retrieve requested collection
+const { collectionName, title, subtitle, flavorText } = Astro.props;
+
+// Extract all blog posts from collections
+const content = await getPublishedEntries(collectionName, false);
+---
+
+<BaseLayout title={title}>
+  <Bento>
+    <BentoCard size="medium">
+      <h1>{subtitle}</h1>
+      <div>{flavorText}</div>
+    </BentoCard>
+    <BentoCard>
+      <ul>{content.map((entry) => <a href={`/${collectionName}/${entry.data.slug}`}>{entry.data.title}</a>)}</ul>
+    </BentoCard>
+  </Bento>
+</BaseLayout>
