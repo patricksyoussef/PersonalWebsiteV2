@@ -13,13 +13,14 @@ export default {
         edge: colors.gray[500],
       },
       fontFamily: {
-        sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.serif],
+        sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.sans],
+        serif: ['"Petrona Variable"', ...defaultTheme.fontFamily.serif],
       },
       maxWidth: {
         base: "1500px",
       },
       spacing: {
-        common: "0.75rem",
+        common: "1rem",
       },
     },
   },
