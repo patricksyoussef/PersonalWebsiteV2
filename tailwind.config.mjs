@@ -18,6 +18,7 @@ export default {
       },
       maxWidth: {
         base: "1500px",
+        content: "1000px",
       },
       spacing: {
         common: "1rem",

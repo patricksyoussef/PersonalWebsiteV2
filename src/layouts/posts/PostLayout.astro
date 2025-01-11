@@ -1,12 +1,18 @@
 ---
 import BaseLayout from "../BaseLayout.astro";
 import { render } from "astro:content";
+import "./base.css";
 
 const { entry } = Astro.props;
 const frontmatter = entry.data;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={frontmatter.title}>
-  <Content />
+<BaseLayout title={frontmatter.title} class="post-layout">
+  <div class="post-content max-w-content">
+    <Content />
+  </div>
+  <aside class="post-aside">
+    <div>Random Aside Content</div>
+  </aside>
 </BaseLayout>

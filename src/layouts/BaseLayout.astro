@@ -19,10 +19,12 @@ const pageTitle = title ? `${title} | Patrick Youssef` : "Patrick Youssef";
   </head>
   <body class="bg-background font-sans">
     <div class="h-2 bg-accent"></div>
-    <div class="max-w-base w-full mx-auto px-6">
-      <Header />
-      <slot />
-      <Footer />
+    <div class="mx-6">
+      <div class="max-w-base w-full mx-auto">
+        <Header />
+        <slot />
+        <Footer />
+      </div>
     </div>
   </body>
 </html>
