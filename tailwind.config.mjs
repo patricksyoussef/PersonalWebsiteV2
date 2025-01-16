@@ -10,6 +10,7 @@ export default {
       colors: {
         background: "rgba(37, 99, 235, 0.01)",
         accent: "rgba(37, 99, 235, 1.0)",
+        darken: "rgba(0, 0, 0, 0.05)",
         edge: colors.gray[500],
       },
       fontFamily: {
