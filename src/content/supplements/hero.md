@@ -1,7 +1,7 @@
----
----
-Hey, I’m Patrick 👋 I build engineering solutions that are scalable, adaptable, and meaningful — creating technology for a lasting impact.
+I solve real-world problems at the intersection of engineering and technology, driven by a fascination with how thoughtful design can shape the future.
 
-Previously, I completed my **<a href="/PatrickYoussefResume.pdf" target="_blank">Computer Science MS</a>** at UCSD and developed **<a href="/PatrickYoussefResume.pdf" target="_blank">Simulation Software @ SpaceX</a>** for Crew Dragon.
+Right now, I’m at Rivian, where I develop simulations to guide autonomous vehicles through the complexities of the real world. Before this, I worked on Crew Dragon’s flight simulations at SpaceX, building tools that helped ensure safe journeys beyond Earth’s atmosphere.
 
-Currently, I'm a <a href="https://www.linkedin.com/in/patricksyoussef/" target="_blank">Software Engineer II</a> working on Simulations for <a href="https://www.rivian.com" target="_blank">Autonomy @ Rivian</a>!
+Whether it’s training AI models, mentoring the next generation of engineers, or designing better tools for exploration, I’m drawn to projects that are equal parts ambitious and meaningful.
+
+Beyond the screen, I enjoy running, brewing the perfect cup of coffee, and diving deep into the details of whatever’s caught my curiosity that week. If you’re also curious about building something impactful, I’d love to connect.
