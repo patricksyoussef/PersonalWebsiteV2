@@ -1,35 +1,35 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-// Base schema to be inherited for blog, projects, and musings
-function createBaseSchema() {
+function createBaseSchema(imageSchema) {
   return z.object({
-    title: z.string(), // The post title
-    slug: z.string(), // The URL-friendly version of the title
-    date: z.date(), // Publication date
-    description: z.string().optional(), // A brief summary of the post
-    tags: z.array(z.string()).default([]), // Array of strings, defaults to empty
-    published: z.boolean().default(true), // Defaults to true
-    pinned: z.boolean().default(false), // Defaults to false
+    title: z.string(),
+    slug: z.string(),
+    date: z.date(),
+    description: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    cover: imageSchema, // Using dynamic schema for image
+    published: z.boolean().default(true),
+    pinned: z.boolean().default(false),
   });
 }
 
 // Create the blog collection using our schema
 const blog = defineCollection({
   loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/blog" }),
-  schema: createBaseSchema(),
+  schema: ({ image }) => createBaseSchema(image()),
 });
 
 // Create the projects collection using our schema
 const projects = defineCollection({
   loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/projects" }),
-  schema: createBaseSchema(),
+  schema: ({ image }) => createBaseSchema(image()),
 });
 
 // Create the musings collection using our schema
 const musings = defineCollection({
   loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/musings" }),
-  schema: createBaseSchema(),
+  schema: ({ image }) => createBaseSchema(image()),
 });
 
 // Create the supplements collection using no schema
