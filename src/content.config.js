@@ -1,7 +1,7 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-function createBaseSchema(imageSchema) {
+function createBaseSchema(imageSchema = z.any().optional()) {
   return z.object({
     title: z.string(),
     slug: z.string(),
@@ -29,7 +29,7 @@ const projects = defineCollection({
 // Create the musings collection using our schema
 const musings = defineCollection({
   loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/musings" }),
-  schema: ({ image }) => createBaseSchema(image()),
+  schema: () => createBaseSchema(),
 });
 
 // Create the supplements collection using no schema
