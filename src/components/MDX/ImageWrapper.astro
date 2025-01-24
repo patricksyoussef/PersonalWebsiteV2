@@ -1,0 +1,11 @@
+---
+import { Image } from "astro:assets";
+const { src, alt, otherProps } = Astro.props;
+---
+
+<div {...otherProps}>
+  <div class="rounded-content overflow-clip shadow-lg mb-2 border-edge border-[1px]">
+    <Image src={src} alt="" />
+  </div>
+  <div class="text-center">{alt}</div>
+</div>

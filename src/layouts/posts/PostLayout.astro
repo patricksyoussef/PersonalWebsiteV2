@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../BaseLayout.astro";
 import { render } from "astro:content";
+import "../styles/post_base.css";
 
 const { entry } = Astro.props;
 const frontmatter = entry.data;
@@ -8,17 +9,19 @@ const { Content } = await render(entry);
 
 // Form the markdown overrides
 import BlockQuote from "../../components/MDX/Blockquote.astro";
-import HeaderLink from "../../components/MDX/HeaderLink.astro";
+import H1 from "../../components/MDX/H1.astro";
 import P from "../../components/MDX/P.astro";
+import ImageWrapper from "../../components/MDX/ImageWrapper.astro";
 const components = {
-  h1: HeaderLink,
+  h1: H1,
   blockquote: BlockQuote,
   p: P,
+  img: ImageWrapper,
 };
 ---
 
 <BaseLayout title={frontmatter.title} class="post-layout">
-  <div class="post-content max-w-content mx-auto">
+  <div class="post-content max-w-content mx-auto space-y-[0.75rem]">
     <Content components={components} />
   </div>
 </BaseLayout>

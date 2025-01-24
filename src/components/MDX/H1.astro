@@ -1,0 +1,12 @@
+---
+const { id } = Astro.props;
+import Underline from "../Underline.astro";
+---
+
+<Underline>
+  <a href={`#${id}`}>
+    <h1 id={id}>
+      <slot />
+    </h1>
+  </a>
+</Underline>
