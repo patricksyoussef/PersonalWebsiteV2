@@ -7,7 +7,11 @@ const { entry, extraStyle } = Astro.props;
 const path = `/projects/${entry.data.slug}`;
 ---
 
-<BentoCard size={size} path={path} className={`border-[1px] border-edge rounded-lg hover:bg-blue-200`} extraStyle={extraStyle}>
-  <div>{entry.data.title}</div>
-  <Image src={entry.data.cover} alt="" />
+<BentoCard size={size} path={path} className={`border-[1px] border-edge rounded-cards hover:bg-blue-200`} extraStyle={extraStyle}>
+  <div class="flex flex-row h-full">
+    <div class="flex-grow">{entry.data.title}</div>
+    <div class="max-w-[40%]">
+      <Image src={entry.data.cover} alt="" class="object-cover h-full w-full overflow-clip rounded-cards shadow-left-lg" />
+    </div>
+  </div>
 </BentoCard>

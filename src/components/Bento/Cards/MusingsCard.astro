@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import BentoCard from "./BentoCard.astro";
 
 const size = "small";
@@ -9,5 +8,4 @@ const path = `/musings/${entry.data.slug}`;
 
 <BentoCard size={size} path={path} className={`border-[1px] border-edge rounded-lg hover:bg-blue-200`} extraStyle={extraStyle}>
   <div>{entry.data.title}</div>
-  <Image src={entry.data.cover} alt="" />
 </BentoCard>
