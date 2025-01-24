@@ -2,6 +2,9 @@
 const props = Astro.props;
 ---
 
-<blockquote {...props} class="p-4 border-l-content border-accent rounded-content bg-darken">
-  <slot />
+<blockquote {...props} class="flex flex-row">
+  <div class="w-2 bg-accent rounded-l-content"></div>
+  <div class="p-4 w-full bg-gray-100 border-edge border-[1px] rounded-content border-l-0 rounded-l-[0px]">
+    <slot />
+  </div>
 </blockquote>
