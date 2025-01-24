@@ -1,5 +1,3 @@
-/** @type {import('tailwindcss').Config} */
-
 import defaultTheme from "tailwindcss/defaultTheme";
 const colors = require("tailwindcss/colors");
 
@@ -11,7 +9,8 @@ export default {
         background: "rgba(37, 99, 235, 0.01)",
         accent: "rgba(37, 99, 235, 1.0)",
         darken: "rgba(0, 0, 0, 0.05)",
-        edge: colors.gray[500],
+        edge: colors.gray[300],
+        light: colors.neutral[600],
       },
       fontFamily: {
         sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.sans],
@@ -19,10 +18,23 @@ export default {
       },
       maxWidth: {
         base: "1500px",
-        content: "1000px",
+        content: "850px",
       },
       spacing: {
         common: "1rem",
+        intra: "1rem",
+        content: "0.5rem",
+        cards: "0.75rem",
+      },
+      borderWidth: (theme) => ({
+        content: theme("spacing.content"),
+      }),
+      borderRadius: (theme) => ({
+        cards: theme("spacing.cards"),
+        content: theme("spacing.content"),
+      }),
+      boxShadow: {
+        "left-lg": "-10px 0 15px -3px rgba(0, 0, 0, 0.25)", // Large left shadow
       },
     },
   },
