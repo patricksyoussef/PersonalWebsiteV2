@@ -8,7 +8,7 @@ export default {
       colors: {
         background: "rgba(37, 99, 235, 0.01)",
         accent: "rgba(37, 99, 235, 1.0)",
-        darken: "rgba(0, 0, 0, 0.05)",
+        darken: "rgba(0, 0, 0, 0.03)",
         edge: colors.neutral[300],
         extralight: colors.neutral[500],
         light: colors.neutral[600],
