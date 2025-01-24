@@ -3,25 +3,33 @@ import BaseLayout from "../BaseLayout.astro";
 import { render } from "astro:content";
 import "../styles/post_base.css";
 
-const { entry } = Astro.props;
+const { entry, contentStyle = "" } = Astro.props;
 const frontmatter = entry.data;
 const { Content } = await render(entry);
 
 // Form the markdown overrides
 import BlockQuote from "../../components/MDX/Blockquote.astro";
+import PostVideo from "../../components/MDX/PostVideo.astro";
+import Tex from "../../components/MDX/Tex.astro";
 import H1 from "../../components/MDX/H1.astro";
 import P from "../../components/MDX/P.astro";
 import ImageWrapper from "../../components/MDX/ImageWrapper.astro";
+import UL from "../../components/MDX/UL.astro";
+import OL from "../../components/MDX/OL.astro";
+
 const components = {
   h1: H1,
   blockquote: BlockQuote,
   p: P,
   img: ImageWrapper,
+  ul: UL,
+  ol: OL,
+  ...{ Tex, PostVideo },
 };
 ---
 
-<BaseLayout title={frontmatter.title} class="post-layout">
-  <div class="post-content max-w-content mx-auto space-y-[0.75rem]">
+<BaseLayout title={frontmatter.title}>
+  <div class={`post-content max-w-content mx-auto space-y-[0.75rem] ${contentStyle}`}>
     <Content components={components} />
   </div>
 </BaseLayout>

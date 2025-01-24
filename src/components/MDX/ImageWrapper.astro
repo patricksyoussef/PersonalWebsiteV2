@@ -1,11 +1,12 @@
 ---
 import { Image } from "astro:assets";
+import ContentWrapper from "./ContentWrapper.astro";
 const { src, alt, otherProps } = Astro.props;
 ---
 
 <div {...otherProps}>
-  <div class="rounded-content overflow-clip shadow-lg mb-2 border-edge border-[1px]">
+  <ContentWrapper>
     <Image src={src} alt="" />
-  </div>
+  </ContentWrapper>
   <div class="text-center">{alt}</div>
 </div>
