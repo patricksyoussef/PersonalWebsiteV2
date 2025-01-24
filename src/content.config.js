@@ -17,7 +17,7 @@ function createBaseSchema(imageSchema = z.any().optional()) {
 // Create the blog collection using our schema
 const blog = defineCollection({
   loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/blog" }),
-  schema: ({ image }) => createBaseSchema(image()),
+  schema: () => createBaseSchema(),
 });
 
 // Create the projects collection using our schema
