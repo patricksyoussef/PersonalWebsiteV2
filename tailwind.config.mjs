@@ -9,7 +9,8 @@ export default {
         background: "rgba(37, 99, 235, 0.01)",
         accent: "rgba(37, 99, 235, 1.0)",
         darken: "rgba(0, 0, 0, 0.05)",
-        edge: colors.gray[300],
+        edge: colors.neutral[300],
+        extralight: colors.neutral[500],
         light: colors.neutral[600],
       },
       fontFamily: {
@@ -23,7 +24,7 @@ export default {
       spacing: {
         common: "1rem",
         intra: "1rem",
-        content: "0.5rem",
+        content: "0.4rem",
         cards: "0.75rem",
       },
       borderWidth: (theme) => ({
