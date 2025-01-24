@@ -1,5 +1,4 @@
 ---
-
 published: true
 title: "Neural Nets: Gradient Descent"
 slug: neural-net-gradient-descent
@@ -11,7 +10,7 @@ excerpt: "The first in a series where I introduce how to implement gradient desc
 pinned: true
 ---
 
-import SeriesIntro from "../SeriesIntro.mdx"
+import SeriesIntro from "../SeriesIntro.md"
 
 <SeriesIntro/>
 
@@ -30,7 +29,7 @@ There are a few concepts that you should know before coming into this post, in g
 
 Before we step into how we use the gradient to help in our optimization problem, let's first build some understanding around the gradient. For those who are unfamiliar with partial derivatives or want a refresher you can take a look at the aside below.
 
-import PartialDeriv from "./asides/PartialDeriv.mdx"
+import PartialDeriv from "./asides/PartialDeriv.md"
 
 <Collapse title="Partial Derivative Refresher">
     <PartialDeriv/>
@@ -237,7 +236,7 @@ $$
 \frac{\partial L}{\partial b} = \frac{-2}{N} \sum^{n}_{i=1} (y_i - (wx_i + b))
 $$
 
-import LinearRegressionGrad from "./asides/LinearRegressionGrad.mdx"
+import LinearRegressionGrad from "./asides/LinearRegressionGrad.md"
 
 <Collapse title="Derivation of Gradients">
     <LinearRegressionGrad/>
