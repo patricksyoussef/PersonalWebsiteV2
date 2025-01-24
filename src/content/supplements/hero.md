@@ -1,7 +1,7 @@
-I solve real-world problems at the intersection of engineering and technology, driven by a fascination with how thoughtful design can shape the future.
+Hey, I’m Patrick 👋 I create systems that are intuitive and meaningful, tackling real-world challenges along the way.
 
-Right now, I’m at Rivian, where I develop simulations to guide autonomous vehicles through the complexities of the real world. Before this, I worked on Crew Dragon’s flight simulations at SpaceX, building tools that helped ensure safe journeys beyond Earth’s atmosphere.
+Previously, I developed simulation software @ SpaceX, supporting the first private crewed missions to the ISS.
 
-Whether it’s training AI models, mentoring the next generation of engineers, or designing better tools for exploration, I’m drawn to projects that are equal parts ambitious and meaningful.
+Currently, I’m an Autonomy Software Engineer II @ Rivian, building tools to scale simulations and provide insights.
 
-Beyond the screen, I enjoy running, brewing the perfect cup of coffee, and diving deep into the details of whatever’s caught my curiosity that week. If you’re also curious about building something impactful, I’d love to connect.
+Beyond the screen, I’m perfecting my coffee, running, or diving into projects that pique my interest and growth.
