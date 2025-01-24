@@ -30,12 +30,12 @@ const aspectRatio = aspectRatios[collectionName];
 ---
 
 <BaseLayout title={title}>
-  <div class="w-[50%] pb-2">
-    <span class="flex text-[5rem] font-serif font-[300]">
+  <div class="pb-2">
+    <span class="flex text-[2.75rem] lowercase font-serif font-[400] my-3">
       <div>{subtitle}</div>
       <div class="text-accent">.</div>
     </span>
-    <div class="text-[1.25rem]">{flavorText}</div>
+    <div class="text-base">{flavorText}</div>
   </div>
   <Bento>
     {content.map((entry) => <Component extraStyle={aspectRatio} entry={entry} />)}

@@ -1,7 +1,7 @@
 ---
-
+const { extraStyle } = Astro.props;
 ---
 
-<div class="border-b-[1px] border-edge">
+<div class={`border-b-[1px] border-edge ${extraStyle}`}>
   <slot />
 </div>
