@@ -12,6 +12,8 @@ pinned: true
 
 import Collapse from '../../../../../components/MDX/Collapse.jsx';
 import SeriesIntro from "../SeriesIntro.md"
+import PartialDeriv from "./asides/PartialDeriv.md"
+import LinearRegressionGrad from "./asides/LinearRegressionGrad.md"
 
 <SeriesIntro/>
 
@@ -29,8 +31,6 @@ There are a few concepts that you should know before coming into this post, in g
 # Gradients
 
 Before we step into how we use the gradient to help in our optimization problem, let's first build some understanding around the gradient. For those who are unfamiliar with partial derivatives or want a refresher you can take a look at the aside below.
-
-import PartialDeriv from "./asides/PartialDeriv.md"
 
 <Collapse client:load title="Partial Derivative Refresher">
     <PartialDeriv/>
@@ -105,7 +105,7 @@ In a convex function, there is only one minima and that implies it's the global 
 
 import grad from "./videos/grad.mp4";
 
-<PostVideo video={grad}/>
+<PostVideo video={grad} alt="Simple Convex Example"/>
 
 In the video, the blue represents the partial derivative $\partial f / \partial x$ so with descent we expect to go opposite this direction as we change the value of x with the negative of the gradient.
 
@@ -115,7 +115,7 @@ Let's consider a function where there are multiple minimas, in particular we hav
 
 import grad_problem from "./videos/grad_problem.mp4";
 
-<PostVideo video={grad_problem}/>
+<PostVideo video={grad_problem} alt="Multiple Minima Example"/>
 
 ### Resolutions
 
@@ -171,7 +171,7 @@ Let's go ahead and take a look at the hills example realized! What you can see i
 
 import hill_descent from "./videos/hill_descent.mp4";
 
-<PostVideo video={hill_descent} aspectRatio={2000 / 1100}/>
+<PostVideo video={hill_descent} aspectRatio={1.818} alt="Various Hill Descent"/>
 
  As we can see they all reach minimums which is what we expect! Something to note is that you can see that depending on where the points start they have a destined minimum they'll end up in, in other landscapes this may mean that a point will terminate at a local not a global minima!
 
@@ -237,8 +237,6 @@ $$
 \frac{\partial L}{\partial b} = \frac{-2}{N} \sum^{n}_{i=1} (y_i - (wx_i + b))
 $$
 
-import LinearRegressionGrad from "./asides/LinearRegressionGrad.md"
-
 <Collapse client:load title="Derivation of Gradients">
     <LinearRegressionGrad/>
 </Collapse>
@@ -263,7 +261,7 @@ What you can see in the video below is the loss landscape on the left and the hi
 
 import loss_travel from "./videos/loss_travel.mp4";
 
-<PostVideo video={loss_travel} aspectRatio={2000 / 1200}/>
+<PostVideo video={loss_travel} aspectRatio={1.666} alt="Loss Curve for Linear Dataset"/>
 
 One way to think about this is that the position of the point $(w,b)$ defines a line that will have a corresponding height that is the current loss. By traversing down the loss landscape we find the $(w,b)$ such that the corresponding loss in minimal.
 
@@ -281,7 +279,7 @@ The visualization here is similar to the prior but just with the parabolic data.
 
 import loss_travel_parabola from "./videos/loss_travel_parabola.mp4";
 
-<PostVideo video={loss_travel_parabola} aspectRatio={2000 / 1200}/>
+<PostVideo video={loss_travel_parabola} aspectRatio={1.666} alt="Loss Curve for Quadratic Dataset"/>
 
 ## Comparing Losses
 
@@ -305,8 +303,6 @@ So when we compare slices along the minimums of the loss landscapes we see that 
 # Learning Rate Tuning
 
 The learning rate $\alpha$ is generally regarded as how big of a step to take in the direction of the gradient during descent. Changing the value of the learning rate has massive implications on the descent time and results. Let's consider some example and try to understand how to pick an adequate value for the learning rate.
-
-## General Behaviors
 
 ## Comparing Learning Rates
 

@@ -17,7 +17,7 @@ $$
 $$
 
 $$
-\frac{\partial L}{\partial w} = \frac{\partial \text{Out}}{\partial w} \text{In} \frac{\partial \text{In}}{\partial w} 
+\frac{\partial L}{\partial w} = \frac{\partial \text{Out}}{\partial w} \text{In} \frac{\partial \text{In}}{\partial w}
 $$
 
 $$
