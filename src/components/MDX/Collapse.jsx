@@ -16,7 +16,7 @@ export default function Collapse({ title, defaultOpen = false, children }) {
   };
 
   return (
-    <div class="not-prose border border-gray-300 rounded-md p-3 mb-4 bg-gray-50">
+    <div class="my-5 border border-gray-300 rounded-md p-3 mb-4 bg-gray-50">
       <div
         class="cursor-pointer flex items-center justify-between"
         onClick={handleToggle}
