@@ -9,17 +9,21 @@ import preact from "@astrojs/preact";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind({
-    nesting: true,
-  }), astroExpressiveCode({
-    themes: ["light-plus"],
-    styleOverrides: {
-      // You can optionally override the plugin's default styles here
-      frames: {
-        editorBackground: "rgb(247, 247, 247)",
+  integrations: [
+    tailwind({
+      nesting: true,
+    }),
+    astroExpressiveCode({
+      themes: ["catppuccin-mocha"],
+      styleOverrides: {
+        frames: {
+          editorBackground: "hsl(221, 95%, 9%)",
+        },
       },
-    },
-  }), mdx(), preact()],
+    }),
+    mdx(),
+    preact(),
+  ],
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],

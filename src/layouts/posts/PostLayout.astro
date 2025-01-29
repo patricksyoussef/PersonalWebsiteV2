@@ -17,9 +17,10 @@ import ImageWrapper from "../../components/MDX/ImageWrapper.astro";
 import UL from "../../components/MDX/UL.astro";
 import OL from "../../components/MDX/OL.astro";
 import HR from "../../components/MDX/HR.astro";
+import Prose from "../../components/MDX/Prose.astro";
 
 const components = {
-  h1: H1,
+  // h1: H1,
   blockquote: BlockQuote,
   p: P,
   img: ImageWrapper,
@@ -31,7 +32,9 @@ const components = {
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <div class={`post-content max-w-content mx-auto space-y-[0.75rem] ${contentStyle}`}>
-    <Content components={components} />
-  </div>
+  <Prose>
+    <div class={`post-content max-w-content mx-auto space-y-[0.75rem] font-serif ${contentStyle}`}>
+      <Content components={components} />
+    </div>
+  </Prose>
 </BaseLayout>

@@ -10,7 +10,7 @@ export default {
         accent: "rgba(37, 99, 235, 1.0)",
         darken: "rgba(0, 0, 0, 0.03)",
         edge: colors.neutral[300],
-        extralight: colors.neutral[500],
+        extralight: "oklch(0.632 0 0);",
         light: colors.neutral[600],
       },
       fontFamily: {
@@ -39,5 +39,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
