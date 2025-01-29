@@ -16,19 +16,19 @@ function createBaseSchema(imageSchema = z.any().optional()) {
 
 // Create the blog collection using our schema
 const blog = defineCollection({
-  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/blog" }),
+  loader: glob({ pattern: ["**/index.mdx"], base: "./src/content/blog" }),
   schema: () => createBaseSchema(),
 });
 
 // Create the projects collection using our schema
 const projects = defineCollection({
-  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/projects" }),
+  loader: glob({ pattern: ["**/index.mdx"], base: "./src/content/projects" }),
   schema: ({ image }) => createBaseSchema(image()),
 });
 
 // Create the musings collection using our schema
 const musings = defineCollection({
-  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/musings" }),
+  loader: glob({ pattern: ["**/index.mdx"], base: "./src/content/musings" }),
   schema: () => createBaseSchema(),
 });
 
