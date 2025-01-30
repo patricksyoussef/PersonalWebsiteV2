@@ -47,6 +47,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
+      unist-util-visit:
+        specifier: ^5.0.0
+        version: 5.0.0
     devDependencies:
       '@tailwindcss/typography':
         specifier: ^0.5.16
