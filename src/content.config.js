@@ -29,7 +29,7 @@ const projects = defineCollection({
 // Create the musings collection using our schema
 const musings = defineCollection({
   loader: glob({ pattern: ["**/index.mdx"], base: "./src/content/musings" }),
-  schema: () => createBaseSchema(),
+  schema: ({ image }) => createBaseSchema(image()),
 });
 
 // Create the supplements collection using no schema
