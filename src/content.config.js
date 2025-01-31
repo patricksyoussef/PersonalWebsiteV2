@@ -8,6 +8,8 @@ function createBaseSchema(imageSchema = z.any().optional()) {
     date: z.date(),
     description: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    category: z.string().optional(),
+    excerpt: z.string().optional(),
     cover: imageSchema, // Using dynamic schema for image
     published: z.boolean().default(true),
     pinned: z.boolean().default(false),
