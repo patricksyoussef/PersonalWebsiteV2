@@ -1,13 +1,6 @@
 ---
 import BentoCard from "./BentoCard.astro";
-
-const {
-  size,
-  slug,
-  extraStyle = "",
-  commonClassName = "border-[1px] bg-gray-50 border-edge rounded-cards hover:bg-blue-200",
-  className = "",
-} = Astro.props;
+const { size, slug, extraStyle = "", commonClassName = "border-[1px] bg-gray-50 border-edge rounded-cards", className = "" } = Astro.props;
 
 // Combine provided class names with common styles.
 const combinedClassName = `${commonClassName} ${className}`;

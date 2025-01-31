@@ -19,14 +19,6 @@ const componentMap = {
   musings: MusingsCard,
 };
 const Component = componentMap[collectionName];
-
-// Fix Aspect Ratio
-const aspectRatios = {
-  blog: "aspect-[2/1]",
-  projects: "aspect-[2/1]",
-  musings: "aspect-[2/1]",
-};
-const aspectRatio = aspectRatios[collectionName];
 ---
 
 <BaseLayout title={title}>
@@ -38,6 +30,6 @@ const aspectRatio = aspectRatios[collectionName];
     <div class="text-base">{flavorText}</div>
   </div>
   <Bento>
-    {content.map((entry) => <Component extraStyle={aspectRatio} entry={entry} />)}
+    {content.map((entry) => <Component entry={entry} />)}
   </Bento>
 </BaseLayout>
