@@ -1,5 +1,11 @@
 ---
-
+import { LinkedinIcon, GithubIcon, SendIcon } from "astro-feather";
+const size = 30;
+const stroke = 1.5;
 ---
 
-<div>SOCIALS WILL BE HERE</div>
+<div class="flex flex-row space-x-4 text-black pt-3">
+  <LinkedinIcon size={size} strokeWidth={stroke} />
+  <GithubIcon size={size} strokeWidth={stroke} />
+  <SendIcon size={size} strokeWidth={stroke} />
+</div>
