@@ -3,10 +3,10 @@ import ContentCard from "./ContentCard.astro";
 import CommonContent from "./CommonContent.astro";
 
 const size = "blog";
-const { entry, extraStyle } = Astro.props;
+const { entry } = Astro.props;
 const slug = `/blog/${entry.data.slug}`;
 ---
 
-<ContentCard size={size} slug={slug} extraStyle={extraStyle}>
+<ContentCard size={size} slug={slug}>
   <CommonContent entry={entry} toolbarText={entry.data.category} />
 </ContentCard>

@@ -5,11 +5,11 @@ import CommonContent from "./CommonContent.astro";
 import { joinTags } from "../../../utils/cardUtils";
 
 const size = "project";
-const { entry, extraStyle } = Astro.props;
+const { entry } = Astro.props;
 const slug = `/projects/${entry.data.slug}`;
 ---
 
-<ContentCard size={size} slug={slug} extraStyle={extraStyle}>
+<ContentCard size={size} slug={slug}>
   <div class="flex flex-col h-full">
     <CommonContent entry={entry} toolbarText={joinTags(entry)} />
     <div class="max-h-[50%] min-h-[50%]">
