@@ -15,7 +15,7 @@ export default function Collapse({ title, defaultOpen = false, children }) {
       {/* Clickable Header */}
       <button class="cursor-pointer flex items-center justify-between w-full text-left" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
         <h3 class="m-0 font-medium">{title}</h3>
-        <span class={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true">
+        <span class={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6" />
           </svg>
@@ -25,11 +25,11 @@ export default function Collapse({ title, defaultOpen = false, children }) {
       {/* Collapsible Content */}
       <div
         ref={contentRef}
-        class="overflow-hidden transition-all duration-300 ease-in-out"
+        class="overflow-hidden transition-all duration-500 ease-in-out col"
         style={{ height: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px" }}
         aria-hidden={!isOpen}
       >
-        <div class="mt-2">{children}</div>
+        <div class="col">{children}</div>
       </div>
     </div>
   );
