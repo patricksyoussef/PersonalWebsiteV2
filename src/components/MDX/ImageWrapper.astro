@@ -4,7 +4,7 @@ import ContentWrapper from "./ContentWrapper.astro";
 const { src, alt, otherProps } = Astro.props;
 ---
 
-<div {...otherProps} class="not-prose">
+<div {...otherProps}>
   <ContentWrapper>
     <Image src={src} alt="" />
   </ContentWrapper>
