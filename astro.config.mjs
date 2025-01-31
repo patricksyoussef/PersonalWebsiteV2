@@ -19,4 +19,7 @@ export default defineConfig({
     remarkPlugins: [remarkMath, remarkReadingTime],
     rehypePlugins: [rehypeKatex],
   },
+  devToolbar: {
+    enabled: false,
+  },
 });
