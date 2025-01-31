@@ -5,3 +5,7 @@
 html {
     scroll-behavior: smooth;
 }
+
+.post-content > *:first-child {
+    margin-bottom: 0 !important;
+}
