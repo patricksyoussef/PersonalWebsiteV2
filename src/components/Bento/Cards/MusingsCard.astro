@@ -1,11 +1,11 @@
 ---
-import BentoCard from "./BentoCard.astro";
+import ContentCard from "./ContentCard.astro";
 
 const size = "small";
 const { entry, extraStyle } = Astro.props;
 const slug = `/musings/${entry.data.slug}`;
 ---
 
-<BentoCard size={size} slug={slug} className={`border-[1px] border-edge rounded-lg hover:bg-blue-200`} extraStyle={extraStyle}>
+<ContentCard size={size} slug={slug} extraStyle={extraStyle}>
   <div>{entry.data.title}</div>
-</BentoCard>
+</ContentCard>

@@ -1,17 +1,17 @@
 ---
 import { Image } from "astro:assets";
-import BentoCard from "./BentoCard.astro";
+import ContentCard from "./ContentCard.astro";
 
 const size = "medium";
 const { entry, extraStyle } = Astro.props;
 const slug = `/projects/${entry.data.slug}`;
 ---
 
-<BentoCard size={size} slug={slug} className={`border-[1px] border-edge rounded-cards hover:bg-blue-200`} extraStyle={extraStyle}>
+<ContentCard size={size} slug={slug} extraStyle={extraStyle}>
   <div class="flex flex-row h-full">
     <div class="flex-grow">{entry.data.title}</div>
-    <div class="max-w-[40%]">
+    <div class="max-w-[40%] sm:max-w-[50%]">
       <Image src={entry.data.cover} alt="" class="object-cover h-full w-full overflow-clip rounded-cards shadow-left-lg" />
     </div>
   </div>
-</BentoCard>
+</ContentCard>

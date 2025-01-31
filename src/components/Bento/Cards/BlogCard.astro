@@ -1,13 +1,29 @@
 ---
-import BentoCard from "./BentoCard.astro";
+import { ArrowUpRightIcon } from "astro-feather";
+import { render } from "astro:content";
+import ContentCard from "./ContentCard.astro";
 
 const size = "small";
 const { entry, extraStyle } = Astro.props;
 const slug = `/blog/${entry.data.slug}`;
+const { remarkPluginFrontmatter } = await render(entry);
+const dateString = entry.data.date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
 
-<BentoCard size={size} slug={slug} className={`border-[1px] border-edge rounded-xl hover:bg-blue-200`} extraStyle={extraStyle}>
-  <div class="h-full w-full">
-    <div>{entry.data.title}</div>
+<ContentCard size={size} slug={slug} extraStyle={extraStyle}>
+  <div class="p-3 flex flex-col justify-between h-full">
+    <div class="flex flex-row justify-between text-light">
+      <div>{entry.data.category}</div>
+      <ArrowUpRightIcon strokeWidth={1.5} size={"1.25rem"} />
+    </div>
+    <div class="space-y-1">
+      <div class="text-2xl font-medium">{entry.data.title}</div>
+      <div class="text-extralight">{dateString} · {remarkPluginFrontmatter.minutesRead}</div>
+      <div class="line-clamp-2">{entry.data.excerpt}</div>
+    </div>
   </div>
-</BentoCard>
+</ContentCard>
