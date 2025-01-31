@@ -3,21 +3,41 @@ published: true
 title: Testing Components
 slug: testing_components
 date: 2025-07-10
-cover: images/LintExample.png
+cover: assets/sigmoid.jpg
 tags: ["Python"]
 category: "Tutorial"
-excerpt: ""
+excerpt: "Just a way for me to test the MDX components that I expect in blog posts and get a view of what's going on."
 pinned: true
 ---
 
 import figure8 from "./assets/figure8_anim.mp4";
-
 import Collapse from '../../../../components/MDX/Collapse.jsx';
 
 
 # Heading 1
 ## Heading 2
 ### Heading 3
+
+## Code
+```python
+import numpy as np
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Useful for running matplotlib on high-dpi displays
+%config InlineBackend.figure_format='retina'
+```
+
+## Math Equations
+
+$$
+    \dot{x}=\frac{\Delta \text{Ticks} \, \pi \, \text{D}_{\text{wheel}}}{\Delta \tau \, \text{TPR}}
+$$
+
+Testing inline math $1+1=2$ and more
+
 
 ## Collapse
 
@@ -56,20 +76,10 @@ Here's a sentence with a footnote. [^1]
 - Level 1
   - Level 2
 
-# Latex
-
-export const f2 = '\\overbrace{a+b+c}^{\\text{a sum of three numbers}}';
-
-<Tex formula={f2}/>
-
-Testing inline math $1+1=2$ and more
-
 # Image
 
 ![Img Test](./assets/sigmoid.jpg)
 
 # Video
 
-<PostVideo video={figure8} _autoplay={false}/>
-
-<PostVideo video={figure8} _autoplay={true}/>
+<PostVideo video={figure8} alt="Wow"/>
