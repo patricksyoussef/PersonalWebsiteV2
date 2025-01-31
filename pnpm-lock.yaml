@@ -29,12 +29,21 @@ importers:
       astro-expressive-code:
         specifier: ^0.38.3
         version: 0.38.3(astro@5.1.1(jiti@2.4.2)(rollup@4.25.0)(typescript@5.6.3)(yaml@2.6.0))
+      astro-feather:
+        specifier: ^1.0.0
+        version: 1.0.0
       katex:
         specifier: ^0.16.21
         version: 0.16.21
+      mdast-util-to-string:
+        specifier: ^4.0.0
+        version: 4.0.0
       preact:
         specifier: ^10.25.4
         version: 10.25.4
+      reading-time:
+        specifier: ^1.5.0
+        version: 1.5.0
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
@@ -1004,6 +1013,9 @@ packages:
     resolution: {integrity: sha512-Tvdc7RV0G92BbtyEOsfJtXU35w41CkM94fOAzxbQP67Wj5jArfserJ321FO4XA7WG9QMV0GIBmQq77NBIRDzpQ==}
     peerDependencies:
       astro: ^4.0.0-beta || ^5.0.0-beta || ^3.3.0
+
+  astro-feather@1.0.0:
+    resolution: {integrity: sha512-PVIDwuKOv+sw/pqYysOVY4m77fUOYEKBn8R4l280muXXUuYZUoPRFYx8WoAigI+Yp3cKFY5pJecmtyT4RCnblA==}
 
   astro@5.1.1:
     resolution: {integrity: sha512-prpWC2PRs4P3FKQg6gZaU+VNMqbZi5pDvORGB2nrjfRjkrvF6/l4BqhvkJ6YQ0Ohm5rIMVz8ljgaRI77mLHbwg==}
@@ -2130,6 +2142,9 @@ packages:
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
+
+  reading-time@1.5.0:
+    resolution: {integrity: sha512-onYyVhBNr4CmAxFsKS7bz+uTLRakypIe4R+5A824vBSkQy/hB3fZepoVEf8OVAxzLvK+H/jm9TzpI3ETSm64Kg==}
 
   recma-build-jsx@1.0.0:
     resolution: {integrity: sha512-8GtdyqaBcDfva+GUKDr3nev3VpKAhup1+RvkMvUxURHpW7QyIvk9F5wz7Vzo06CEMSilw6uArgRqhpiUcWp8ew==}
@@ -3541,6 +3556,8 @@ snapshots:
     dependencies:
       astro: 5.1.1(jiti@2.4.2)(rollup@4.25.0)(typescript@5.6.3)(yaml@2.6.0)
       rehype-expressive-code: 0.38.3
+
+  astro-feather@1.0.0: {}
 
   astro@5.1.1(jiti@2.4.2)(rollup@4.25.0)(typescript@5.6.3)(yaml@2.6.0):
     dependencies:
@@ -5163,6 +5180,8 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
+
+  reading-time@1.5.0: {}
 
   recma-build-jsx@1.0.0:
     dependencies:

@@ -1,7 +1,7 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
-import { astroExpressiveCode } from "astro-expressive-code";
+import { remarkReadingTime } from "./src/utils/remarkReadingTime.mjs";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import preact from "@astrojs/preact";
@@ -12,19 +12,11 @@ export default defineConfig({
     tailwind({
       nesting: true,
     }),
-    astroExpressiveCode({
-      themes: ["catppuccin-mocha"],
-      styleOverrides: {
-        frames: {
-          editorBackground: "hsl(221, 95%, 9%)",
-        },
-      },
-    }),
     mdx(),
     preact(),
   ],
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkReadingTime],
     rehypePlugins: [rehypeKatex],
   },
 });
