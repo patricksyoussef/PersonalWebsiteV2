@@ -15,6 +15,6 @@ const readTimeString = readTime(entry);
   <div class="space-y-1">
     <div class="text-2xl font-medium">{entry.data.title}</div>
     <div class="text-extralight">{dateString} · {readTimeString}</div>
-    <div class="line-clamp-2">{entry.data.excerpt}</div>
+    <slot />
   </div>
 </div>

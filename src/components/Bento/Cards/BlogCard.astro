@@ -8,5 +8,7 @@ const slug = `/blog/${entry.data.slug}`;
 ---
 
 <ContentCard size={size} slug={slug}>
-  <CommonContent entry={entry} toolbarText={entry.data.category} />
+  <CommonContent entry={entry} toolbarText={entry.data.category}>
+    <div class="line-clamp-3 md:line-clamp-4">{entry.data.excerpt}</div>
+  </CommonContent>
 </ContentCard>
