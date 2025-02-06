@@ -8,8 +8,8 @@ const entry = await getEntry("supplements", "hero");
 const { Content } = await render(entry);
 ---
 
-<BentoCard size="large">
-  <div class="hero space-y-4 text-xl font-light text-extralight leading-8">
+<BentoCard size="hero">
+  <div class="hero prose prose-p:leading-snug space-y-4 text-xl md:text-3xl font-light text-extralight">
     <Content />
     <Socials />
   </div>
