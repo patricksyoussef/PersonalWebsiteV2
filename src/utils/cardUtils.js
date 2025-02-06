@@ -3,7 +3,7 @@ import { render } from "astro:content";
 export const formatDate = (entry) => {
   return entry.data.date.toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
 };
@@ -15,5 +15,5 @@ export const joinTags = (entry) => {
 
 export const readTime = async (entry) => {
   const { remarkPluginFrontmatter } = await render(entry);
-  return `${remarkPluginFrontmatter.minutesRead} min read`;
+  return remarkPluginFrontmatter.minutesRead;
 };
