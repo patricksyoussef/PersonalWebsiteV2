@@ -6,11 +6,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "rgba(37, 99, 235, 0.01)",
-        accent: "rgba(37, 99, 235, 1.0)",
+        background: "rgb(248, 247, 244)",
+        accent: "#072AC8",
         darken: "rgba(0, 0, 0, 0.03)",
         edge: colors.neutral[300],
-        extralight: "oklch(0.632 0 0);",
+        extralight: "oklch(0.632, 0 0);",
         light: colors.neutral[600],
       },
       fontFamily: {
