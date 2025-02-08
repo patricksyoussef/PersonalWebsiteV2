@@ -9,3 +9,7 @@ html {
 .post-content > *:first-child {
     margin-bottom: 0 !important;
 }
+
+.hero > *:first-child {
+    margin-top: 0 !important;
+}

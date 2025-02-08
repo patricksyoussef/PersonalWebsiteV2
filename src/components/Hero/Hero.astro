@@ -1,7 +1,6 @@
 ---
 import BentoCard from "../Bento/Cards/BentoCard.astro";
 import Socials from "./Socials.astro";
-import "./styles.css";
 
 import { getEntry, render } from "astro:content";
 const entry = await getEntry("supplements", "hero");
@@ -9,8 +8,10 @@ const { Content } = await render(entry);
 ---
 
 <BentoCard size="hero">
-  <div class="hero prose prose-p:leading-snug space-y-4 text-xl md:text-3xl font-light text-extralight">
-    <Content />
-    <Socials />
+  <div class="prose prose-p:leading-snug space-y-4 text-xl md:text-3xl font-light font-serif text-extralight">
+    <div class="hero prose-a:font-medium prose-a:no-underline prose-strong:font-medium">
+      <Content />
+      <Socials />
+    </div>
   </div>
 </BentoCard>

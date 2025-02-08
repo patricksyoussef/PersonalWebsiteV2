@@ -6,7 +6,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "rgb(248, 247, 244)",
+        // #f8f7f4
+        background: "#FAF9F7",
         accent: "#072AC8",
         darken: "rgba(0, 0, 0, 0.03)",
         edge: colors.neutral[300],
