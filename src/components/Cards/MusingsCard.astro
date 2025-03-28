@@ -1,0 +1,21 @@
+---
+import ContentCard from "./ContentCard.astro";
+import CommonContent from "./CommonContent.astro";
+
+const { entry, ...extraProps } = Astro.props;
+const slug = `/musings/${entry.data.slug}`;
+---
+
+<ContentCard slug={slug} {...extraProps} extraStyle="font-serif">
+  <CommonContent
+    entry={entry}
+    toolbarText={entry.data.category}
+    toolbarStyle="italic text-gray-500 text-sm"
+    titleStyle="italic font-normal text-gray-800"
+    subTitleStyle="text-gray-500 italic"
+    tagText="musings"
+    tagColor="bg-green-50 text-green-600"
+  >
+    <div class="line-clamp-2">{entry.data.excerpt}</div>
+  </CommonContent>
+</ContentCard>

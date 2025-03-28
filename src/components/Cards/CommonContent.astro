@@ -1,0 +1,19 @@
+---
+import { formatDate, readTime } from "../../utils/cardUtils";
+
+const { entry, toolbarText = "", toolbarStyle = "", titleStyle = "", subTitleStyle = "", tagText = "", tagColor = "" } = Astro.props;
+const dateString = formatDate(entry);
+const readTimeString = readTime(entry);
+---
+
+<div class="p-3 flex flex-col justify-between h-full">
+  <div class={`flex flex-row justify-between items-center ${toolbarStyle}`}>
+    <div>{toolbarText}</div>
+    {tagText && <div class={`text-xs px-2 py-0.5 rounded-full font-medium ${tagColor}`}>{tagText}</div>}
+  </div>
+  <div class="space-y-1">
+    <div class={`text-2xl font-medium mt-4 ${titleStyle}`}>{entry.data.title}</div>
+    <div class={`text-extralight ${subTitleStyle}`}>{dateString} · {readTimeString}</div>
+    <slot />
+  </div>
+</div>
