@@ -1,0 +1,82 @@
+---
+const { code, lang, meta } = Astro.props;
+import { hastToHtml, codeToHast, codeToTokens, tokensToHast } from "shiki";
+import { transformerNotationHighlight } from "@shikijs/transformers";
+import { parseKeyValuePairs } from "../../../utils.js";
+import "./styles.css";
+const theme = "dark-plus";
+
+// Parse Metadata and Change Styling
+var metas = parseKeyValuePairs(meta);
+
+// File Name
+const fileName = metas["file"] ?? "";
+
+// Output Lines
+let codeLines = code;
+let outputLines = null;
+
+// Process if output lines are needed
+const n = parseInt(metas["output"]) ?? 0;
+if (n > 0) {
+  const lines = code.split("\n");
+  const splitIndex = lines.length - n;
+  codeLines = lines.slice(0, splitIndex).join("\n");
+  outputLines = lines.slice(splitIndex).join("\n");
+}
+
+// Generate Intermediate Representation
+let hastCode = await codeToHast(codeLines, {
+  lang,
+  theme,
+  transformers: [transformerNotationHighlight()],
+});
+
+if (n > 0) {
+  // Apply Output Lines
+  let hastOutput = await codeToHast(outputLines, {
+    lang: "plain",
+    theme,
+  });
+
+  // 1) Helper to find <pre> in a HAST
+  function findPreNode(hast) {
+    // If the top-level is already <pre>
+    if (hast?.tagName === "pre") {
+      return hast;
+    }
+    // If it's a root node with children, search them
+    if (hast?.type === "root" && Array.isArray(hast.children)) {
+      return hast.children.find((node) => node.tagName === "pre");
+    }
+    return null;
+  }
+
+  const preMain = findPreNode(hastCode);
+  const preOutput = findPreNode(hastOutput);
+
+  // Only merge if both exist
+  if (preMain && preOutput) {
+    // Insert <hr> in preMain
+    preMain.children.push({
+      type: "element",
+      tagName: "hr",
+      children: [],
+    });
+
+    // Add a custom "output" class to each line in preOutput
+    for (const child of preOutput.children) {
+      child.properties = child.properties || {};
+      child.properties.className = child.properties.className || [];
+      child.properties.className.push("output");
+    }
+
+    // Append them to preMain
+    preMain.children.push(...preOutput.children);
+  }
+}
+
+let highlightedCode = hastToHtml(hastCode);
+---
+
+<div class="not-prose" set:html={highlightedCode} />
