@@ -8,10 +8,10 @@ export default {
       colors: {
         background: "#FAF9F7",
         accent: "#274ae6",
-        darken: "rgba(0, 0, 0, 0.02)",
-        edge: colors.neutral[300],
-        extralight: colors.neutral[500],
-        light: colors.neutral[600],
+        darken: "#F8F6F2",
+        edge: colors.stone[300],
+        extralight: colors.stone[500],
+        light: colors.stone[600],
       },
       fontFamily: {
         sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.sans],
