@@ -11,18 +11,29 @@ pinned: true
 ---
 
 import figure8 from "./assets/figure8_anim.mp4";
-import Collapse from '../../../../components/MDX/Collapse.jsx';
-
 
 # Heading 1
 ## Heading 2
 ### Heading 3
 
 ## Code
+```python output=2
+import numpy as np
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True # [!code highlight]
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Useful for running matplotlib on high-dpi displays
+%config InlineBackend.figure_format='retina'
+This is an output line!
+This is an output line!
+```
+
 ```python
 import numpy as np
 import matplotlib
-matplotlib.rcParams['text.usetex'] = True
+matplotlib.rcParams['text.usetex'] = True # [!code highlight]
 import matplotlib.pyplot as plt
 %matplotlib inline
 
@@ -41,7 +52,11 @@ Testing inline math $1+1=2$ and more
 
 ## Collapse
 
-<Collapse client:load title="Test Title">
+<Collapse title="Test Title">
+    <div>Content to be hidden</div>
+    <div>Content to be hidden</div>
+    <div>Content to be hidden</div>
+    <div>Content to be hidden</div>
     <div>Content to be hidden</div>
 </Collapse>
 
