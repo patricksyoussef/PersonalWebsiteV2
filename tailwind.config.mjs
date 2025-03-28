@@ -8,7 +8,7 @@ export default {
       colors: {
         background: "#faf9f5",
         accent: "#3451DB",
-        darken: "#F8F6F2",
+        darken: "#F7F4F0",
         edge: colors.stone[300],
         extralight: colors.stone[500],
         light: colors.stone[600],
