@@ -17,3 +17,21 @@ html {
 .collapse-content astro-slot > *:first-child {
     margin-top: 0.5rem !important;
 }
+
+.code-block {
+    .has-highlighted .line {
+        opacity: 0.5;
+    }
+
+    .has-highlighted .highlighted {
+        opacity: 1;
+    }
+
+    .has-highlighted .output .line {
+        opacity: 1 !important;
+    }
+
+    hr {
+        margin: 0.5rem 0 !important;
+    }
+}
