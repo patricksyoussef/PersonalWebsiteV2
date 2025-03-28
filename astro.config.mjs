@@ -1,10 +1,11 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
-import { remarkReadingTime } from "./src/utils/remarkReadingTime.mjs";
+import { remarkReadingTime, remarkCodeBlocks } from "./src/utils/remarkPlugins.js";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import preact from "@astrojs/preact";
+import { transformerNotationDiff, transformerNotationHighlight } from "@shikijs/transformers";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,7 +17,8 @@ export default defineConfig({
     preact(),
   ],
   markdown: {
-    remarkPlugins: [remarkMath, remarkReadingTime],
+    syntaxHighlight: false,
+    remarkPlugins: [remarkMath, remarkReadingTime, remarkCodeBlocks],
     rehypePlugins: [rehypeKatex],
   },
   devToolbar: {
