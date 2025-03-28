@@ -6,8 +6,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#FAF9F7",
-        accent: "#274ae6",
+        background: "#faf9f5",
+        accent: "#3451DB",
         darken: "#F8F6F2",
         edge: colors.stone[300],
         extralight: colors.stone[500],
