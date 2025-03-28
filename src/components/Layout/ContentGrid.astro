@@ -1,0 +1,7 @@
+---
+const { elements } = Astro.props;
+---
+
+<div class="mx-auto max-w-base my-common grid gap-common grid-cols-1 sm:grid-flow-row-dense md:grid-cols-2">
+  {elements.map(({ component: Component, props }) => <Component {...props} />)}
+</div>

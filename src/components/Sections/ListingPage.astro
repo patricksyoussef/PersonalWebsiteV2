@@ -1,10 +1,10 @@
 ---
 import { getPublishedEntries } from "../../utils";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Bento from "../Bento/Bento.astro";
-import BlogCard from "../Bento/Cards/BlogCard.astro";
-import ProjectCard from "../Bento/Cards/ProjectCard.astro";
-import MusingsCard from "../Bento/Cards/MusingsCard.astro";
+import BlogCard from "../Cards/BlogCard.astro";
+import ProjectCard from "../Cards/ProjectCard.astro";
+import MusingsCard from "../Cards/MusingsCard.astro";
+import ContentGrid from "../Layout/ContentGrid.astro";
 
 // Retrieve requested collection
 const { collectionName, title, subtitle, flavorText } = Astro.props;
@@ -18,18 +18,23 @@ const componentMap = {
   projects: ProjectCard,
   musings: MusingsCard,
 };
+
 const Component = componentMap[collectionName];
+const elems = [
+  ...content.map((entry) => ({
+    component: Component,
+    props: { entry: entry },
+  })),
+];
 ---
 
 <BaseLayout title={title}>
-  <div class="pb-2">
-    <span class="flex text-[2.75rem] lowercase font-serif font-medium my-3">
+  <div class="mx-auto max-w-base pb-2">
+    <span class="flex text-6xl mt-6 mb-2 lowercase font-serif font-medium">
       <div>{subtitle}</div>
       <div class="text-accent">.</div>
     </span>
     <div class="text-base">{flavorText}</div>
   </div>
-  <Bento>
-    {content.map((entry) => <Component entry={entry} />)}
-  </Bento>
+  <ContentGrid elements={elems} />
 </BaseLayout>

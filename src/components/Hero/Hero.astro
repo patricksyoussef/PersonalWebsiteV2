@@ -1,17 +1,21 @@
 ---
-import BentoCard from "../Bento/Cards/BentoCard.astro";
-import Socials from "./Socials.astro";
-
 import { getEntry, render } from "astro:content";
+import { Image } from "astro:assets";
+import image from "../../content/supplements/images/PatrickGhibliCircle.png";
+
 const entry = await getEntry("supplements", "hero");
 const { Content } = await render(entry);
 ---
 
-<BentoCard size="hero">
-  <div class="prose prose-p:leading-snug space-y-4 text-xl md:text-3xl font-light font-serif text-extralight">
-    <div class="hero prose-a:font-medium prose-a:no-underline prose-strong:font-medium">
-      <Content />
-      <Socials />
+<div class="mx-auto max-w-base grid grid-cols-1 gap-8 md:grid-cols-[2fr_1fr] my-2 md:my-12">
+  <div class="prose text-xl md:text-3xl lg:text-4xl font-serif text-extralight">
+    <div class="prose-p:my-0 prose-p:font-light prose-a:font-light">
+      <div class="hero space-y-6 prose-a:transition prose-a:decoration-transparent hover:prose-a:decoration-accent">
+        <Content />
+      </div>
     </div>
   </div>
-</BentoCard>
+  <div class="hidden md:block">
+    <Image src={image} width={800} alt="" class="object-contain object-center h-full w-full" />
+  </div>
+</div>
