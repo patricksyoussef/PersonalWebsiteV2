@@ -6,12 +6,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        // #f8f7f4
         background: "#FAF9F7",
-        accent: "#072AC8",
-        darken: "rgba(0, 0, 0, 0.03)",
+        accent: "#274ae6",
+        darken: "rgba(0, 0, 0, 0.02)",
         edge: colors.neutral[300],
-        extralight: "oklch(0.632, 0 0);",
+        extralight: colors.neutral[500],
         light: colors.neutral[600],
       },
       fontFamily: {
@@ -19,8 +18,8 @@ export default {
         serif: ['"Petrona Variable"', ...defaultTheme.fontFamily.serif],
       },
       maxWidth: {
-        base: "1500px",
-        content: "850px",
+        base: "1000px",
+        content: "800px",
       },
       spacing: {
         common: "1rem",
@@ -37,6 +36,9 @@ export default {
       }),
       boxShadow: {
         "left-lg": "-10px 0 15px -3px rgba(0, 0, 0, 0.25)", // Large left shadow
+      },
+      aspectRatio: {
+        card: "1.75",
       },
     },
   },
