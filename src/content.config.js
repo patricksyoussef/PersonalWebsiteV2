@@ -36,7 +36,7 @@ const musings = defineCollection({
 
 // Create the supplements collection using no schema
 const supplements = defineCollection({
-  loader: glob({ pattern: ["*.mdx"], base: "./src/content/supplements" }),
+  loader: glob({ pattern: ["**/*.mdx"], base: "./src/content/supplements" }),
 });
 
 export const collections = { blog, projects, musings, supplements };
