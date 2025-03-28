@@ -6,7 +6,7 @@ const { src, alt, otherProps } = Astro.props;
 
 <div {...otherProps}>
   <ContentWrapper>
-    <Image src={src} alt="" />
+    <Image src={src} widths={[240, 540, 720, 1200]} class="bg-white object-cover h-full w-full" alt="" />
   </ContentWrapper>
   <div class="text-center italic">{alt}</div>
 </div>

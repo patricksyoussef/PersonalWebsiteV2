@@ -1,6 +1,6 @@
 import { useState, useRef, useLayoutEffect } from "preact/hooks";
 
-export default function Collapse({ title, defaultOpen = false, children }) {
+export default function CollapseSrc({ title, defaultOpen = false, children }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const contentRef = useRef(null);
 
@@ -11,10 +11,10 @@ export default function Collapse({ title, defaultOpen = false, children }) {
   }, [isOpen]);
 
   return (
-    <div class="my-5 border border-gray-300 rounded-md p-3 mb-4 bg-gray-50">
+    <div class="my-5 border border-gray-300 rounded-md p-3 mb-4 bg-darken">
       {/* Clickable Header */}
       <button class="cursor-pointer flex items-center justify-between w-full text-left" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
-        <h3 class="m-0 font-medium">{title}</h3>
+        <h3 class="!m-0 font-medium">{title}</h3>
         <span class={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6" />
@@ -29,7 +29,7 @@ export default function Collapse({ title, defaultOpen = false, children }) {
         style={{ height: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px" }}
         aria-hidden={!isOpen}
       >
-        <div class="col">{children}</div>
+        <div class="prose collapse-content">{children}</div>
       </div>
     </div>
   );

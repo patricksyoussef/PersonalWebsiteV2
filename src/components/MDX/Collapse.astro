@@ -1,0 +1,8 @@
+---
+import CollapseSrc from "./CollapseSrc";
+const { title } = Astro.props;
+---
+
+<CollapseSrc client:idle title={title}>
+  <slot />
+</CollapseSrc>
