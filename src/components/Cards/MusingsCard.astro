@@ -11,10 +11,10 @@ const slug = `/musings/${entry.data.slug}`;
     entry={entry}
     toolbarText={entry.data.category}
     toolbarStyle="text-gray-500 text-sm"
-    titleStyle="italic font-normal text-gray-800"
+    titleStyle="italic font-normal text-gray-800 decoration-wavy group-hover:decoration-emerald-400"
     subTitleStyle="text-gray-500 italic"
     tagText="musings"
-    tagColor="bg-emerald-100 text-emerald-700"
+    tagColor="bg-emerald-100 text-emerald-700 border-emerald-200"
   >
     <div class="line-clamp-2">{entry.data.excerpt}</div>
   </CommonContent>

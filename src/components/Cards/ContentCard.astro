@@ -2,7 +2,7 @@
 const { slug, extraStyle = "" } = Astro.props;
 ---
 
-<div class={`overflow-clip border border-edge hover:border-extralight rounded-cards transition duration-300 hover:shadow-xl ${extraStyle}`}>
+<div class={`overflow-clip border border-edge hover:border-extralight rounded-cards transition duration-300 shadow-md hover:shadow-xl ${extraStyle}`}>
   <div class="bg-darken group">
     <a href={slug}>
       <slot />

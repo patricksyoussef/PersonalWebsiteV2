@@ -1,5 +1,5 @@
 ---
-const { entry } = Astro.props;
+const { entry, extraProps } = Astro.props;
 import { Image } from "astro:assets";
 import { formatDate } from "../../utils/cardUtils";
 const src = entry.data.cover;

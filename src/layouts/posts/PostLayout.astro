@@ -7,14 +7,14 @@ import "../styles/post_base.css";
 import "katex/dist/katex.min.css";
 import { components } from "../../components/MDX/MDXComponents";
 
-const { entry, contentStyle = "" } = Astro.props;
+const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;
 const { Content } = await render(entry);
 ---
 
 <BaseLayout title={frontmatter.title}>
   <div class={`${contentStyle}`}>
-    <Feature entry={entry} />
+    <Feature entry={entry} class={`{featureStyle`} />
     <Prose>
       <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
         <Content components={components} />
