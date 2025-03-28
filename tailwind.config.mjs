@@ -1,5 +1,6 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 const colors = require("tailwindcss/colors");
+import theme from "./src/components/MDX/CodeBlock/ayu_mirage.json";
 
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
@@ -9,6 +10,7 @@ export default {
         background: "#faf9f5",
         accent: "#3451DB",
         darken: "#F7F4F0",
+        codeBackground: theme["colors"]["editor.background"],
         edge: colors.stone[300],
         extralight: colors.stone[500],
         light: colors.stone[600],

@@ -3,7 +3,7 @@ const { code, lang, meta } = Astro.props;
 import { hastToHtml, codeToHast, codeToTokens, tokensToHast } from "shiki";
 import { transformerNotationHighlight } from "@shikijs/transformers";
 import { parseKeyValuePairs } from "../../../utils.js";
-import theme from "./ayu_vs.json";
+import theme from "./ayu_mirage.json";
 import CopyButton from "./copy.svg";
 
 // Parse Metadata and Change Styling
@@ -77,11 +77,9 @@ if (n > 0) {
 }
 
 const highlightedCode = hastToHtml(hastCode);
-const bgColor = theme["colors"]["editor.background"];
-const bgColorClass = `bg-[${bgColor}]`;
 ---
 
-<div class={`code-block ${bgColorClass} p-3 rounded-lg`}>
+<div class="code-block bg-codeBackground p-3 rounded-lg">
   <div class="flex flex-row text-white justify-between mb-1 min-h-5">
     <div class="flex flex-row space-x-2 items-center">
       <div class="rounded-full bg-[#FF605C] h-[0.75rem] aspect-square"></div>
