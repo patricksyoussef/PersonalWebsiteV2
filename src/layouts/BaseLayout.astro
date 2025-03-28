@@ -1,6 +1,7 @@
 ---
 import "@fontsource-variable/dm-sans/opsz.css";
 import "@fontsource-variable/petrona";
+import "@fontsource-variable/petrona/wght-italic.css";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/globals.css";
@@ -19,8 +20,8 @@ const pageTitle = title ? `${title} | Patrick Youssef` : "Patrick Youssef";
   </head>
   <body class="bg-background font-sans">
     <div class="h-2 bg-accent"></div>
-    <div class="mx-4">
-      <div class="max-w-base w-full mx-auto">
+    <div class="mx-4 md:mx-8">
+      <div class="w-full mx-auto">
         <Header />
         <slot />
         <Footer />

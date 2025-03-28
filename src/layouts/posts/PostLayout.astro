@@ -1,20 +1,11 @@
 ---
 import BaseLayout from "../BaseLayout.astro";
+import Feature from "../../components/Layout/Feature.astro";
 import Prose from "../../components/MDX/Prose.astro";
 import { render } from "astro:content";
 import "../styles/post_base.css";
 import "katex/dist/katex.min.css";
-
-// Form the markdown overrides
-import BlockQuote from "../../components/MDX/Blockquote.astro";
-import ImageWrapper from "../../components/MDX/ImageWrapper.astro";
-import PostVideo from "../../components/MDX/PostVideo.astro";
-
-const components = {
-  blockquote: BlockQuote,
-  img: ImageWrapper,
-  ...{ PostVideo },
-};
+import { components } from "../../components/MDX/MDXComponents";
 
 const { entry, contentStyle = "" } = Astro.props;
 const frontmatter = entry.data;
@@ -22,9 +13,12 @@ const { Content } = await render(entry);
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <Prose>
-    <div class={`post-content mx-auto space-y-[0.75rem] ${contentStyle}`}>
-      <Content components={components} />
-    </div>
-  </Prose>
+  <div class={`${contentStyle}`}>
+    <Feature entry={entry} />
+    <Prose>
+      <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
+        <Content components={components} />
+      </div>
+    </Prose>
+  </div>
 </BaseLayout>
