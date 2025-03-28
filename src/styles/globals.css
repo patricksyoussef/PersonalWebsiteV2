@@ -13,3 +13,7 @@ html {
 .hero > *:first-child {
     margin-top: 0 !important;
 }
+
+.collapse-content astro-slot > *:first-child {
+    margin-top: 0.5rem !important;
+}
