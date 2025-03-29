@@ -3,8 +3,8 @@ const { code, lang, meta } = Astro.props;
 import { hastToHtml, codeToHast } from "shiki";
 import { transformerNotationHighlight } from "@shikijs/transformers";
 import { parseKeyValuePairs } from "../../../utils.js";
-import CopyButton from "./copy.svg";
 const theme = "catppuccin-mocha";
+import CopyButton from "./CopyButton.astro";
 
 // Parse Metadata and Change Styling
 var metas = parseKeyValuePairs(meta);
@@ -88,7 +88,7 @@ const highlightedCode = hastToHtml(hastCode);
     </div>
     <div class="font-mono text-sm">{fileName}</div>
     <div>
-      <CopyButton width={"1.1rem"} height={"100%"} />
+      <CopyButton code={codeLines} />
     </div>
   </div>
   <div class="not-prose text-[1rem] leading-[1.5]" set:html={highlightedCode} />
