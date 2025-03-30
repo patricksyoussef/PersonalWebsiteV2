@@ -6,12 +6,24 @@ html {
     scroll-behavior: smooth;
 }
 
-.post-content > *:first-child {
-    margin-bottom: 0 !important;
+.hero {
+    .projects:hover {
+        @apply decoration-blue-500;
+    }
+    .blog:hover {
+        @apply decoration-amber-300;
+    }
+    .musings:hover {
+        @apply decoration-emerald-400;
+    }
 }
 
 .hero > *:first-child {
     margin-top: 0 !important;
+}
+
+.post-content > *:first-child {
+    margin-bottom: 0 !important;
 }
 
 .collapse-content astro-slot > *:first-child {
