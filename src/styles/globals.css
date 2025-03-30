@@ -22,6 +22,26 @@ html {
     margin-top: 0 !important;
 }
 
+.drop-in {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInUp 0.5s forwards;
+    animation-delay: calc(var(--anim-idx) * 0.1s);
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 1s forwards;
+    animation-delay: calc(var(--anim-idx) * 0.1s);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .post-content > *:first-child {
     margin-bottom: 0 !important;
 }

@@ -1,7 +1,13 @@
 ---
-const { elements } = Astro.props;
+const { elements, startIdx = 0 } = Astro.props;
 ---
 
 <div class="mx-auto max-w-base my-common grid gap-common grid-cols-1 sm:grid-flow-row-dense md:grid-cols-2">
-  {elements.map(({ component: Component, props }) => <Component {...props} />)}
+  {
+    elements.map(({ component: Component, props }, i) => (
+      <div class="drop-in" style={`--anim-idx: ${i + startIdx};`}>
+        <Component {...props} />
+      </div>
+    ))
+  }
 </div>

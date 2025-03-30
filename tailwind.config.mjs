@@ -7,7 +7,7 @@ export default {
     extend: {
       colors: {
         background: "#faf9f5",
-        accent: "#3451DB",
+        accent: colors.blue[600],
         darken: "#F7F4F0",
         codeBackground: "#1e1e2e",
         edge: colors.stone[300],
