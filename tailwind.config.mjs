@@ -26,7 +26,7 @@ export default {
       spacing: {
         common: "1rem",
         intra: "1rem",
-        content: "0.4rem",
+        content: "0.75rem",
         cards: "0.75rem",
       },
       borderWidth: (theme) => ({
