@@ -24,7 +24,7 @@ html {
 
 .drop-in {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-15px);
     animation: fadeInUp 0.5s forwards;
     animation-delay: calc(var(--anim-idx) * 0.1s);
 }
