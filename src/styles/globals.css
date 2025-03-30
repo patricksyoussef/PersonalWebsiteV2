@@ -34,4 +34,11 @@ html {
     hr {
         margin: 0.75rem 0 !important;
     }
+
+    code {
+        display: block; /* makes the element a block-level element */
+        max-width: 100%; /* ensures it doesn’t exceed the parent’s width */
+        overflow-x: auto; /* enables horizontal scrolling if needed */
+        white-space: pre; /* preserves whitespace (or use pre-wrap if desired) */
+    }
 }
