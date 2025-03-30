@@ -11,7 +11,7 @@ export default function CollapseSrc({ title, defaultOpen = false, children }) {
   }, [isOpen]);
 
   return (
-    <div class="my-5 border border-edge rounded-md p-3 mb-4 bg-darken shadow-sm">
+    <div class="my-5 border border-edge rounded-content p-3 mb-4 bg-darken shadow-md">
       {/* Clickable Header */}
       <button class="cursor-pointer flex items-center justify-between w-full text-left" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
         <h3 class="!m-0 font-medium">{title}</h3>
