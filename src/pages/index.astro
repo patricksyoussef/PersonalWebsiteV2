@@ -4,7 +4,6 @@ import BlogCard from "../components/Cards/BlogCard.astro";
 import ProjectCard from "../components/Cards/ProjectCard.astro";
 import MusingsCard from "../components/Cards/MusingsCard.astro";
 import Hero from "../components/Hero/Hero.astro";
-import DividerTitle from "../components/Layout/DividerTitle.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
 
 import { getPublishedEntries } from "../utils";
@@ -39,14 +38,11 @@ const musings_elems = [
     props: { entry: entry },
   })),
 ];
+
+const elements = [...project_elems, ...blog_elems, ...musings_elems];
 ---
 
 <BaseLayout title="Iterating, Always">
   <Hero />
-  <!-- <DividerTitle text="Projects" slug="/projects" /> -->
-  <ContentGrid elements={project_elems} />
-  <!-- <DividerTitle text="Blog" slug="/blog" /> -->
-  <ContentGrid elements={blog_elems} />
-  <!-- <DividerTitle text="Musings" slug="/musings" /> -->
-  <ContentGrid elements={musings_elems} />
+  <ContentGrid elements={elements} />
 </BaseLayout>
