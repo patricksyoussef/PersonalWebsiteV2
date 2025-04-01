@@ -6,9 +6,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#faf9f5",
+        background: "#FCFBF9",
         accent: colors.blue[600],
-        darken: "#F7F4F0",
+        darken: "#F9F6F2",
         codeBackground: "#1e1e2e",
         edge: colors.stone[300],
         extralight: colors.stone[500],
@@ -36,12 +36,6 @@ export default {
         cards: theme("spacing.cards"),
         content: theme("spacing.content"),
       }),
-      boxShadow: {
-        "left-lg": "-10px 0 15px -3px rgba(0, 0, 0, 0.25)", // Large left shadow
-      },
-      aspectRatio: {
-        card: "1.75",
-      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
