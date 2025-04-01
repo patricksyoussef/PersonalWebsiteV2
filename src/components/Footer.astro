@@ -2,7 +2,7 @@
 let currentYear = new Date().getFullYear();
 ---
 
-<footer class="text-sm text-extralight lowercase mt-10 pb-8 space-y-1">
+<footer class="md:text-sm text-extralight lowercase mt-10 pb-8">
   <div class="flex space-x-2 justify-center">
     <div>&copy {currentYear} patrick youssef</div>
     <div>·</div>
@@ -10,5 +10,8 @@ let currentYear = new Date().getFullYear();
     <div>·</div>
     <a href="mailto:patricksyoussef@gmail.com" class="hover:underline">email</a>
   </div>
-  <div class="flex justify-center">site built with astro, tailwind, shiki. typeset in petrona & dm sans.</div>
+  <div class="flex flex-wrap justify-center items-center gap-x-[0.25em]">
+    <span class="mt-1">site built with astro, tailwind, shiki.</span>
+    <span class="mt-1">typeset in petrona & dm sans.</span>
+  </div>
 </footer>
