@@ -1,10 +1,14 @@
 ---
-
+let currentYear = new Date().getFullYear();
 ---
 
-<div class="flex items-center justify-center my-8 text-light">
-  <div class="text-center">
-    <div>Designed and Built by Patrick Youssef</div>
-    <div>Powered by Astro</div>
+<footer class="text-sm text-extralight lowercase mt-10 pb-8 space-y-1">
+  <div class="flex space-x-2 justify-center">
+    <div>&copy {currentYear} patrick youssef</div>
+    <div>·</div>
+    <a href="https://linkedin.com/in/patricksyoussef" target="_blank" class="hover:underline">linkedin</a>
+    <div>·</div>
+    <a href="mailto:patricksyoussef@gmail.com" class="hover:underline">email</a>
   </div>
-</div>
+  <div class="flex justify-center">site built with astro, tailwind, shiki. typeset in petrona & dm sans.</div>
+</footer>
