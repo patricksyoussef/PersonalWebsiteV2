@@ -13,6 +13,7 @@ function createBaseSchema(imageSchema = z.any().optional()) {
     cover: imageSchema, // Using dynamic schema for image
     published: z.boolean().default(true),
     pinned: z.boolean().default(false),
+    draft: z.boolean().default(false),
   });
 }
 
