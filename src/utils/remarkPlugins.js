@@ -38,3 +38,28 @@ export function remarkCodeBlocks() {
     });
   };
 }
+
+export function advanceHeadings() {
+  return (tree) => {
+    visit(tree, "heading", (node) => {
+      node.depth = Math.min(node.depth + 1, 6); // Ensure it does not exceed <h6>
+    });
+  };
+}
+
+export function rehypeTrimInlineCode() {
+  return (tree) => {
+    visit(tree, "element", (node, index, parent) => {
+      if (node.tagName === "code" && parent?.tagName !== "pre") {
+        if (Array.isArray(node.children)) {
+          node.children = node.children.map((child) => {
+            if (child.type === "text") {
+              child.value = child.value.trim();
+            }
+            return child;
+          });
+        }
+      }
+    });
+  };
+}

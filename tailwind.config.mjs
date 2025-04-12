@@ -24,7 +24,7 @@ export default {
         content: "800px",
       },
       spacing: {
-        common: "1rem",
+        common: "1.25rem",
         intra: "1rem",
         content: "0.75rem",
         cards: "0.75rem",
@@ -36,6 +36,14 @@ export default {
         cards: theme("spacing.cards"),
         content: theme("spacing.content"),
       }),
+      typography: {
+        DEFAULT: {
+          css: {
+            ":not(pre) > code::before": { content: "none" },
+            ":not(pre) > code::after": { content: "none" },
+          },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
