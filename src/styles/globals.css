@@ -43,7 +43,7 @@ html {
 }
 
 .post-content > *:first-child {
-    margin-bottom: 0 !important;
+    margin-top: 0 !important;
 }
 
 .collapse-content astro-slot > *:first-child {
@@ -52,7 +52,7 @@ html {
 
 .code-block {
     .has-highlighted .line {
-        opacity: 0.5;
+        opacity: 0.4;
     }
 
     .has-highlighted .highlighted {
