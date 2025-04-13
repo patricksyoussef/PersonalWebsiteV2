@@ -6,7 +6,7 @@ const { src, alt, otherProps } = Astro.props;
 
 <div {...otherProps} class="flex justify-center flex-col">
   <ContentWrapper>
-    <Image src={src} widths={[240, 540, 720, 1200]} class="bg-white object-contain h-full w-full max-h-[60vh]" alt="" />
+    <Image src={src} widths={[240, 540, 720, 1200]} class="bg-white object-cover h-full w-full max-h-[60vh]" alt="" />
   </ContentWrapper>
   <div class="text-center italic">{alt}</div>
 </div>
