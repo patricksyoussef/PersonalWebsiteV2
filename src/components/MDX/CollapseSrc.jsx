@@ -29,7 +29,7 @@ export default function CollapseSrc({ title, defaultOpen = false, children }) {
         style={{ height: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px" }}
         aria-hidden={!isOpen}
       >
-        <div class="prose collapse-content">{children}</div>
+        <div class="prose collapse-content !max-w-none">{children}</div>
       </div>
     </div>
   );
