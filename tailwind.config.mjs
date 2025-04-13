@@ -36,13 +36,57 @@ export default {
         cards: theme("spacing.cards"),
         content: theme("spacing.content"),
       }),
-      typography: {
-        DEFAULT: {
-          css: {
-            ":not(pre) > code::before": { content: "none" },
-            ":not(pre) > code::after": { content: "none" },
+      typography: ({ theme }) => {
+        const defaultStyles = {
+          color: theme("colors.stone.900"),
+          ":not(pre) > code::before": { content: "none" },
+          ":not(pre) > code::after": { content: "none" },
+          h1: { fontWeight: theme("fontWeight.bold") },
+          h2: { fontWeight: theme("fontWeight.bold") },
+          h3: { fontWeight: theme("fontWeight.bold") },
+          h4: { fontWeight: theme("fontWeight.bold") },
+          a: {
+            textDecorationColor: "transparent",
+            textDecoration: "underline",
+            textUnderlineOffset: "2px",
+            transitionProperty: "text-decoration-color",
+            transitionDuration: "200ms",
           },
-        },
+          ul: {
+            listStylePosition: "outside",
+            lineHeight: theme("lineHeight.6"),
+          },
+          "ul > li::marker": {
+            color: theme("colors.stone.600"),
+          },
+          ol: {
+            listStylePosition: "outside",
+            lineHeight: theme("lineHeight.6"),
+          },
+          "ol > li::marker": {
+            color: theme("colors.stone.600"),
+          },
+          thead: {
+            borderBottomColor: theme("colors.accent"),
+          },
+        };
+
+        return {
+          DEFAULT: {
+            css: defaultStyles,
+          },
+          post: {
+            css: {
+              ...defaultStyles,
+              a: {
+                color: theme("colors.blue.700"),
+                "&:hover": {
+                  textDecorationColor: theme("colors.blue.700"),
+                },
+              },
+            },
+          },
+        };
       },
     },
   },
