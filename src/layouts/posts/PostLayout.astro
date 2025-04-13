@@ -10,11 +10,12 @@ import { components } from "../../components/MDX/MDXComponents";
 const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;
 const { Content, remarkPluginFrontmatter } = await render(entry);
+console.log(featureStyle);
 ---
 
 <BaseLayout title={frontmatter.title}>
   <div class={`${contentStyle}`}>
-    <Feature entry={entry} frontmatter={remarkPluginFrontmatter} class={`${featureStyle}`} />
+    <Feature entry={entry} frontmatter={remarkPluginFrontmatter} extraStyle={`${featureStyle}`} />
     <Prose>
       <div class={`post-content font-serif space-y-[1.25rem] ${contentStyle}`}>
         <Content components={components} />
