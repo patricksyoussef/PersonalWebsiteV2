@@ -4,30 +4,30 @@ published: true
 title: What is Logistic Regression?
 slug: logistic-regression-intro
 date: 2020-12-23
-cover: images/Example_Training.png
+cover: images/ExampleTrainingCrop.png
 tags: ["Machine Learning", "Optimization"]
 category: "Machine Learning"
 excerpt: "How to implement a logistic regression model with a neural network mindset in Python."
 pinned: false
 ---
 
-# Introduction
+This post will introduce you to the principles behind logistic regression as a binary classification method. Using NumPy we'll implement the model from scratch.
 
-This post will introduce you to the principles behind logistic regression as a binary classification method. Using Python and NumPy we will implement the core principles from scratch on a test dataset. There are different ways to implement this particular algorithm but I will focus on an implementation with a neural network mindset as many of these ideas extend well into neural nets in later posts.
+There are different ways to implement this particular algorithm but I will focus on an implementation with a neural network mindset.
 
 # What is Logistic Regression?
 
-Logistic regression is a predictor borrowed from statistics used for binary classification. All this means is that we can use the algorithm to predict whether a given example belongs to a class or not. As an example, if we knew certain features about the weather (temperature, humidity, wind, etc.) we could try to predict if it's going to rain or not. To do so, we need many _labeled_ examples of data from other days. We'll get into this more moving forward.
+Logistic regression is a predictor borrowed from statistics used for binary classification. In english this means that we can use the model to determine is an input example belongs to a group or not. As an example, if we knew certain features about the weather (temperature, humidity, wind, etc.) we could try to predict if it's going to rain or not. To do so, we need many _labeled_ examples (inputs + did it rain) of data from other days.
 
-# Math Representation
+# Representation
 
-Before we can dive into the implementation, we first need to fully understand the required data and math for this problem.
+Let's first understand the required data and math for this problem.
 
 ## Data Organization
 
 We represent a particular example as a vector of features and we store all these examples as one large matrix $X$ where $X_i$ is a particular example (a single day if we follow our prior rain metaphor). The labeled aspect means that we know whether or not that day had rain, we'll call this the ground-truth and save all labels for our examples in a vector $y$ where we store a 0 for the days it didn't rain and a 1 when it does rain.
 
-As an example, let's imagine that we track 2 different aspects to describe each day such as average temperature and humidity. For a year, we would have 365 examples of temperature and humidity stored in our vector $X$ and the whether it rained or not in our vector $y$.
+As an example, let's imagine that we track 2 different aspects to describe each day such as average temperature and humidity. For a year, we would have 365 examples of temperature and humidity stored in our vector $X$ and the rain history in our vector $y$.
 
 $$
 X = [365 \times 2] =
@@ -53,7 +53,13 @@ $$
 
 ## Forward Propagation
 
-The forward propagation step is where we take an example $X_i$ and pass it through our model to yield a prediction $\hat{y_i}$. To do so, we have a vector $W$ that stores what we call the weights. We also have a bias term that we denote as $b$. Together with the sigmoid function ($\sigma$) we get the following:
+The forward propagation step is where we take an example day $X_i$ and pass it through our model to yield a prediction $\hat{y_i}$. We need a signal of how *important* each of the input signals is to whether it rained and in which direction it pushes our guess.
+
+The importance as I called it is more aptly called the weight, we store a weight value for each of our input values (humidity and temperature). A positive weight implies that an increase in the input signal corresponds to a higher likelihood of predicting true. Across all our possible inputs, it's easier to combine all the weights into one vector $W$.
+
+We may need to shift our baseline as well, to do this we include an offset that in a way sets our *start* for where we start allowing our inputs to change off of, called the bias $b$.
+
+Lastly, we need a way of "squashing" the signal down to yes and no. This is best done as a probability where 0 says definetely not, and a 1 is very confident. We want to take the loudest of voice, and quietest of whispers and clamp them to a range we actually know how to handle. This is done with the sigmoid function $\sigma$.
 
 $$
 \hat{y_i} = \sigma (W^T X_i + b)
@@ -78,7 +84,7 @@ $$
 b = -13
 $$
 
-We can actually go ahead and bulk propagate all examples using matrix multiplication! Let's use $X$ and $y$ as the define days from before which is:
+We can actually go ahead and bulk propagate all examples using matrix multiplication! Let's use $X$ and $y$ as the define days from before. What we're looking at here are 4 days worth of information with their respective humidities and temperatures.
 
 $$
 X = [4 \times 2] =
@@ -89,6 +95,8 @@ X = [4 \times 2] =
 71 & 0.43\\
 \end{bmatrix}
 $$
+
+We can see in the corresponding $y$ that it rained on days 2 and 3.
 
 $$
 y=[4 \times 1] =
@@ -142,11 +150,15 @@ $$
 \text{P}_{\text{Clear}} = 1 - \text{P}_{\text{Rain}}
 $$
 
-Essentially, if the probability is greater or less than $0.5$ we round as the alternate probability becomes lower.
-
 ### Bias Simplification
 
-Personally, I prefer to move the bias term ($b$) into the matrix multiplication ($W^T X_i$). This is done by adding a column of 1's to the end of $X$, adding a feature that is consistent across all examples. Then we increase the size of the weights by 1 (now $W',X'$ etc.) such that the last weight acts as the bias. Check the math below if you are still curious. This helps to simplify the training procedure as you only need to train for $W'$! Moving forward, I will refer to $W'$ as just $W$.
+Personally, I prefer to move the bias term ($b$) into the matrix multiplication ($W^T X_i$).
+
+This is done by adding a column of 1's to the end of $X$, adding a feature that is consistent across all examples. Then we increase the size of the weights by 1 (now $W',X'$ etc.) such that the last weight acts as the bias. Check the math below if you are still curious.
+
+This helps to simplify the training procedure as you only need to train for $W'$!
+
+Moving forward, I will refer to $W'$ as just $W$.
 
 > $$
 > W^T X + b  = w_1 x_1 + ... + w_n x_n + b
@@ -162,15 +174,15 @@ Personally, I prefer to move the bias term ($b$) into the matrix multiplication 
 
 ### Finding the Correct $W$ and $b$
 
-As mentioned prior I just gave you suitable values for $W$ and $b$ to go through the example by tweaking with the results in a python session. In practice, it can be difficult/impossible to self determine the correct values. To most correctly determine the values we use a process called training!
+It can be difficult/impossible to determine the correct values for the weights and bias through trial and error. Even for small examples of only two input features it's challenging to get correct, let alone when we step into many more.
 
-> Values of the weights are determined through training!
+To correctly determine the values we use a process called training!
 
 # Training
 
 Training is the process where we take many labeled examples and use them to determine values for $w$ that will yield us the best _overall_ performance. To be precise, we will describe some formulations for what are called the cost and loss of the model.
 
-## Cost and Loss Functions
+## Loss Function
 
 Let's start with the loss function. The loss is a measure of the error for a particular example's prediction. Following our prior notation the loss for one example is:
 
@@ -178,19 +190,69 @@ $$
 \mathcal{L} = -y \log(\hat{y}) - (1-y) \log(1-\hat{y})
 $$
 
-Let's play this out and see why it makes sense. For a given example that we know had no rain ($y=0$), we can consider the error as the log of the difference between the prediction $\hat{y}$ and 0 as the left side term goes to 0 and we're just left with $\log(1-\hat{y})$. As a reminder, $\log(1)=0$ so any deviation from 1 would create an error. Going back to if $y=0$, a perfect prediction would be if $\hat{y}=0$ and we'd be left with $\log(1)=0$. Therefore, the cost function accommodates for the two different possible values of $y$ and takes the log of the difference for the respective cases.
+This function evaluates the error differently depending on the true label $y$. Let's play this out and see why it makes sense.
+
+### Case 1: It Rained
+
+When the actual outcome is rain ($y=1$), the loss simplifies to:
+
+$$
+\mathcal{L} = -(1) \log(\hat{y}) - (1 - 1)\log(1 - \hat{y})
+$$
+
+$$
+\mathcal{L} = -\log(\hat{y})
+$$
+
+An ideal prediction would have $\hat{y} = 1$, resulting in:
+
+$$
+-\log(1) = 0
+$$
+
+Predicting any probability lower than 1 (less certain of rain) increases the loss.
+
+### Case 2: It Did Not Rain
+
+When there's no rain ($y=0$), the loss becomes:
+
+$$
+\mathcal{L} = -(0)\log(\hat{y}) - (1 - 0)\log(1 - \hat{y})
+$$
+
+$$
+\mathcal{L} = -\log(1 - \hat{y})
+$$
+
+Here, the ideal prediction is $\hat{y} = 0$, yielding:
+
+$$
+-\log(1 - 0) = -\log(1) = 0
+$$
+
+Predicting higher probabilities incorrectly indicating rain increases the loss significantly.
+
+### Intuition
+
+The logistic regression loss function quantifies prediction errors for both outcomes ($y=0$ or $y=1$), penalizing predictions increasingly as they diverge from the observed reality.
+
+## Cost Function
 
 The cost function is easy, it's just the average of the loss functions so:
 
 $$
-Cost = \frac{1}{N}\sum_{i=1}^{N} \mathcal{L}_i
+C = \frac{1}{N}\sum_{i=1}^{N} \mathcal{L}_i
 $$
 
-Now that we have a formulation for a function to decrease let's just take the derivative and set it equal to 0 to see what the values of $W$ should be. In practice, this is not possible so we need to approach this as a numerical optimization problem.
+The cost gives us an idea of how we are doing *overall* against all of our data.
+
+We want to find a way to reduce this to the lowest value possible. To do so, we use an optimization method called gradient descent.
 
 ## Gradient Descent
 
-Gradient descent is fairly simple, given the gradient of a function with respect to the variable to be optimized take a step in the negative direction of the gradient (positive for gradient ascent) and update your inputs with the step. Keep repeating this until you are happy with the convergence. In general, it looks something like this:
+This method isn't the focus of the post, so if this feels bit heavy don't worry too much. I introduce this as the method of choice because neural networks also use it so it's good to get exposure to it here!
+
+Gradient descent is fairly simple, given the [gradient](https://www.youtube.com/watch?v=tIpKfDc295M&ab_channel=KhanAcademy) of a function with respect to the variable to be optimized take a step in the negative direction of the gradient (positive for gradient ascent) and update your inputs with the step. Keep repeating this until you are happy with the convergence. In general, it looks something like this:
 
 $$
 \theta_{i+1} = \theta_i - \alpha \nabla f(\theta)
@@ -214,11 +276,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 ```
 
-I will be using Python and NumPy for the implementation. The dataset used is imported in our prior code block with the rest of our libraries. The dataset takes a few human health metrics as features and tries to predict if the patient has breast cancer, you can read more [here](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html).
+I will be using Python/NumPy for the implementation. The dataset used is imported in our prior code block with the rest of our libraries. The dataset takes a few human health metrics as features and tries to predict if the patient has breast cancer, you can read more [here](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html).
 
 ## Model Class
 
-As we have many parameters, helper functions, and repeated operations I will be creating the model as a Python class. Let's go ahead and initialize the class with all the methods we will be using.
+As we have many parameters, helper functions, and repeated operations I will be creating the model as a class. Let's initialize the class with all the methods we will be using.
 
 ```python
 class LogisticRegression():
@@ -238,29 +300,35 @@ class LogisticRegression():
 - `prep_data` is where we will normalize our data to between 0 and 1
 - `add_dimension` is a helper function for adding the column of 1's to $X$
 - `train` is where we will run the gradient descent iterations to determine our weights
-- `predict` is where we will forward propagate on unseen (test) data to estimate the classes
+- `predict` is where we will forward propagate on data to estimate the classes
 
-Let's start with the `sigmoid` function, as mentioned before the function is $(1+\exp(-x))^{-1}$, using NumPy this is:
+Let's start with the `sigmoid` function. As a reminder the function is:
+
+$$
+\sigma(x) = \frac{1}{1 + e^{-x}}
+$$
 
 ```python
 def sigmoid(self, z):
     return 1 / (1 + np.exp(-z))
 ```
 
-Let's continue with `prep_data` and `add_dimension`. `prep_data` takes the range of each column and brings them down to $[0,1]$, that way no particular feature dominates the result of $W^T X_i$. `add_dimension` creates a vector of ones the size of the number of samples and tacks it as the last column of $X$.
+Let's continue with `prep_data` and `add_dimension`.
+
+`prep_data` takes the range of each column and brings them down to $[0,1]$, that way no particular feature dominates the result of $W^T X_i$.
+
+`add_dimension` creates a vector of ones the size of the number of samples and tacks it as the last column of $X$.
 
 ```python
 def prep_data(self, X):
     temp = X - np.min(X, axis=0)
     X = temp / np.max(temp, axis=0)
-
     return X
 
 def add_dimension(self, X):
     # Stacks a vector of ones with the same number of rows as X
     # horizontally on then end of X
     X_new = np.hstack((X, np.ones((X.shape[0], 1))))
-
     return X_new
 ```
 
@@ -271,9 +339,11 @@ def train(self, X_train, y_train, learning_rate, iterations):
     self.learning_rate = learning_rate
     self.iterations = iterations
 
+    # Prepare Data for Training
     X_train = self.prep_data(X_train)
     X_train = self.add_dimension(X_train)
 
+    # Initialize Weights Randomly
     N,D = X_train.shape
     self.weights = np.random.random((D,1)) * 0.001
 
@@ -300,17 +370,18 @@ To close out the model class, let's implement `predict` that computes the forwar
 def predict(self, X_test):
     A = self.sigmoid(np.dot(self.weights.T, X_test.T))
     y_est = np.round(A)
-
     return y_est
 ```
 
 ## Data Import and Function Calls
 
-Assuming you have downloaded the aforementioned dataset, you should make sure you have it in the same folder as your Python file! The following code will import it and split the data into a test and train set. I have not mentioned this yet but this is a good place to talk about it.
+Assuming you have downloaded the aforementioned dataset, you should make sure you have it in the same folder as your Python file! The following will import and split the data into a test and train set. I have not mentioned this yet but this is a good place to talk about it.
 
 ### Test/Train Split
 
-Quick digression, a test and train split is a process of splitting your data into two groups based on a fraction (typical is 70/30 for train/test). This is very important to do as testing a model on the data it was trained on is not a good metric of its performance. To put it briefly, a model can learn to fit a training set very well but won't generalize well to new data. This is very bad as all we really care about is how it generalizes. This is as much as you need to know for now, but I would highly recommend you read more [here](https://developers.google.com/machine-learning/crash-course/training-and-test-sets/splitting-data).
+Quick digression, a test and train split is a process of splitting your data into two groups based on a fraction (typical is 70/30 for train/test). This is very important to do as testing a model on the data it was trained on is not a good metric of its performance.
+
+To put it briefly, a model can learn to fit a training set very well but won't generalize well to new data. This is very bad as all we really care about is how it generalizes. This is as much as you need to know for now, but I would highly recommend you read more [here](https://developers.google.com/machine-learning/crash-course/training-and-test-sets/splitting-data).
 
 ```python
 # Load in data
@@ -327,7 +398,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30,
 
 ## Running the Model
 
-We've made it! It's time to train our model and see how it does on the testing set! The following code will help you out:
+It's time to train our model and see how it does on the testing set!
 
 ```python output=6
 # Create an instance of our logistic regression class
@@ -360,12 +431,8 @@ print("Test Accuracy: {:0.3f}".format(test_accuracy))
 Test Accuracy: 0.912
 ```
 
-This results in an accuracy of around 91%! Considering the low number of features in the dataset this is a great result.
+This results in an accuracy of around 91%!
 
-# Moving Forward
+Considering the low number of features in the dataset this is a great result.
 
-As the intro suggests, this is just an introduction and there is much more that we can do with logistic regression. Just to list a few, here are the topics I am considering in extending the basics of logistic regression.
-
-1. Underfitting and overfitting in the model, how do we know when this is happening and how can we mitigate it.
-2. Multinomial logistic regression, let's extend the prediction space from in or not in a class to multiple classes.
-3. Tuning of parameters, what other metrics can we look at to better understand the best values for our hyperparameters.
+Hope you learned something new!
