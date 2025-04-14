@@ -1,7 +1,10 @@
 ---
-
+const { alt } = Astro.props;
 ---
 
-<div class="rounded-content not-prose overflow-clip shadow-md mb-2 border-edge border">
-  <slot />
+<div class="flex justify-center flex-col">
+  <div class="rounded-content mx-auto not-prose overflow-clip shadow-md mb-2 border-edge border">
+    <slot />
+  </div>
+  <div class="text-center italic">{alt}</div>
 </div>
