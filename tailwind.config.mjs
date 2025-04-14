@@ -38,7 +38,7 @@ export default {
       }),
       typography: ({ theme }) => {
         const defaultStyles = {
-          color: theme("colors.stone.900"),
+          color: theme("colors.neutral.950"),
           ":not(pre) > code::before": { content: "none" },
           ":not(pre) > code::after": { content: "none" },
           h1: { fontWeight: theme("fontWeight.bold") },
