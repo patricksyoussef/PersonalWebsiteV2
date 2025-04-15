@@ -4,16 +4,16 @@ published: true
 title: Comprehensions in Python
 slug: python-comprehensions
 date: 2022-11-08
-cover: images/comparison.png
+cover: images/ListWide.jpg
 tags: ["Python"]
 category: "Tutorial"
 excerpt: "A brief introduction to the general concept behind Python comprehensions and how to use the different variants."
 pinned: true
 ---
 
-# Introduction
+The comprehension structure is one of the most iconic utilities in Python.
 
-The comprehension structure is one of the most iconic utilities in Python. Many of you may already be familiar with list comprehensions but did you know there are actually 4 types of comprehensions? In this post, we'll review list comprehensions and introduce the others that you may have not seen before. For each type I will present the iterative forms you may currently know and how you consider converting them into comprehensions.
+Many of you may already be familiar with list comprehensions but did you know there are actually 4 types of comprehensions? We'll review list comprehensions and introduce the others that you may have not seen before. For each type I will present the iterative forms you may currently know and how to consider converting them into comprehensions.
 
 # Why Use Comprehensions?
 
@@ -25,68 +25,72 @@ Before we step into the material, let's consider why you'd want to use comprehen
 
 # List Comprehensions
 
-As I mentioned previously, list comprehensions are the most common and known comprehensions. To better understand how they work let's first look at how we can accomplish the same utility with a simple loop structure.
+List comprehensions are the most common comprehensions, but to better understand how they work let's first look at how we can accomplish the same utility with a loop.
 
 ## List Creation via Loops
 
-Consider how we might construct a basic list comprised of elements of a Python iterable when each item is passed through an expression. The general structure is something you may have already done before with a list initialization and a for loop to fill out the list based on the items passed into an expression.
+Consider how we might construct a basic list comprised of elements of a Python [iterable](https://docs.python.org/3/glossary.html#term-iterable) when each item is passed through an expression. The general structure is something you may have already done before with a list initialization and a `for` loop.
 
-> A Python [iterable](https://docs.python.org/3/glossary.html#term-iterable) is an object that returns its members one at a time. Some iterables that you may have already used are lists, sets, and tuples.
+> A Python iterable is an object that returns its members one at a time.
+>
+> Some iterables that you may have already used are lists, sets, and tuples.
 
-![Structure of a List Iteration](./images/ListBaseIterative.png)
+![Structure of a List Iteration](./images/ListBaseIterative.jpg)
 
-For smaller tasks, this structure is fine but as we add other bits of utility it can become harder to read the code while also adding additional overhead. Let's try to replicate this structure as a comprehension.
+This structure is fine but as we add other bits of utility it can become harder to read the code while also adding additional overhead. Let's turn this into a comprehension instead.
 
 ## List Creation via Comprehension
 
 For a list comprehension, we wrap part of our prior for loop does code within brackets to produce a resultant list that is equivalent to the list from before.
 
-![Structure of a List Comprehension](./images/ListBase.png)
+![Structure of a List Comprehension](./images/ListBase.jpg)
 
-The list comprehension handles the list initialization and appending needed before and reduces the code to just the important bits, what are we iterating over and what are we doing to each of the elements.
+The list comprehension handles the list initialization and appending and reduces the code to just what are we iterating over and what are we doing to each of the elements.
 
 ## Adding a Condition
 
-When iterating through a collection of items, we often only want to produce a list where the items pass a certain condition. We can extend the prior structure to have a condition quite easily. Let's start with extending the loop variant.
+When iterating through a collection of items, we often only want to produce a list where items pass a condition. We extend the prior loop to have a condition quite easily.
 
-![Structure of a Conditional List Iteration](./images/ListConditionIterative.png)
+![Structure of a Conditional List Iteration](./images/ListConditionIterative.jpg)
 
 It's pretty simple to also extend this condition format into our comprehensions.
 
-![Structure of a Conditional List Comprehension](./images/ListCondition.png)
+![Structure of a Conditional List Comprehension](./images/ListCondition.jpg)
 
-> From now on I will just be including a condition in the structures of later iterations but they are always optional and depend on what you need!
+> From now on I will just be including a condition in the structures of later iterations.
+>
+> They are always optional and depend on what you need!
 
 ## Reducing to a Comprehension
 
-One trend you may have noticed about comprehensions is that the part of the statement after the expression is just reading down each line of our iterative variant. Let's look closer at the case with a condition to see what I mean.
+One trend you may have noticed is that the parts of the statement that make up the comprehension after the expression are just the line by line read of our iterative variant.
 
 
-```python highlight=3-4
+```python
 # Iterative Variant
 my_list = []
-for item in iterable:
-    if condition:
+for item in iterable: # [!code highlight]
+    if condition: # [!code highlight]
         my_list.append(expression)
 ```
 
-If you were to unravel the highlighted lines of the above code block and remove any additional formatting (:) then you would get what we wrote for our comprehension. This is a helpful way of thinking for taking iterative code that you're used to and writing it as comprehensions.
+If you were to unravel the highlighted lines of the above, you'd get the equivalent comprehension. This mental model is helpful for converting iterative code.
 
-## Nested Comprehensions
+## Aside On Nested Comprehensions
 
-If you read other resources you might also see nested comprehensions where you can put a list comprehension into another list comprehension to generate a matrix or iterate over a matrix. To me, these kind of step away from the core principles of readability and simplicity that make comprehensions so great. I would recommend staying away from complicated comprehensions and rather expand that code for the sake of readability.
+Although nested comprehensions exist to emulate nested loops, I would *highly* recommend you stay away from them. In the same mantra of generally avoiding nested loops, I find that the intense one-liners you can achieve through nested comprehensions stray away from the core principles of readability and simplicity that we strive so hard for.
 
 ## Examples
 
-Let's look at some basic examples to see how we can write the tasks both as loops and comprehensions.
+Let's look at examples of how we can write the tasks both as loops and comprehensions.
 
 ### Squaring Numbers in an Iterable
 
-Let's assume we're given some iterable full of numbers (likely a set or list) and we want to produce a list of the squares of these numbers.
+We're given an iterable of numbers and we're asked to create a list of the squares.
 
 ```python output=2
 # List of Numbers
-numbers = [0, 1, 2, 3, 4, 5]
+numbers = [-2, 0, 1, 2, 3, 4, 5]
 
 # Loop Variant
 my_list = []
@@ -98,11 +102,11 @@ print(my_list)
 my_list = [num ** 2 for num in numbers]
 print(my_list)
 
-[0, 1, 4, 9, 16, 25]
-[0, 1, 4, 9, 16, 25]
+[4, 0, 1, 4, 9, 16, 25]
+[4, 0, 1, 4, 9, 16, 25]
 ```
 
-As you can see we get the exact same result! Let's go ahead and break down each of the important parts highlighted in the structure.
+We get the exact same result! Let's break down the important parts in the structure.
 
 - **Iterable**: The iterable is the list `numbers`
 - **Item**: Each number we retrieve out of the list is our item
@@ -110,7 +114,7 @@ As you can see we get the exact same result! Let's go ahead and break down each 
 
 ### Flooring Floats
 
-Let's assume we're given a different iterable full of floating point numbers and we wish to use the function `floor` which rounds down to the nearest integer, but only if the numbers are positive.
+We're given a different iterable full of floating point numbers and we wish to use `floor` to round down to the nearest integer, but only if the numbers are positive.
 
 ```python output=2
 # Importing the floor function
@@ -134,7 +138,7 @@ print(my_list)
 [0, 3, 11]
 ```
 
-As you can see, we can call functions or really execute any bit of code as the expression as we need! Often I will write a larger function and call that function from a simple comprehension.
+We can call functions or really execute any bit of code as the expression! Often I will write a larger function and call that function from a simple comprehension.
 
 ### Capitalizing Names
 
@@ -167,26 +171,28 @@ You may not believe me, but you already grasp most of the information to underst
 
 ## What's a Generator?
 
-> TLDR: Generators don't store all the results but just pass them one at a time when you call the generator. This is great for saving memory but not great if you want to save the resultant list.
+> Generators don't store all the results but just pass them one at a time when you call the generator. This is great for saving memory but not great if you want to save the resultant list.
 
-I could write a whole blog post on just [generators](https://realpython.com/introduction-to-python-generators/), but the important part to understand for this post is that generators are functions that you can write that act like iterators. Let's work through a simple example and see why generators are useful. Let's consider our prior example of squaring numbers, the steps taken when creating a list are as follows.
+I could write a whole blog post on just [generators](https://realpython.com/introduction-to-python-generators/), but the important part to understand is that generators are functions that you can write that act like iterators.
+
+Let's work through a simple example and see why generators are AWESOME. Let's consider our prior example of squaring numbers, the steps taken when creating a list are as follows.
 
 - Initialize a list to store the results
 - Iterate through the numbers and append the square of each number
 
-Seems simple enough! The issue is each number in our original list produces a square that has to be stored in the new list which can create a big memory problem. It's easy to start creating variations of an already large list and use up memory.
+Seems simple enough! The issue is each number in our original list produces a square that has to be stored in the new list which can create a big memory problem. It's easy to begin creating variations of an *already large* list and use up memory unnecessarily.
 
-With generators, the elements that would comprise the result aren't stored but instead the steps to produce them are kept in history. For our example, the generator would be an object that essentially contains "when I am called, I will iterate over the list of numbers and return the squared result for each number one at a time". With this, we never have to store all of the results at once. This is a good thing if you only need the results at runtime but bad if you want to keep the results.
+For our example, the generator would be an object that essentially evaluates "when I am called, I will iterate over the list of numbers and return the squared result for each number one at a time". We never store all of the results at once, which is a good thing if you only need the results at runtime but not if you want to keep the results.
 
-The below graph shows how the memory allocation changes with increasing input list size. As you can see the generator has a constant amount of space used as it only has to keep the process stored whereas the list variant has to store a larger and larger list that scales directly with input size.
+The below shows how memory usage changes with increasing input list size. The generator has a constant amount of space used as it only has to keep the process stored whereas the list variant has to store a larger and larger list that scales directly with input size.
 
 ![Memory Allocation Comparison](./images/memory_comparison.jpg)
 
 ## Generator via Loops
 
-Let's look at the basic structure of a generator following our prior list comprehension examples.
+Let's look at the basic structure of a generator based on our prior list examples.
 
-![Structure of a Generator](./images/GeneratorBaseIterative.png)
+![Structure of a Generator](./images/GeneratorBaseIterative.jpg)
 
 You might say this looks similar to the list and you would be right! The differences are that the generator we're interested in is actually the returned product of calling this function.
 
@@ -194,19 +200,19 @@ You might say this looks similar to the list and you would be right! The differe
 
 Phew that was a lot, luckily extending these concepts into a comprehension is trivial. All we need to do is replace the brackets from the list comprehensions with parentheses!
 
-![Structure of a Generator Comprehension](./images/GeneratorBase.png)
+![Structure of a Generator Comprehension](./images/GeneratorBase.jpg)
 
 ## Examples
 
-Let's go through the same examples as before in the list comprehension section. One key difference that you'll notice is that the generator itself does not have the resultant list stored so we have to call `list` on it to produce a list comprised of the generator results such that we can print and compare them.
+Let's go through the same examples as before in the list section. One key difference that you'll notice is that the generator itself does not have the resultant list stored. We have to call `list` on it to produce a list comprised of the generator results.
 
 ### Squaring Numbers in an Iterable
 
-Let's assume we're given some iterable full of numbers (likely a set or list) and we want to produce a list of the squares of these numbers.
+We're given an iterable of numbers and we're asked to create a list of the squares.
 
 ```python output=2
 # List of Numbers
-numbers = [0, 1, 2, 3, 4, 5]
+numbers = [-2, 0, 1, 2, 3, 4, 5]
 
 # Iterative Generator
 def generator_func(numbers):
@@ -220,16 +226,15 @@ print(list(my_generator))
 my_generator = (num ** 2 for num in numbers)
 print(list(my_generator))
 
-[0, 1, 4, 9, 16, 25]
-[0, 1, 4, 9, 16, 25]
+[4, 0, 1, 4, 9, 16, 25]
+[4, 0, 1, 4, 9, 16, 25]
 ```
 
 As expected we get the same result as the list comprehension but in practice if our lists were very large the generators can help us keep memory under control.
 
 ### Flooring Floats
 
-Let's assume we're given a different iterable full of floating point numbers and we wish to use the function `floor` which rounds down to the nearest integer, but only if the numbers are positive.
-
+We're given a different iterable full of floating point numbers and we wish to use `floor` to round down to the nearest integer, but only if the numbers are positive.
 
 ```python output=2
 # Importing the floor function
@@ -281,7 +286,7 @@ print(list(my_generator))
 
 # Set Comprehensions
 
-In my opinion, generator comprehensions are the hardest to understand so I think the hardest is over! Set comprehensions are ones that I often use and luckily they're super simple as well!
+Set comprehensions are ones that I often use and luckily they're super simple as well!
 
 ## Set Comprehensions as List Comprehensions
 
@@ -296,15 +301,15 @@ my_set = set(my_list)
 
 ## Set Creation via Loops
 
-Following the same theme of these being similar to lists, you'll see that the creation using loops is very similar. The only differences is initializing a set instead of a list and sets use the `add` method.
+Following the theme of being similar to lists, you'll see that the creation using loops is very similar. The only differences is initializing a set instead of a list using the `add` method.
 
-![Structure of a Set Iteration](./images/SetBaseIterative.png)
+![Structure of a Set Iteration](./images/SetBaseIterative.jpg)
 
 ## Set Creation via Comprehension
 
-As you might expect, these are also similar to list comprehensions except we need to change the brackets to curly brackets.
+As you might expect, we just need to change the brackets to curly brackets.
 
-![Structure of a Set Comprehension](./images/SetBase.png)
+![Structure of a Set Comprehension](./images/SetBase.jpg)
 
 ## Examples
 
@@ -312,11 +317,11 @@ Let's go through the prior examples again but with sets!
 
 ### Squaring Numbers in an Iterable
 
-Let's assume we're given some iterable full of numbers (likely a set or list) and we want to produce a set of the squares of these numbers.
+We're given an iterable of numbers and we're asked to create a list of the squares.
 
 ```python output=2
 # List of Numbers
-numbers = [0, 1, 2, 3, 4, 5]
+numbers = [-2, 0, 1, 2, 3, 4, 5]
 
 # Loop Variant
 my_set = set()
@@ -332,92 +337,43 @@ print(my_set)
 {0, 1, 4, 9, 16, 25}
 ```
 
-As you can see we get the exact same result! Let's go ahead and break down each of the important parts highlighted in the structure.
+**Note:** -2 and 2 have a collision in this case, we only see 4 once!
+
+Let's go ahead and break down each of the important parts highlighted in the structure.
 
 - **Iterable**: The iterable is the list `numbers`
 - **Item**: Each number we retrieve out of the list is our item
 - **Expression**: The expression is merely the squaring of the number `num ** 2`
 
-### Flooring Floats
-
-Let's assume we're given a different iterable full of floating point numbers and we wish to use the function `floor` which rounds down to the nearest integer, but only if the numbers are positive.
-
-```python output=2
-# Importing the floor function
-from math import floor
-
-# List of Numbers
-numbers = [0.15, 3.14, -5.8, 11.2]
-
-# Loop Variant
-my_set = set()
-for num in numbers:
-    if num >= 0:
-        my_set.add(floor(num))
-print(my_set)
-
-# Comprehension Variant
-my_set = {floor(num) for num in numbers if num >= 0}
-print(my_set)
-
-{0, 3, 11}
-{0, 3, 11}
-```
-
-As you can see, we can call functions or really execute any bit of code as the expression as we need! Often I will write a larger function and call that function from a simple comprehension.
-
-### Capitalizing Names
-
-Given a list of names, create a new list where every name is capitalized.
-
-
-```python output=2
-# List of Names
-names = ["james", "charlotte", "Patrick", "elaine"]
-
-# Loop Variant
-my_set = set()
-for name in names:
-    my_set.add(name.capitalize())
-print(my_set)
-
-# Comprehension Variant
-my_set = {name.capitalize() for name in names}
-print(my_set)
-
-{'James', 'Charlotte', 'Patrick', 'Elaine'}
-{'James', 'Charlotte', 'Patrick', 'Elaine'}
-```
-
 # Dictionary Comprehensions
 
-Dictionary comprehensions are mostly the same as prior examples but just a little different because we need to create not just an element in the collection but a pair of values. I think these are best understood through examples so stick through to the end!
+Dictionary comprehensions are mostly the same as prior examples but just a little different because we need to create not just an element in the collection but a pair of values.
 
 ## Dictionary Creation via Loops
 
 It's about what you would expect at this point where we do some sort of initialization, get items from out iterable, and run some code to define changes to our data structure.
 
-![Structure of a Dictionary Iteration](./images/DictBaseIterative.png)
+![Structure of a Dictionary Iteration](./images/DictBaseIterative.jpg)
 
-What you'll notice is that there are essentially two expressions that are based on the item, both key and value! Often key will just be the item or item id whereas the value will be some processing done on the item.
+You'll notice that there are essentially two expressions that are based on the item, key and value! Often key will be the item or item id whereas value will be an expression.
 
 ## Dictionary Creation via Comprehension
 
-The comprehension variant is extremely similar to prior examples, except the returned expression is a pair of values and not one singular expression. Note that both set and dictionary comprehensions use the same curly brackets.
+The comprehension variant is similar to prior examples, but the expression is a pair of values, not a singular one. Note both set and dictionary comprehensions use curly brackets.
 
-![Structure of a Dictionary Comprehension](./images/DictBase.png)
+![Structure of a Dictionary Comprehension](./images/DictBase.jpg)
 
 ## Examples
 
-I will not be exactly repeating the prior examples as it's not really possible to map them but I will instead do examples inspired by each prior example.
+I will not be repeating the prior examples but I instead ones inspired by each prior example.
 
 ### Squaring Numbers in an Iterable
 
-We will proceed with squaring numbers as before but now we'll store the square as the value paired with the original number.
+We'll square numbers but store the square as the value paired with the original as the key.
 
 ```python output=2
 # List of Numbers
-numbers = [0, 1, 2, 3, 4, 5]
+numbers = [-2, 0, 1, 2, 3, 4, 5]
 
 # Loop Variant
 my_dict = {}
@@ -429,13 +385,13 @@ print(my_dict)
 my_dict = {num:num ** 2 for num in numbers}
 print(my_dict)
 
-{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
-{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+{-2: 4, 0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+{-2: 4, 0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
 ```
 
 ### Flooring Floats
 
-We will do a similar case as before where the key is the input number and the value is the floored value while keeping the positive value only condition.
+We'll do a case where the key is the input number and value is the floored value.
 
 ```python output=2
 # Importing the floor function
@@ -461,7 +417,7 @@ print(my_dict)
 
 ### Capitalizing Names
 
-Lastly, let's capitalize the names for the keys and the value will be `True` if the name needed to be capitalized or false if it was capitalized already.
+Lastly, let's used the capitalized names for the input keys and the value will be `True` if the name needed to be capitalized or false if it was capitalized already.
 
 ```python output=2
 # List of Names
@@ -483,7 +439,11 @@ print(my_dict)
 {'James': True, 'Charlotte': True, 'Patrick': False, 'Elaine': True}
 ```
 
-I decided to end on a mixed example where I also used a list comprehension and zipping! In this case, I didn't want to have to capitalize the name twice in my comprehension (key side and value side) so I created a list of the capitalized names. I then got out the pair of both original name and capitalized name using `zip` such that I could do the same thing as my iterative variant.
+I decided to end on a mixed example where I also used a list comprehension and zipping!
+
+In this case, I didn't want to have to capitalize the name twice in my comprehension (key side and value side) so I created a list of the capitalized names.
+
+I then got out the pair of both original name and capitalized name using `zip` such that I could do the same thing as my iterative variant.
 
 # Closing
 
