@@ -1,42 +1,54 @@
 import { useRef, useEffect, useState } from "preact/hooks";
 import hillsBackground from "./assets/background_hills.jpg";
 import convexBackground from "./assets/background_convex.jpg";
-import hillsPreview from "./assets/3d_hills.jpg";
-import convexPreview from "./assets/3d_convex.jpg";
-
-function gradient_descent(grad, start, alpha = 1.5) {
-  let [x, y] = start;
-  const path = [];
-  for (let i = 0; i < 500; i++) {
-    const [dx, dy] = grad(x, y);
-    const M = Math.sqrt(dx ** 2 + dy ** 2);
-    path.push([x, y, M]);
-    if (M < 0.0004) break;
-    x -= alpha * dx;
-    y -= alpha * dy;
-  }
-  return path;
-}
+import valleyBackground from "./assets/background_valley.jpg";
 
 function grad_hill(x, y) {
   return [Math.cos(x) * Math.sin(y), Math.sin(x) * Math.cos(y)];
 }
+
 function grad_convex(x, y) {
   return [2 * x, 2 * y];
 }
 
+function grad_valley(x, y) {
+  return [5 * x, y];
+}
+
 const input_data = {
-  hills: [hillsBackground, [-Math.PI, Math.PI, -Math.PI, Math.PI], grad_hill, hillsPreview],
-  convex: [convexBackground, [-3, 3, -3, 3], grad_convex, convexPreview],
+  hills: [hillsBackground, [-Math.PI, Math.PI, -Math.PI, Math.PI], grad_hill],
+  convex: [convexBackground, [-3, 3, -3, 3], grad_convex],
+  valley: [valleyBackground, [-10, 10, -10, 10], grad_valley],
 };
 
 export default function GradientDescentPlayground() {
   // States/Refs
   const canvasRef = useRef(null);
   const [caseVal, setCaseVal] = useState("hills");
+  const [alpha, setAlpha] = useState(0.1); // State for alpha value
+  const [timedOut, setTimedOut] = useState(false); // New state for timeout
   const [currentStep, setCurrentStep] = useState(0);
   const [gradMag, setGradMag] = useState(0.0);
   let isAnimating = false;
+
+  function gradient_descent(grad, start, alpha) {
+    let [x, y] = start;
+    const path = [];
+    let flag = true;
+    for (let i = 0; i < 101; i++) {
+      const [dx, dy] = grad(x, y);
+      const M = Math.sqrt(dx ** 2 + dy ** 2);
+      path.push([x, y, M]);
+      if (M < 0.0002) {
+        flag = false;
+        break;
+      }
+      x -= alpha * dx;
+      y -= alpha * dy;
+    }
+    setTimedOut(flag);
+    return path;
+  }
 
   function handleReset() {
     const canvas = canvasRef.current;
@@ -158,37 +170,44 @@ export default function GradientDescentPlayground() {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const start = getRealScale([x, y]);
-      const path = gradient_descent(grad, start);
+      const path = gradient_descent(grad, start, alpha);
       const cpath = path.map(getCanvasScale);
       animatePath(cpath);
     }
 
     canvas.addEventListener("click", handleClick);
     return () => canvas.removeEventListener("click", handleClick);
-  }, [caseVal]);
+  }, [caseVal, alpha]);
 
   return (
     <div className="flex flex-col gap-4 items-center w-full mx-auto py-4">
       <canvas ref={canvasRef} width={2000} height={2000} className="shadow-md rounded-lg border border-gray-300 w-full max-w-full" />
       <div className="flex justify-between w-full">
         <div className="flex flex-wrap justify-center gap-4">
-          <button onClick={handleReset} className="px-4 py-2 bg-gray-800 font-mono text-white rounded hover:bg-gray-700 transition">
-            Reset
-          </button>
-
-          {["hills", "convex"].map((key) => (
+          {["hills", "valley"].map((key) => (
             <button
               key={key}
               onClick={() => setCaseVal(key)}
-              className={`px-4 py-2 rounded border font-mono ${caseVal === key ? "bg-blue-600 text-white" : "bg-white text-gray-800 hover:bg-gray-100"}`}
+              className={`px-4 py-2 rounded border font-mono ${
+                caseVal === key ? "bg-blue-600 text-white" : "bg-white text-gray-800 hover:bg-gray-100"
+              }`}
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
           ))}
+          <select className="px-4 py-2 rounded border font-mono" value={alpha} onChange={(e) => setAlpha(parseFloat(e.target.value))}>
+            {[0.01, 0.1, 0.25, 0.5].map((val) => (
+              <option key={val} value={val}>
+                {val}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="text-right">
-          <div className="text-gray-700 font-mono">Step: {currentStep}</div>
-          <div className="text-gray-700 font-mono">Gradient Mag: {gradMag.toFixed(3)}</div>
+          <div className="font-mono text-gray-700">
+            Step: {currentStep} {timedOut && <span className="text-red-500"> (Timed Out)</span>}
+          </div>
+          <div className="font-mono text-gray-700">Gradient Mag: {gradMag.toFixed(3)}</div>
         </div>
       </div>
     </div>
