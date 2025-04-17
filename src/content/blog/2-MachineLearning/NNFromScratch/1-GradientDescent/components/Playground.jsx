@@ -4,9 +4,8 @@ import convexBackground from "./assets/background_convex.jpg";
 import hillsPreview from "./assets/3d_hills.jpg";
 import convexPreview from "./assets/3d_convex.jpg";
 
-function gradient_descent(grad, start) {
+function gradient_descent(grad, start, alpha = 1.5) {
   let [x, y] = start;
-  const alpha = 0.07;
   const path = [];
   for (let i = 0; i < 500; i++) {
     const [dx, dy] = grad(x, y);
@@ -92,25 +91,64 @@ export default function GradientDescentPlayground() {
 
     function animatePath(cpath) {
       isAnimating = true;
-      ctx.beginPath();
-      ctx.lineWidth = 5;
-      ctx.setLineDash([15, 15]);
-      ctx.lineDashOffset = 0; // Ensures dash starts predictably
-      ctx.moveTo(cpath[0][0], cpath[0][1]);
+
+      // Function to reset canvas while keeping the previous elements
+      function resetCanvas() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        const [imgSrc] = input_data[caseVal];
+        const img = new Image();
+        img.src = typeof imgSrc === "string" ? imgSrc : imgSrc.src;
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+      }
 
       function step(index) {
         if (index < cpath.length) {
-          ctx.lineTo(cpath[index][0], cpath[index][1]);
+          resetCanvas(); // Ensure we clear past frames and redraw
+
+          // Draw the path up to the current point
+          ctx.beginPath();
+          ctx.lineWidth = 5;
+          ctx.setLineDash([15, 15]);
+          ctx.lineDashOffset = 0; // Ensures dash starts predictably
+          ctx.moveTo(cpath[0][0], cpath[0][1]);
+
+          for (let j = 0; j <= index; j++) {
+            ctx.lineTo(cpath[j][0], cpath[j][1]);
+          }
           ctx.stroke();
+
+          // Always draw the starting point
+          drawCircle(cpath[0], 12, "lime", 4);
+
+          // Draw the moving circle at the current path index
+          drawCircle(cpath[index], 12, "white", 4);
+
+          // Update UI to reflect current step and gradient magnitude
           setCurrentStep(index);
           setGradMag(cpath[index][2]);
+
           requestAnimationFrame(() => step(index + 1));
         } else {
-          drawCircle(cpath[0], 12, "lime", 4);
-          drawCircle(cpath[cpath.length - 1], 12, "white", 4);
+          // Ensure we leave the path visible after the animation completes
+          ctx.beginPath();
+          ctx.moveTo(cpath[0][0], cpath[0][1]);
+          for (let j = 0; j < cpath.length; j++) {
+            ctx.lineTo(cpath[j][0], cpath[j][1]);
+          }
+          ctx.stroke();
+
+          // Draw the starting and final points
+          drawCircle(cpath[0], 12, "lime", 4); // Ensure the starting point remains
+          drawCircle(cpath[cpath.length - 1], 12, "white", 4); // End point
+
           isAnimating = false;
         }
       }
+
       step(0);
     }
 
