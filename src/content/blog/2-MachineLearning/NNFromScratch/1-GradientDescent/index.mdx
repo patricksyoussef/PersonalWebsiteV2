@@ -14,18 +14,23 @@ import SeriesIntro from "../SeriesIntro.md"
 import PartialDeriv from "./asides/PartialDeriv.md"
 import LinearRegressionGrad from "./asides/LinearRegressionGrad.md"
 
+import Playground from "./components/Playground.jsx"
+
+
 <SeriesIntro/>
 
 # Introduction
 
-Gradient descent is a simple and intuitive optimization method that is common across a large space of problems ranging from simple linear regression to neural networks. With this, we can optimize against a given function and determine parameters that give us the best performance. By the end of this post, you should have a good idea on how this optimizer works and how to apply it to new problems.
+Gradient descent is a simple and intuitive optimization method that is common across a large space of problems ranging from simple linear regression to neural networks.
+
+With this, we can optimize against a given function and determine parameters that give us the best performance. By the end of this post, you should have a good idea on how this optimizer works and how to apply it to new problems.
 
 # Prior Knowledge
 
 There are a few concepts that you should know before coming into this post, in general I try to explain everything clearly but it helps if you have prior exposure to these concepts.
 
-- **NumPy:** We'll be using NumPy as the data storage and computation backbone. If you're not familiar with NumPy matrices and how to manipulate them take a look at [this resource](https://numpy.org/doc/stable/user/absolute_beginners.html).
-- **Calculus:** We rely heavily on derivatives, in particular, [partial derivatives](https://www.mathsisfun.com/calculus/derivatives-partial.html) are important!
+- **NumPy:** NumPy is used as the data storage and computation backbone. If you're not familiar with NumPy matrices take a look at [this resource](https://numpy.org/doc/stable/user/absolute_beginners.html).
+- **Calculus:** We rely on derivatives, in particular, [partial derivatives](https://www.mathsisfun.com/calculus/derivatives-partial.html)!
 
 # Gradients
 
@@ -37,13 +42,13 @@ Before we step into how we use the gradient to help in our optimization problem,
 
 ## Gradient Intuition
 
-The gradient of a function $\nabla f$ is actually quite a simple concept but can be so powerful when used correctly. The way to think about the gradient intuitively is that it's a vector that points in the direction of greatest increase of a certain function.
+The gradient of a function $\nabla f$ is actually quite a simple concept but can be so powerful when used correctly. The way to think about the gradient intuitively is that it's a vector that points in the direction of greatest increase for your given function $f$.
 
 It's a vector in the sense that it has the direction where max increase happens as well as the magnitude of the increase. The components of the vector lie in the space of the function so if the function takes one input the gradient is only one value and direction.
 
 ## Gradient Definition
 
-To be more formal, we can define the gradient in terms of partial derivatives such that we could actually compute a gradient. Consider a function $f(x, y, z)$ that depends on multiple input variables. The gradient $\nabla f$ is a vector of partial derivatives.
+Formally, we can define the gradient in terms of partial derivatives such that we could actually compute a gradient. Consider a function $f(x, y, z)$ that depends on 3 input variables $x$, $y$, and $z$. The gradient $\nabla f$ is a vector of partial derivatives.
 
 $$
 \nabla f =
@@ -54,7 +59,7 @@ $$
 \end{bmatrix}
 $$
 
-So if you're standing at a point $(x_0, y_0, z_0)$ and compute the associated gradient at that point, you'd be getting the vector pointing in the direction from where you are such that you would climb $f$ the fastest. A clearer way to show this is that we evaluate each partial derivative at our point.
+If you're standing at a point $(x_0, y_0, z_0)$ and compute the gradient at that point, you'd be getting the vector pointing in the direction from where you are such that you would climb $f$ the fastest. A clearer way to show this is that we evaluate each partial derivative at our point.
 
 $$
 \nabla f(x_0, y_0, z_0) =
@@ -65,7 +70,7 @@ $$
 \end{bmatrix}
 $$
 
-Don't be worried about the math for now, I just want you to take the intuition and roll with it for now. If you plan to implement this from scratch you'll need to actually evaluate this but for now just know it points to where we climb $f$ fastest!
+Don't be worried about the math for now, I just want you to take the intuition and roll with it for now. If you plan to implement this from scratch you'll need to actually evaluate this but for now just know it points to where we climb $f$ fastest given a starting point!
 
 # Gradient Descent
 
@@ -73,11 +78,11 @@ Now that we have an understanding of how to compute gradients and what informati
 
 ## Descent Intuition
 
-Let imagine that you are stranded on a large hill and really dense fog surrounds you such that you can only see a few feet around. You want to *descend* to the bottom of the hill back to safety but you can't see far enough to path out how to get to the bottom.
+Imagine you’re stranded on a massive hill, surrounded by thick fog where you can only see a few feet in any direction. Your goal is to get down to the bottom, but the limited visibility makes it impossible to chart a full path from where you are.
 
-You decide that the best thing you can do is to follow the direction of greatest descent local to what you can see. As you continue to descend you get new information about your surroundings so you change your direction every so often to the new greatest descent. Eventually you'll either reach a valley in the hill landscape or the true bottom where you're trying to be.
+So, you make a simple decision: take a small step in the direction that slopes downward the most from where you’re currently standing. Then you repeat. Each time you move, the fog shifts just enough to reveal new terrain, allowing you to reassess and adjust your direction. Over time, by continuously stepping downhill in the steepest local direction, you’ll eventually find yourself in a valley or if you’re lucky, at the very bottom.
 
-What you've just done is gradient descent down the hill! In the next section we'll associate these bits of intuition to the math and see how it works.
+That’s essentially what gradient descent is. In the next section, we’ll take this intuition and connect it to the math behind the algorithm.
 
 ## Descent Definition
 
@@ -87,16 +92,16 @@ $$
 \theta_{i+1} = \theta_i - \alpha \nabla f(\theta_i)
 $$
 
-- $f$ is the function we're minimizing with gradient descent, it's the surface height of the hill
-- $\theta$ is the set of variables that $f$ needs, it's the $x$ and $y$ position on the hill looking top down
-- $\nabla f(\theta)$ is the gradient of $f$ with respect to $\theta$, it's the direction we move in $x$ and $y$ on the hill
-- $\alpha$ is a scalar for the gradient to decrease how big of a step we take, often called learning rate
+- $f$ is the function we're minimizing with gradient descent, it's the height of the hill
+- $\theta$ is the set of variables for $f$, it's the $x$ and $y$ position on the hill
+- $\nabla f(\theta)$ is the gradient of $f$ evaluated at $\theta$, the direction we move on the hill
+- $\alpha$ is a scalar to decrease how big of a step we take, often called learning rate
 
 ## Local vs Global Minima
 
-Another aspect of the problem we should try to connect is the idea of an intermediate valley in the hill landscape versus the true bottom. Formally this difference is called local and global minimas.
+Another aspect of the problem we should connect is the idea of an intermediate valley in the hill landscape versus true bottom. This difference is called local and global minimas.
 
-With gradient descent there is a problem in which depending on the loss function we are not guaranteed that we'll land at the global minima which is the lowest point over the entire landscape. Let's consider some simple cases to see why this is the case.
+With gradient descent there is a problem in which depending on the loss function we are not guaranteed that we'll land at the global minima, the lowest point over the entire landscape. Let's consider some simple cases to see why this is can be a problem.
 
 ### Convex Function
 
@@ -118,7 +123,7 @@ import grad_problem from "./videos/grad_problem.mp4";
 
 ### Resolutions
 
-In practice, we don't even know what the loss landscape looks like for large models, but this problem exists no matter what. There is research done on variations of gradient descent to help mitigate these problems as well as improve training speed and overall performance. The go-to right now is the [Adam optimizer](https://optimization.cbe.cornell.edu/index.php?title=Adam) which varies $\alpha$ automatically based on patterns observed in prior iterations.
+In practice, we don't know what the loss landscape looks like for large models. There is research on variations of gradient descent to help mitigate these problems as well as improve training speed and overall performance. The go-to right now is the [Adam optimizer](https://optimization.cbe.cornell.edu/index.php?title=Adam) which varies $\alpha$ automatically based on patterns observed in prior iterations.
 
 Just to give you an idea what these more complicated landscapes look like, consider [this work](https://arxiv.org/abs/1712.09913) done to try to visualize them! Mind you, in most applications the number of inputs variables is larger than we can visualize so this is an attempt at visualizing.
 
@@ -172,19 +177,23 @@ import hill_descent from "./videos/hill_descent.mp4";
 
 <PostVideo video={hill_descent} aspectRatio={1.818} alt="Various Hill Descent"/>
 
- As we can see they all reach minimums which is what we expect! Something to note is that you can see that depending on where the points start they have a destined minimum they'll end up in, in other landscapes this may mean that a point will terminate at a local not a global minima!
+They all reach minimums which is what we expect! Something to note is that you can see that depending on where the points start they have a destined minimum they'll end up in, in other landscapes this may mean that a point will terminate at a local not a global minima!
 
 ### Gradient Field
 
-We can evaluate the gradient at a grid of points across the space we're optimizing in. We know in this case that the gradient produces a vector over $x$ and $y$ so we can plot the gradient as an arrow pointing in the gradient direction. This grid of arrows is called a "gradient vector field".
+We can evaluate the gradient at a grid of points across the space we're in. We know that the gradient produces a vector over $x$ and $y$ so we can plot the gradient as an arrow pointing in the gradient direction. This grid of arrows is called a *gradient vector field*.
 
-Plotting the paths from before over the vector field we can see that the path the points take almost exactly follows the negative of the gradient which makes sense! The gradient points in the direction of greatest *increase* so when we descend we follow the negative of the gradient to follow the path of greatest *decrease*. We could just as easily follow the gradient if we wanted to maximize a function called gradient ascent but this isn't nearly as common.
+Plotting the paths from before over the vector field we can see that the path the points take almost exactly follows the opposite of the gradient which makes sense! The gradient points in the direction of greatest *increase* so when we descend we follow the opposite of the gradient to achieve the path of greatest *decrease*. We could just as easily follow the gradient if we wanted to maximize a function called gradient ascent but this isn't nearly as common.
 
 ![Gradient Field with Paths](./images/grad_path.jpg)
 
+# Gradient Playground
+
+<Playground client:load />
+
 # Linear Regression
 
-Now that we have the foundation to apply this method, let's implement gradient descent for linear regression and analyze some of the behavior. In this section I focus more on the conceptual side of this problem and not the code but you can see how I implemented it in the [next section](/blog/neural-net-gradient-descent/#implementation).
+Now that we have the foundations, let's implement gradient descent for linear regression and analyze some of the behavior. In this section I focus more on the conceptual side of this problem and not the code but you can see how I implemented it in the [next section](/blog/neural-net-gradient-descent/#implementation).
 
 ## Problem Statement
 
@@ -202,9 +211,9 @@ $$
 \hat{y} = w X + b
 $$
 
-Where the weight $w$ is the slope of the line and the bias $b$ is the line vertical offset. We are considering the scalar case here where $X$ is a single number for each example in our dataset but we could also have the case where $X$ is a vector of multiple inputs for each sample and as such $w$ would also be a vector. In the next post, we'll look more into what that looks like but I want start simple.
+Where the weight $w$ is the slope of the line and the bias $b$ is the vertical offset. We're considering the scalar case where $X$ is a single number for each example in our dataset but we could also have the case where $X$ is a vector of many inputs and as such $w$ would also be a vector. In the next post, we'll look more into what that looks like but I want start simple.
 
-Often it will help to think about this model working on a single sample at a time which merely implies that we index a sample out of $X$ and that only results in the prediction for that sample.
+It will help to think about this model working on a single sample at a time which implies that we index a sample out of $X$ and that only results in the prediction for that sample.
 
 $$
 \hat{y_i} = w X_i + b
@@ -212,15 +221,15 @@ $$
 
 ## Function to Minimize
 
-In this problem, we want to formulate a function that by minimizing we'll achieve the expected behavior. One way to think about this is we want a function that indicates how bad we are doing and we want to minimize this "badness". This is commonly referred to as a [loss function](https://en.wikipedia.org/wiki/Loss_function#:~:text=In%20mathematical%20optimization%20and%20decision,cost%22%20associated%20with%20the%20event.).
+We want to formulate a function that by minimizing we'll achieve the expected behavior. One way to think about this is we want a function that indicates how bad we are doing and we want to minimize this "badness". This is commonly referred to as a [loss function](https://en.wikipedia.org/wiki/Loss_function#:~:text=In%20mathematical%20optimization%20and%20decision,cost%22%20associated%20with%20the%20event.).
 
-In the case of linear regression, we're looking to produce a real-valued number and compare it to the dataset samples. The loss function used for this is called the mean-squared error loss (MSE).
+For linear regression, we're looking to produce a real-valued number and compare it to the dataset samples. The loss function used for this is called the mean-squared error loss (MSE).
 
 $$
 \text{MSE} = \frac{1}{N} \sum^{n}_{i=1} (y_i - \hat{y_i})^2
 $$
 
-To be more inline with our prior labeling we'll call MSE our loss $L$. We can sub in our prior model for prediction for $\hat{y_i}$ to get the final loss description in terms of our model parameters $w$ and $b$. This is because we can think of $w$ and $b$ as our knobs that we can tweak to change where the line is!
+To be consistent with our prior labeling we'll call MSE our loss $L$. We sub in our prior model for predicting $\hat{y_i}$ to get the loss in terms of our model parameters $w$ and $b$. This is because we can think of $w$ and $b$ as our knobs that we can tweak to change where the line is!
 
 $$
 L = \frac{1}{N} \sum^{n}_{i=1} (y_i - (wx_i + b))^2
@@ -248,7 +257,7 @@ Let's actually step into an example where we can see how the model trains and ev
 
 ## Linear Dataset
 
-The construction of out linear dataset is very simple! We start with a line with a known $w$ and $b$, in this case $w=2$ and $b=1$, and we apply noise to the points just as we would expect real data to have. The noise is merely sampling from a normal distribution $\mathcal{N}(0, \sigma^2)$. In a real example, we would not know what the true line is and we use linear regression to estimate $w$ and $b$ of that line.
+We start with a line with a known $w$ and $b$, in this case $w=2$ and $b=1$, and we apply noise to the points just as we would expect real data to have. The noise is merely sampling from a normal distribution $\mathcal{N}(0, \sigma^2)$. In a real example, we would not know what the true line is and we use linear regression to estimate $w$ and $b$ of that line.
 
 ![True Line and Noisy Points](./images/linear_data.jpg)
 
@@ -256,7 +265,7 @@ We can now execute a linear regression to solve for $w$ and $b$ and see how well
 
 ## Training Visualization
 
-What you can see in the video below is the loss landscape on the left and the history of our $(w,b)$ values as the point traveling through it and on the right you can see the predicted line in red plotting the corresponding line for that $(w,b)$ based on the position in the descent. We can see the loss value is quite low and the fit seems good!
+What you can see in the video below is the loss landscape on the left and the history of our $(w,b)$ values as the point traveling through it. On the right you can see the predicted line in red plotting the corresponding line for that $(w,b)$ based on the position in the descent.
 
 import loss_travel from "./videos/loss_travel.mp4";
 
@@ -266,7 +275,7 @@ One way to think about this is that the position of the point $(w,b)$ defines a 
 
 ## Parabolic Dataset Example
 
-Let's consider a different example where the underlying trend of the data isn't a line anymore but instead a parabola.
+Let's consider a different example where the underlying trend of the data is a parabola.
 
 ## Parabolic Dataset
 
@@ -284,14 +293,14 @@ import loss_travel_parabola from "./videos/loss_travel_parabola.mp4";
 
 You may have noticed that both examples reach the minimum which would indicate that we should have reached a point where the model performs well, right?
 
-Not quite, in fact there is a whole concept in machine learning called the [bias/variance tradeoff](https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html). The general idea of this is that there are two extremes that result in poor performance.
+Not quite, in fact there is a concept called the [bias/variance tradeoff](https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html). The general idea of this is that there are two extremes that result in poor performance.
 
 - **High Bias**: The model is too *inflexible* to model the data correctly
-    - Happens when models are too simple for patterns in the data
+    - Models is too simple to adequately capture the patterns in the data
     - This is where we are, there is no world where a line will correctly fit a parabola
 - **High Variance**: The model is too *flexible* to generalize the data correctly
-    - Happens when models are too complex are starts fitting to patterns that aren't "real"
-    - Large models can have an issue where they fit to noise and don't generalize the data well
+    - Model is too complex and starts fitting to patterns that aren't "real"
+    - Issue where the model fits to noise and doesn't generalize the data well
 
 Somewhere in the middle there is a goldilocks region where the model is flexible enough to encompass the complexity of the data but not so flexible that it starts [overfitting](https://en.wikipedia.org/wiki/Overfitting).
 
@@ -333,13 +342,13 @@ When the learning rate $\alpha$ is too small there isn't a concern of instabilit
 
 ### Good Learning Rate
 
-When the learning rate $\alpha$ is well chosen we swiftly converge to the minima without any oscillations or sporadic behavior. We reach the optimal point on our loss surface within ~25 iterations and hold there.
+When the learning rate $\alpha$ is well chosen we swiftly converge to the minima without any oscillations or sporadic behavior while reaching the optimal point on our loss surface.
 
 ![Adequately Fast](./images/learningrate_0.1.jpg)
 
 ### Large Learning Rate
 
-When the learning rate $\alpha$ is a bit large we have some oscillations as the descent settles into the final path. Looking just at the loss curve everything seems perfectly fine and in practice this is fine! One issue is sometimes you'll see a rapid decay of loss at first and then unstable behavior as you settle in closer.
+When the learning rate $\alpha$ is a bit large we see some oscillations as the descent settles. Looking at the loss curve everything seems perfectly fine, but one issue is sometimes you'll see a rapid decay of loss at first and then unstable behavior as you settle in closer.
 
 ![A Bit Unstable](./images/learningrate_0.25.jpg)
 
@@ -351,7 +360,7 @@ When the learning rate $\alpha$ is way too large we have unmanageable oscillatio
 
 ## Where to Start
 
-So how do you pick the right learning rate? In practice this is harder said then done and is a bit of an art. I would advise looking at similar models trained and what people used as a baseline but have fun experimenting with it too. Keep the behaviors in mind and change as you see necessary.
+How do you pick the right learning rate? In practice, this is harder said then done and is a bit of an art. Look at similar models trained and what people used as a baseline but have fun experimenting with it too. Keep the behaviors in mind and change as you see necessary.
 
 With better optimizers like aforementioned [Adam optimizer](https://optimization.cbe.cornell.edu/index.php?title=Adam) much of these issues are handled automatically but it still helps to know general behaviors in plain gradient descent.
 
