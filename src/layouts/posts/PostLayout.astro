@@ -10,7 +10,6 @@ import { components } from "../../components/MDX/MDXComponents";
 const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;
 const { Content, remarkPluginFrontmatter } = await render(entry);
-console.log(featureStyle);
 ---
 
 <BaseLayout title={frontmatter.title}>
