@@ -207,7 +207,10 @@ export default function GradientDescentPlayground() {
           <div className="font-mono text-gray-700">
             Step: {currentStep} {timedOut && <span className="text-red-500"> (Timed Out)</span>}
           </div>
-          <div className="font-mono text-gray-700">Gradient Mag: {gradMag.toFixed(3)}</div>
+          <div className="font-mono text-gray-700">
+            Gradient Mag:
+            {gradMag > 1000 ? <span className="text-red-500"> Unstable</span> : gradMag.toFixed(3)}
+          </div>
         </div>
       </div>
     </div>
