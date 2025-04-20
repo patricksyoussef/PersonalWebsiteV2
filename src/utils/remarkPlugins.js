@@ -5,7 +5,7 @@ import { visit } from "unist-util-visit";
 export function remarkReadingTime() {
   return function (tree, { data }) {
     const textOnPage = toString(tree);
-    const readingTime = getReadingTime(textOnPage);
+    const readingTime = getReadingTime(textOnPage, { wordsPerMinute: 150 });
     data.astro.frontmatter.minutesRead = readingTime.text;
   };
 }
