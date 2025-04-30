@@ -2,8 +2,9 @@
 import { Image } from "astro:assets";
 import ContentWrapper from "./ContentWrapper.astro";
 const { src, alt } = Astro.props;
+let aspectRatio = src.width / src.height;
 ---
 
-<ContentWrapper alt={alt}>
-  <Image src={src} widths={[720, 1200, src.width]} class="bg-white object-contain h-auto w-auto max-h-60vh]" alt="" />
+<ContentWrapper alt={alt} aspectRatio={aspectRatio}>
+  <Image src={src} widths={[720, 1200, src.width]} class="bg-white object-contain h-auto w-full]" alt="" />
 </ContentWrapper>
