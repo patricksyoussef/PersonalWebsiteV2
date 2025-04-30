@@ -12,10 +12,20 @@ const InlineCode = (props) => {
   );
 };
 
+const LinkWrapper = (props) => {
+  const isExternal = props.href?.startsWith("http");
+  return (
+    <a target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined} {...props}>
+      {props.children}
+    </a>
+  );
+};
+
 export const components = {
   blockquote: BlockQuote,
   img: ImageWrapper,
   code: InlineCode,
+  a: LinkWrapper,
   Collapse,
   PostVideo,
   CodeBlock,
