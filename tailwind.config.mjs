@@ -54,17 +54,20 @@ export default {
           },
           ul: {
             listStylePosition: "outside",
-            lineHeight: theme("lineHeight.6"),
           },
           "ul > li::marker": {
             color: theme("colors.stone.600"),
           },
           ol: {
             listStylePosition: "outside",
-            lineHeight: theme("lineHeight.6"),
           },
           "ol > li::marker": {
             color: theme("colors.stone.600"),
+          },
+          li: {
+            lineHeight: theme("lineHeight.8"),
+            marginTop: "0.25em",
+            marginBottom: "0.25em",
           },
           thead: {
             borderBottomColor: theme("colors.accent"),
