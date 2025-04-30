@@ -2,6 +2,7 @@
 import BaseLayout from "../BaseLayout.astro";
 import Feature from "../../components/Layout/Feature.astro";
 import Prose from "../../components/MDX/Prose.astro";
+import TableOfContents from "../../components/Layout/TableOfContents.astro";
 import { render } from "astro:content";
 import "../styles/post_base.css";
 import "katex/dist/katex.min.css";
@@ -9,16 +10,23 @@ import { components } from "../../components/MDX/MDXComponents";
 
 const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;
-const { Content, remarkPluginFrontmatter } = await render(entry);
+const { Content, remarkPluginFrontmatter, headings } = await render(entry);
+let numHeadings = headings.filter((item) => item.depth === 2).length;
 ---
 
 <BaseLayout title={frontmatter.title}>
   <div class={`${contentStyle}`}>
     <Feature entry={entry} frontmatter={remarkPluginFrontmatter} extraStyle={`${featureStyle}`} />
-    <Prose>
-      <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
-        <Content components={components} />
+    <div class="grid lg:grid-cols-[1fr_auto_1fr]">
+      <div class="hidden lg:block"></div>
+      <Prose>
+        <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
+          <Content components={components} />
+        </div>
+      </Prose>
+      <div class="hidden lg:block h-fit sticky top-5">
+        {numHeadings > 5 && <TableOfContents headings={headings} />}
       </div>
-    </Prose>
+    </div>
   </div>
 </BaseLayout>

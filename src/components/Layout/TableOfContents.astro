@@ -9,9 +9,68 @@ const { headings } = Astro.props;
 const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
 ---
 
-<div class="p-4 text-sm leading-tight overflow-scroll max-h-[80vh]">
-  <h2 class="text-xl font-semibold mb-4 text-gray-800">Table of Contents</h2>
-  <ul class="mt-4 flex flex-col gap-2">
+<div class="pl-20 text-sm">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observerOptions = {
+        rootMargin: "0px 0px -80% 0px", // Adjust the margin for when to activate
+        threshold: 0, // Change this to be more or less sensitive as needed
+      };
+
+      let activeSection = null;
+
+      const observerCallback = (entries) => {
+        entries.forEach((entry) => {
+          const tocLink = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+
+          if (entry.isIntersecting) {
+            if (entry.target.tagName === "H2") {
+              // Directly update for h2
+              setActiveSection(tocLink);
+            } else if (entry.target.tagName === "H3" && !activeSection) {
+              // Fallback logic if activeSection is not set, consider nearest h2
+              const parentH2Link = findParentH2Link(entry.target);
+              if (parentH2Link) {
+                setActiveSection(parentH2Link);
+              }
+            }
+          }
+        });
+      };
+
+      const setActiveSection = (newActiveSection) => {
+        if (activeSection && activeSection !== newActiveSection) {
+          activeSection.classList.remove("font-semibold", "text-blue-600");
+        }
+
+        if (newActiveSection) {
+          newActiveSection.classList.add("font-semibold", "text-blue-600");
+        }
+
+        activeSection = newActiveSection;
+      };
+
+      const findParentH2Link = (h3Node) => {
+        // Logic to find the corresponding TOC link for the parent h2 of a given h3
+        let parentH2 = h3Node.previousElementSibling;
+        while (parentH2 && parentH2.tagName !== "H2") {
+          parentH2 = parentH2.previousElementSibling;
+        }
+        return parentH2 ? document.querySelector(`.toc-link[href="#${parentH2.id}"]`) : null;
+      };
+
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+      // Observe both h2 and h3 for triggering highlight logic
+      document.querySelectorAll("h2, h3").forEach((heading) => {
+        observer.observe(heading);
+      });
+    });
+  </script>
+  <a href="#">
+    <h2 class="text-xl text-gray-800 mb-2">On This Page</h2>
+  </a>
+  <ul class="flex flex-col gap-2 border-l-2 border-edge">
     {
       filteredHeadings.map((heading) => (
         <li
@@ -20,7 +79,7 @@ const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
             "pl-6": heading.depth === 3,
           }}
         >
-          <a href={`#${heading.slug}`} class="toc-link transition text-gray-700 hover:text-gray-900">
+          <a href={`#${heading.slug}`} class="toc-link transition">
             {heading.text}
           </a>
         </li>

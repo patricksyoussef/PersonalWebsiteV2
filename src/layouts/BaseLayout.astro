@@ -18,10 +18,29 @@ const pageTitle = title ? `${title} | Patrick Youssef` : "Patrick Youssef";
     <link rel="icon" type="image/svg+xml" href="/seedling.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
+    <script is:inline>
+      window.addEventListener("DOMContentLoaded", () => {
+        const hash = window.location.hash;
+        if (hash) {
+          // Prevent automatic browser scrolling
+          history.scrollRestoration = "manual";
+        }
+      });
+
+      window.addEventListener("load", () => {
+        const hash = window.location.hash;
+        if (hash) {
+          const el = document.getElementById(hash.substring(1));
+          if (el) {
+            el.scrollIntoView({ behavior: "auto", block: "start" });
+          }
+        }
+      });
+    </script>
   </head>
   <body class="bg-background font-sans">
     <div class="h-2 bg-accent"></div>
-    <div class="mx-4 md:mx-8">
+    <div class="mx-4 md:mx-10">
       <div class="w-full mx-auto">
         <Header />
         <slot />
