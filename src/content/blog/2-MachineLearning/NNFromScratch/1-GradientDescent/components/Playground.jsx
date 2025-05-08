@@ -188,7 +188,7 @@ export default function GradientDescentPlayground() {
             <button
               key={key}
               onClick={() => setCaseVal(key)}
-              className={`px-4 py-2 rounded border font-mono ${
+              className={`px-4 py-2 rounded border font-mono hidden md:block ${
                 caseVal === key ? "bg-blue-600 text-white" : "bg-white text-gray-800 hover:bg-gray-100"
               }`}
             >
