@@ -3,6 +3,7 @@ import BaseLayout from "../BaseLayout.astro";
 import Feature from "../../components/Layout/Feature.astro";
 import Prose from "../../components/MDX/Prose.astro";
 import TableOfContents from "../../components/Layout/TableOfContents.astro";
+import PageTopChevron from "../../components/Layout/PageTopChevron.astro";
 import { render } from "astro:content";
 import "../styles/post_base.css";
 import "katex/dist/katex.min.css";
@@ -15,18 +16,19 @@ let numHeadings = headings.filter((item) => item.depth === 2).length;
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <div class={`${contentStyle}`}>
+  <div class={`fade-in-fast ${contentStyle}`}>
     <Feature entry={entry} frontmatter={remarkPluginFrontmatter} extraStyle={`${featureStyle}`} />
-    <div class="grid lg:grid-cols-[1fr_auto_1fr]">
+    <div class="lg:grid lg:grid-cols-[1fr_auto_1fr]">
       <div class="hidden lg:block"></div>
       <Prose>
         <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
           <Content components={components} />
         </div>
       </Prose>
-      <div class="hidden lg:block h-fit sticky top-5">
+      <div class="hidden lg:block h-fit sticky top-10">
         {numHeadings >= 5 && <TableOfContents headings={headings} />}
       </div>
     </div>
   </div>
+  <PageTopChevron client:load />
 </BaseLayout>
