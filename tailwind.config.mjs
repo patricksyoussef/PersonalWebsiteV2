@@ -34,7 +34,7 @@ export default {
       }),
       borderRadius: (theme) => ({
         cards: theme("spacing.cards"),
-        content: theme("spacing.content"),
+        content: "1rem",
       }),
       typography: ({ theme }) => {
         const defaultStyles = {
@@ -43,8 +43,8 @@ export default {
           ":not(pre) > code::after": { content: "none" },
           h1: { fontWeight: theme("fontWeight.bold") },
           h2: { fontWeight: theme("fontWeight.bold") },
-          h3: { fontWeight: theme("fontWeight.bold") },
-          h4: { fontWeight: theme("fontWeight.bold") },
+          h3: { fontWeight: theme("fontWeight.semibold") },
+          h4: { fontWeight: theme("fontWeight.semibold") },
           a: {
             textDecorationColor: "transparent",
             textDecoration: "underline",
