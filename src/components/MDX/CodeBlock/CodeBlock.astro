@@ -80,14 +80,16 @@ const highlightedCode = hastToHtml(hastCode);
 ---
 
 <div class="code-block p-3 mb-10 rounded-lg bg-codeBackground shadow-md font-mono">
-  <div class="flex flex-row text-white justify-between items-center mb-1 min-h-7">
+  <div class="grid grid-cols-[1fr_4fr_1fr] text-white mb-1">
     <div class="flex flex-row space-x-2 items-center">
       <div class="rounded-full bg-[#FF605C] h-[0.75rem] aspect-square"></div>
       <div class="rounded-full bg-[#FFBD44] h-[0.75rem] aspect-square"></div>
       <div class="rounded-full bg-[#00CA4E] h-[0.75rem] aspect-square"></div>
     </div>
-    <div class="font-mono text-sm">{fileName}</div>
-    <CopyButton code={codeLines} />
+    <div class="font-mono text-sm text-center">{fileName}</div>
+    <div class="flex justify-end">
+      <CopyButton code={codeLines} />
+    </div>
   </div>
   <div class="not-prose text-[0.75rem] md:text-[0.9rem] leading-[1.5]" set:html={highlightedCode} />
 </div>
