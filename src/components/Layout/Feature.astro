@@ -12,6 +12,6 @@ const subTitleStr = `${formatDate(entry)} · ${frontmatter.minutesRead}`;
     <div class={`text-3xl md:text-5xl text-bold text-black mb-4 ${extraStyle}`}>{entry.data.title}</div>
   </div>
   <div class="-mx-4 md:-mx-10 mb-12">
-    <Image src={src} widths={[240, 540, 720, 1200, 1800, src.width]} class="object-cover w-full max-h-40 md:max-h-72 object-center h-full" alt="" />
+    <Image src={src} widths={[1800, src.width]} class="object-cover w-full max-h-[22vh] 2xl:max-h-[30vh] object-center h-full" alt="" />
   </div>
 </div>
