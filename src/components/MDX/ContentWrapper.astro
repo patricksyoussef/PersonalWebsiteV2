@@ -3,7 +3,7 @@ const { alt, aspectRatio } = Astro.props;
 ---
 
 <div class={`flex justify-center flex-col aspect-[${aspectRatio}]`}>
-  <div class="rounded-content w-full mx-auto not-prose overflow-clip shadow-md mb-2 border-edge border">
+  <div class="rounded-content w-fit mx-auto not-prose overflow-clip shadow-md mb-2 border-edge border">
     <slot />
   </div>
   <div class="text-center italic">{alt}</div>
