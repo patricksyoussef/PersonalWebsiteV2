@@ -15,12 +15,12 @@ const slug = `/projects/${entry.data.slug}`;
       toolbarText={joinTags(entry)}
       toolbarStyle="text-xs uppercase tracking-wide text-stone-600"
       titleStyle="text-gray-900 font-semibold group-hover:decoration-blue-500"
-      subTitleStyle="text-gray-500"
+      subTitleStyle="hidden"
       tagText="project"
       tagColor="bg-blue-100 text-blue-700 border-blue-200"
     />
     <div class="overflow-clip rounded-cards">
-      <Image src={entry.data.cover} widths={[240, 540, 720]} alt="" class="max-h-24 min-h-24 object-cover object-center h-full w-full" />
+      <Image src={entry.data.cover} widths={[240, 540, 720]} alt="" class="max-h-20 object-cover object-center h-full w-full" />
     </div>
   </div>
 </ContentCard>

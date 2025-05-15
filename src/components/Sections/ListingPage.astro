@@ -29,11 +29,11 @@ const elems = [
 ---
 
 <BaseLayout title={title}>
-  <div class="fade-in mx-auto max-w-base pb-2">
-    <span class="flex text-6xl mt-6 mb-2 lowercase font-serif font-medium">
+  <div class="fade-in mx-auto max-w-base xl:max-w-wide pb-2">
+    <span class="flex text-6xl lg:text-7xl mt-6 mb-2 lowercase font-serif font-medium">
       <div>{subtitle}<span class="text-accent">.</span></div>
     </span>
-    <div class="text-base">{flavorText}</div>
+    <div class="text-base xl:text-lg">{flavorText}</div>
   </div>
   <ContentGrid elements={elems} />
 </BaseLayout>

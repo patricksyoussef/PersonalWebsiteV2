@@ -21,6 +21,7 @@ export default {
       },
       maxWidth: {
         base: "1000px",
+        wide: "1200px",
         content: "800px",
       },
       spacing: {

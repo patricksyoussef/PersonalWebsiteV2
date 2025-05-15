@@ -7,9 +7,9 @@ const entry = await getEntry("supplements", "hero");
 const { Content } = await render(entry);
 ---
 
-<div class="mx-auto drop-in max-w-base grid grid-cols-1 gap-6 md:grid-cols-[2fr_1fr] my-2 md:my-8">
-  <div class="prose fade-in text-xl md:text-3xl lg:text-4xl font-serif text-extralight">
-    <div class="prose-p:my-0 md:prose-p:font-light md:prose-a:font-normal">
+<div class="mx-auto drop-in max-w-base xl:max-w-wide grid grid-cols-1 md:grid-cols-[2fr_1fr] xl:md:grid-cols-[2fr_1.1fr] my-2 md:my-8">
+  <div class="prose fade-in text-[1.55rem] md:text-3xl lg:text-4xl xl:text-[2.5rem] md:pr-[1.15em] font-serif text-extralight">
+    <div class="prose-p:my-0 md:prose-p:font-light md:prose-a:font-normal prose-p:leading-[1.1]">
       <div class="hero space-y-6 prose-a:transition prose-a:decoration-transparent hover:prose-a:decoration-accent">
         <Content />
       </div>
