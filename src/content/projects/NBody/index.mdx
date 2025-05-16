@@ -11,7 +11,6 @@ pinned: true
 ---
 
 import solar_anim from "./videos/solar_anim.mp4";
-import figure8 from "./videos/figure8_anim.mp4";
 
 # Introduction
 
@@ -178,7 +177,7 @@ for i, j in pairs: # Pairs will be n(n-1)/2 in length
 
 When comparing the different operation counts as the number of bodies $n$ increases we can see that there is a formidable gain in using the combination method over the brute force method.
 
-![Operation Count Comparison](./images/force_pair_comp.jpg)
+![Operation Count Comparison](./images/pair_comp.jpg)
 
 Those are familiar with big-$O$ notation may have noticed the both the implementations are still quadratic $O(n^2)$ in nature and are therefore the same time complexity. However, if you were to measure the actual runtime we would see a gain. This is an example where trying to compare time complexity to runtime can get messy.
 
@@ -900,56 +899,6 @@ plt.show()
 ![Energy Trends For Two Body](./images/twobody_energy.jpg)
 
 Great! Seems like everything is working as expected so we can move on to some more interesting examples.
-
-# Special Three Body
-
-In this section, we'll have fun with an N-body choreography with three bodies. The history of them is [quite short](https://www.math.uni-bielefeld.de/~rehmann/ECM/cdrom/3ecm/pdfs/pant3/simo.pdf) and many fun initial conditions have already been found. We're focusing on one that should produce a stable figure 8!
-
-> It's pretty typical for these to use $G=1$
-
-## Initial Conditions
-
-I have provided the initial conditions and masses for this system in the form needed for our solution below. I chose this choreography as many of the other examples are quite unstable and may not provide good results.
-
-```python
-X = np.array([[-0.3092050,  0.        ,  0.        , -0.50436399],
-              [ 0.1546025, -0.09875616, -1.18437049,  0.25218199],
-              [ 0.1546025,  0.09875616,  1.18437049,  0.25218199]])
-masses = np.ones(3) * 1/3 # Total mass for the system is 1
-```
-
-## Running Simulation
-
-Just as before, we can construct an instance of our `NBody` class and proceed with the simulation!
-
-```python
-Figure8 = NBody(Xi=X, masses=masses, G=1) # Note the different G
-T, dt = 3.5, 1e-3
-history = Figure8.run_simulation(T, dt)
-```
-
-We can go ahead and plot the results to see if we get the correct result.
-
-```python
-# Plot Position
-for i in range(3): # Iterate over the bodies
-    x = history[:, i, 0]
-    y = history[:, i, 1]
-    plt.plot(x, y, linewidth=1, color='black', zorder=0)
-    plt.plot(x, y, markevery=[0], marker="o", ms=5, linewidth=0, color='black',
-             mfc='blue', mec='blue', zorder=1)
-plt.axis('equal')
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.tight_layout()
-plt.show()
-```
-
-![Stable Figure 8 Choreography](./images/figure8.jpg)
-
-That looks great! I took the liberty of producing an animation of their motion and the associated energy as I think it's a great way to appreciate this case.
-
-<PostVideo video={figure8}/>
 
 # Partial Solar System
 
