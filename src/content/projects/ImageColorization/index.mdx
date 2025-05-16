@@ -10,14 +10,7 @@ tags: [Deep Nets, Self-supervised]
 excerpt: "A summary on my solution to the grayscale image colorization problem using convolutional neural networks."
 ---
 
-# Introduction
-
-Although this was a school project, this was open-ended as opposed to a consistent assignment so I am able to share much of the code here! Alongside this project page, you can also find more details in [the report](image_colorization.pdf) that was submitted for this work.
-
-## Model Overview
-
-I opted to implement the model as detailed in [Deep Koalarization: Image Colorization using
-CNNs and Inception-Resnet-v2](https://arxiv.org/pdf/1712.03400v1.pdf). The main points of the network are as follows:
+The goal of this project was to create a neural network to solve the problem of grayscale colorization, where an input grayscale image has missing channels amended such that we *estimate* a full color variant of the image. I opted to implement the model as detailed [here](https://arxiv.org/pdf/1712.03400v1.pdf).
 
 - CNN encoder for initial feature extraction
 - Additional feature extractor using a pre-trained Inception-ResNet-V2
@@ -32,7 +25,9 @@ I enjoy this network as it combines many of the benefits of transfer learning wi
 
 The problem if image colorization is quite an interesting one the simplifies into an elegant self-supervised problem. Given a grayscale image, can we estimate the additional color channels required to gave a full-color image. This sounds difficult at first but with some tweaks to the images, it's quite easy to formulate this as a simple problem.
 
-In the RGB color space, it's hard to imagine how you may split the original image into a set of components, but if you convert the image to be in the [LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space) the problem can easily be self-supervised. In the LAB color space, the L component is the grayscale component and the AB channels encode color information. Now if we convert our dataset images to be in the LAB space, we easily get our input L channel and our ground truth AB channels! Therefore, the dataset requirements are just full-color images. The problem statement simplified as such, we are looking to estimate a function f such that:
+In the RGB color space, it's hard to imagine how you may split the original image into a set of components, but if you convert the image to be in the [LAB color space](https://en.wikipedia.org/wiki/CIELAB_color_space) the problem can easily be modeled as a self-supervised problem. In the LAB color space, the L component is the grayscale component and the AB channels encode color information.
+
+Converting our dataset images to the LAB color space, we easily get our input L channel and our ground truth AB channels! Therefore, the dataset requirements are just full-color images. The problem statement simplified as such, we are looking to estimate a function f such that:
 
 $$
 f(I_L) \rightarrow (I_a, I_b)
@@ -43,8 +38,6 @@ Where $f$ will be our large convolutional net.
 # Dataset
 
 I opted to use the [places2 dataset](hhttp://places2.csail.mit.edu/download.html) as the context of colorizing an image of scenery or typical views from the human perspective are well captured in this dataset. As the dataset is very large and I had limited hardware to train on, I opted to subset the dataset into smaller splits.
-
-I first created folders to store the subsets.
 
 ```python
 from skimage import io
@@ -92,7 +85,7 @@ Now that I have folders containing my data, I needed to work on a PyTorch datase
 - Pre-Trained ResNet requires a different input image size than the base encoder
   - We'll need to resize the dataset images to have each variant
 
-All things considered, the following code achieves all of these goals and helps us bring all the necessary data into PyTorch.
+The following code achieves all of these goals and helps us bring all the necessary data.
 
 ```python
 # Torch dataloader likes having a class instance that represents the data
@@ -458,8 +451,4 @@ Another way to think about this is to consider what are the possible colors for 
 
 ![Object Colors](./images/color_table.jpg)
 
-Either way the solution is a loss that allows for many possibilities for a given object as opposed to dictating a single correct solution. Such losses exist and are detailed [here](https://arxiv.org/pdf/1603.08511v5.pdf) but I did not implement it.
-
-# Conclusion
-
-As always let me know if you have any questions or suggestions but I hope you enjoyed the post!
+The real solution is a loss that allows for many possibilities for a given object as opposed to dictating a single correct solution. [Such losses exist](https://arxiv.org/pdf/1603.08511v5.pdf), but I did not implement it.
