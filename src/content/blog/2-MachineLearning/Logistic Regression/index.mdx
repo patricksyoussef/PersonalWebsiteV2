@@ -4,7 +4,7 @@ published: true
 title: What is Logistic Regression?
 slug: logistic-regression-intro
 date: 2020-12-23
-cover: images/ExampleTrainingCrop.png
+cover: images/accuracy_crop.jpg
 tags: ["Machine Learning", "Optimization"]
 category: "Machine Learning"
 excerpt: "How to implement a logistic regression model with a neural network mindset in Python."
@@ -19,11 +19,7 @@ There are different ways to implement this particular algorithm but I will focus
 
 Logistic regression is a predictor borrowed from statistics used for binary classification. In english this means that we can use the model to determine is an input example belongs to a group or not. As an example, if we knew certain features about the weather (temperature, humidity, wind, etc.) we could try to predict if it's going to rain or not. To do so, we need many _labeled_ examples (inputs + did it rain) of data from other days.
 
-# Representation
-
-Let's first understand the required data and math for this problem.
-
-## Data Organization
+# Data Organization
 
 We represent a particular example as a vector of features and we store all these examples as one large matrix $X$ where $X_i$ is a particular example (a single day if we follow our prior rain metaphor). The labeled aspect means that we know whether or not that day had rain, we'll call this the ground-truth and save all labels for our examples in a vector $y$ where we store a 0 for the days it didn't rain and a 1 when it does rain.
 
@@ -51,7 +47,7 @@ y=[365 \times 1] =
 \end{bmatrix}
 $$
 
-## Forward Propagation
+# Forward Propagation
 
 The forward propagation step is where we take an example day $X_i$ and pass it through our model to yield a prediction $\hat{y_i}$. We need a signal of how *important* each of the input signals is to whether it rained and in which direction it pushes our guess.
 
@@ -62,19 +58,19 @@ We may need to shift our baseline as well, to do this we include an offset that 
 Lastly, we need a way of "squashing" the signal down to yes and no. This is best done as a probability where 0 says definetely not, and a 1 is very confident. We want to take the loudest of voice, and quietest of whispers and clamp them to a range we actually know how to handle. This is done with the sigmoid function $\sigma$.
 
 $$
-\hat{y_i} = \sigma (W^T X_i + b)
+\hat{y_i} = \sigma (W^\top X_i + b)
 $$
 
 ![Sigmoid Function](images/sigmoid.jpg)
 
 Where $\hat{y_i}$ is the probability that the example is in the class we are trying to predict. For the rain example, this is the logistic regressions estimated probability that it will rain that day. The sigmoid function is well catered to this as it introduces a non-linearity that bounds the output between 0 and 1, perfect for a probability!
 
-### Example Forward Propagation
+## Example Forward Propagation
 
 Let's consider our example $X$ in the prior data organization section. I understand that at this point I have not discussed how to determine $W$ and $b$ but for now follow that we know it, we will discuss how to find the correct values in the next section. Let's use the following:
 
 $$
-W^T = [1 \times 2] =
+W^\top = [1 \times 2] =
 \begin{bmatrix}
 0.1 & 10
 \end{bmatrix}
@@ -111,7 +107,7 @@ $$
 Following the equation for $\hat{y_i}$ we get the following:
 
 $$
-\hat{y_i} = [4 \times 1] = \sigma (W^T X^T + b)
+\hat{y_i} = [4 \times 1] = \sigma (W^\top X^\top + b)
 $$
 
 $$
@@ -150,18 +146,16 @@ $$
 \text{P}_{\text{Clear}} = 1 - \text{P}_{\text{Rain}}
 $$
 
-### Bias Simplification
+## Bias Simplification
 
-Personally, I prefer to move the bias term ($b$) into the matrix multiplication ($W^T X_i$).
+A trick I've seen is to move the bias term ($b$) into the matrix multiplication ($W^\top X_i$).
 
 This is done by adding a column of 1's to the end of $X$, adding a feature that is consistent across all examples. Then we increase the size of the weights by 1 (now $W',X'$ etc.) such that the last weight acts as the bias. Check the math below if you are still curious.
 
-This helps to simplify the training procedure as you only need to train for $W'$!
-
-Moving forward, I will refer to $W'$ as just $W$.
+For the sake of expanding this into greater content and not making reductions that are specific to this problem, I will opt to not do this but thought I'd mention it.
 
 > $$
-> W^T X + b  = w_1 x_1 + ... + w_n x_n + b
+> W^\top X + b  = w_1 x_1 + ... + w_n x_n + b
 > $$
 >
 > $$
@@ -172,7 +166,7 @@ Moving forward, I will refer to $W'$ as just $W$.
 > = W'X'
 > $$
 
-### Finding the Correct $W$ and $b$
+## Finding the Correct $W$ and $b$
 
 It can be difficult/impossible to determine the correct values for the weights and bias through trial and error. Even for small examples of only two input features it's challenging to get correct, let alone when we step into many more.
 
@@ -258,13 +252,15 @@ $$
 \theta_{i+1} = \theta_i - \alpha \nabla f(\theta)
 $$
 
-Where $\alpha$ is a tuneable parameter called the learning rate, it dictates what fraction of the gradient we should step by. I will not go through the derivation ([great resource](https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/pdfs/40%20LogisticRegression.pdf)), but for our problem we would like to use gradient descent where $f$ is the cost function and we take the gradient in terms of $W$. For our use case this is:
+Where $\alpha$ is a tuneable parameter called the learning rate, it dictates how fast or slow we should update our parameters relative to the gradient. I will not go through [the derivation](https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/pdfs/40%20LogisticRegression.pdf), but for our problem we would like to use gradient descent where $f$ is the cost function and we take the gradient in terms of $W$ and $b$. For our use case this is:
 
 $$
-W_{i+1} = W_i - \alpha \frac{1}{N} X^T(\sigma(W^T X^T)-y)^T
+W_{i+1} = W_i - \alpha \frac{1}{N} X^\top (\hat{\mathbf{y}} - \mathbf{y})
 $$
 
-Now we have everything to implement!
+$$
+b_{i+1} = b_i - \alpha \frac{1}{N} \sum_{i=1}^{n} (\hat{y}_i - y_i)
+$$
 
 # Implementation
 
@@ -274,116 +270,87 @@ Let's go ahead and import our python modules first as follow:
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
 ```
 
 I will be using Python/NumPy for the implementation. The dataset used is imported in our prior code block with the rest of our libraries. The dataset takes a few human health metrics as features and tries to predict if the patient has breast cancer, you can read more [here](https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html).
 
 ## Model Class
 
-As we have many parameters, helper functions, and repeated operations I will be creating the model as a class. Let's initialize the class with all the methods we will be using.
+We'll package this a class just to keep everything together.
 
 ```python
-class LogisticRegression():
+class LogisticRegression:
+    def sigmoid(self, z):
+        pass
+
+    def cost(self, y, y_hat):
+        pass
+
+    def train(self, X, y):
+        pass
+
+    def predict_prob(self, X):
+        pass
+
+    def predict(self, X):
+        pass
+```
+
+- `sigmoid` will be our implementation of the aforementioned non linear function
+- `cost` will be used to compute the cost across a set of many predictions
+- `train` will take the training input $X$ and the corresponding outputs $y$
+- `predict_prob` will return the predicted probabilities from the model weights
+- `predict` will use the probability to return a class decision
+
+Populating all the methods and `__init__` yields the following:
+
+```python
+class LogisticRegression:
+    def __init__(self, learning_rate=0.01, epochs=1000):
+        self.learning_rate = learning_rate
+        self.epochs = epochs
 
     def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
 
-    def prep_data(self, X):
+    def cost(self, y, y_hat):
+        loss = -y * np.log(y_hat) - (1-y) * np.log(1-y_hat)
+        return np.average(loss)
 
-    def add_dimension(self, X):
+    def train(self, X, y):
 
-    def train(self, X_train, y_train, learning_rate, iterations):
+        # Initialize Weights Randomly, Bias to 0
+        n_samples, n_features = X.shape
+        self.W = np.random.randn(n_features)
+        self.b = 0
 
-    def predict(self, X_test):
+        # Gradient Descent
+        for i in range(self.epochs):
+            # Get Probabilities
+            y_predicted = self.predict_prob(X)
+
+            # Compute Gradients
+            diff = y_predicted - y
+            dW = (1 / n_samples) * np.dot(X.T, diff)
+            db = (1 / n_samples) * np.sum(diff)
+
+            # Update Model Parameters
+            self.W -= self.learning_rate * dW
+            self.b -= self.learning_rate * db
+
+    def predict_prob(self, X):
+        linear_model = np.dot(X, self.W) + self.b
+        return self.sigmoid(linear_model)
+
+    def predict(self, X):
+        y_predicted_prob = self.predict_prob(X)
+        return np.round(y_predicted_prob)
 ```
 
-- `sigmoid` will be where we write the sigmoid function
-- `prep_data` is where we will normalize our data to between 0 and 1
-- `add_dimension` is a helper function for adding the column of 1's to $X$
-- `train` is where we will run the gradient descent iterations to determine our weights
-- `predict` is where we will forward propagate on data to estimate the classes
+With the dataset and prep methods we imported prior we can fashion a test. It's customary to split the data into a test/train split where we train on a larger fraction of the data, and then test our performance on an unseen part of the dataset to see how well the model generalizes.
 
-Let's start with the `sigmoid` function. As a reminder the function is:
-
-$$
-\sigma(x) = \frac{1}{1 + e^{-x}}
-$$
-
-```python
-def sigmoid(self, z):
-    return 1 / (1 + np.exp(-z))
-```
-
-Let's continue with `prep_data` and `add_dimension`.
-
-`prep_data` takes the range of each column and brings them down to $[0,1]$, that way no particular feature dominates the result of $W^T X_i$.
-
-`add_dimension` creates a vector of ones the size of the number of samples and tacks it as the last column of $X$.
-
-```python
-def prep_data(self, X):
-    temp = X - np.min(X, axis=0)
-    X = temp / np.max(temp, axis=0)
-    return X
-
-def add_dimension(self, X):
-    # Stacks a vector of ones with the same number of rows as X
-    # horizontally on then end of X
-    X_new = np.hstack((X, np.ones((X.shape[0], 1))))
-    return X_new
-```
-
-The training process is going to be more involved, the comments explain what is going on but feel free to reach out if you would like more explanation.
-
-```python
-def train(self, X_train, y_train, learning_rate, iterations):
-    self.learning_rate = learning_rate
-    self.iterations = iterations
-
-    # Prepare Data for Training
-    X_train = self.prep_data(X_train)
-    X_train = self.add_dimension(X_train)
-
-    # Initialize Weights Randomly
-    N,D = X_train.shape
-    self.weights = np.random.random((D,1)) * 0.001
-
-    # Iterate to train
-    for i in range(self.iterations):
-
-        # Compute the gradient
-        A = self.sigmoid(np.dot(self.weights.T, X_train.T))
-        grad = (1/N) * np.dot(X_train.T, (A - y_train).T)
-
-        # Update Weights
-        self.weights = self.weights - self.learning_rate * grad
-
-        # Get Training Accuracy Every 100 Iterations
-        if i % 100 == 0:
-            y_est = self.predict(X_train)
-            acc = np.sum(y_train == y_est) / y_train.size
-            print("Training Accuracy on Iteration {}: {:0.4f}".format(i, acc))
-```
-
-To close out the model class, let's implement `predict` that computes the forward propagation of our test data.
-
-```python
-def predict(self, X_test):
-    A = self.sigmoid(np.dot(self.weights.T, X_test.T))
-    y_est = np.round(A)
-    return y_est
-```
-
-## Data Import and Function Calls
-
-Assuming you have downloaded the aforementioned dataset, you should make sure you have it in the same folder as your Python file! The following will import and split the data into a test and train set. I have not mentioned this yet but this is a good place to talk about it.
-
-### Test/Train Split
-
-Quick digression, a test and train split is a process of splitting your data into two groups based on a fraction (typical is 70/30 for train/test). This is very important to do as testing a model on the data it was trained on is not a good metric of its performance.
-
-To put it briefly, a model can learn to fit a training set very well but won't generalize well to new data. This is very bad as all we really care about is how it generalizes. This is as much as you need to know for now, but I would highly recommend you read more [here](https://developers.google.com/machine-learning/crash-course/training-and-test-sets/splitting-data).
-
-```python
+```python output=2
 # Load in data
 data = load_breast_cancer(return_X_y=True)
 
@@ -392,47 +359,42 @@ X = data[0]
 y = data[1]
 
 # Test Train Split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30,
-                                                    random_state=1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.40, random_state=12)
+
+# Standardize Input Data
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Instantiate Model and Train
+MyModel = LogisticRegression(0.2, 2500)
+MyModel.train(X_train, y_train)
+
+y_train_pred = MyModel.predict(X_train)
+train_accuracy = np.sum(y_train_pred == y_train) / y_train_pred.size
+y_test_pred = MyModel.predict(X_test)
+test_accuracy = np.sum(y_test_pred == y_test) / y_test_pred.size
+print(f"Accuracy on train: {train_accuracy:0.3f}")
+print(f"Accuracy on test: {test_accuracy:0.3f}")
+
+Accuracy on train: 0.997
+Accuracy on test: 0.969
 ```
 
-## Running the Model
+## Overfitting
 
-It's time to train our model and see how it does on the testing set!
+A problem that we see in machine learning a lot called overfitting. The model only sees the training data set, and with a sufficiently large model and enough training the model can learn to match the input training data *too* well. When this happen, the performance of the model on the unseen or "test" data regresses, so we want to stop earlier than this stage.
 
-```python output=6
-# Create an instance of our logistic regression class
-MyModel = LogisticRegression()
+When looking at the costs of both the training and test data during training we see that the minimum cost for test data happens well before the end of training. Past this point the model is overfitting to the training data so we see that cost reducing, but this provides no value to us because the test and unseen data in the future is ALL that matters.
 
-# Train the model on the training set using a learning rate of 0.1
-# and 300 iterations
-MyModel.train(X_train, y_train, 0.1, 300)
+![Training Cost Curves](./images/training.jpg)
 
-# Prep test data and get predictions for y_test
-X_test = MyModel.prep_data(X_test)
-X_test = MyModel.add_dimension(X_test)
-y_test_est = MyModel.predict(X_test)
+This is also reflected in the accuracy at roughly the same place in the training stage.
 
-Training Accuracy on Iteration 50: 0.8894
-Training Accuracy on Iteration 100: 0.9196
-Training Accuracy on Iteration 150: 0.9221
-Training Accuracy on Iteration 200: 0.9271
-Training Accuracy on Iteration 250: 0.9271
-Training Accuracy on Iteration 300: 0.9271
-```
+![Training Accuracy Curves](./images/accuracy.jpg)
 
-Now all we have to is compute the accuracy and see how we did.
+# Conclusion
 
-```python output=1
-# (Count of correct predictions) / (Total number of test samples)
-test_accuracy = np.sum(y_test == y_test_est) / y_test.size
-print("Test Accuracy: {:0.3f}".format(test_accuracy))
+Logistic regression may be simple, but it’s a powerful gateway into the world of classification and machine learning in general. By walking through its mathematical intuition, implementation from scratch, and interpretation, we’ve laid the groundwork for understanding more advanced models like neural networks in future posts.
 
-Test Accuracy: 0.912
-```
-
-This results in an accuracy of around 91%!
-
-Considering the low number of features in the dataset this is a great result.
-
-Hope you learned something new!
+Thanks for reading, hope it sparked something!
