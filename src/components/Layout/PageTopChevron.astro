@@ -2,22 +2,20 @@
 // No props needed for now
 ---
 
-<div
-  id="toTop"
-  class="fixed bottom-4 right-4 md:bottom-8 md:right-8 border border-edge z-50 rounded-full bg-background p-2 shadow-xl transition-opacity opacity-0 pointer-events-none"
->
-  <a href="#" aria-label="Back to top">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-    </svg>
-  </a>
-</div>
+<button id="toTop" class="fixed bottom-6 right-6 border border-edge z-50 rounded-full bg-background p-2 shadow-xl transition-opacity opacity-0">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+  </svg>
+</button>
 
 <script>
-  window.addEventListener("scroll", () => {
-    const btn = document.getElementById("toTop");
-    if (!btn) return;
+  const btn = document.getElementById("toTop");
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
+  window.addEventListener("scroll", () => {
     if (window.scrollY > 200) {
       btn.classList.add("opacity-100", "pointer-events-auto");
       btn.classList.remove("opacity-0", "pointer-events-none");
