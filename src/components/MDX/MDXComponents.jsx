@@ -6,7 +6,7 @@ import CodeBlock from "./CodeBlock/CodeBlock.astro";
 
 const InlineCode = (props) => {
   return (
-    <code className="bg-slate-100 font-normal border border-slate-400 text-slate-800 py-[0.025rem] px-[0.18rem] rounded-md font-mono text-[0.9em]">
+    <code className="bg-slate-100 font-normal border border-slate-400 text-slate-800 py-[0.1rem] px-[0.25rem] rounded-md font-mono text-[0.8em]">
       {props.children}
     </code>
   );
