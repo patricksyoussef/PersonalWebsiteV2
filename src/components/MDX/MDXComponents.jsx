@@ -21,6 +21,13 @@ const LinkWrapper = (props) => {
   );
 };
 
+const H2WithHR = (props) => (
+  <div>
+    <hr class="m-0 mt-[20px]" />
+    <h2>{props.children}</h2>
+  </div>
+);
+
 export const components = {
   blockquote: BlockQuote,
   img: ImageWrapper,
@@ -29,4 +36,5 @@ export const components = {
   Collapse,
   PostVideo,
   CodeBlock,
+  h2: H2WithHR,
 };
