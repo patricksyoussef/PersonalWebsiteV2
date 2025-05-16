@@ -4,7 +4,127 @@ published: True
 title: Website Redesign Motivations
 slug: website-redesign
 date: 2025-04-25
-cover: images/banner_cards.png
+cover: images/banner.png
 category: Build Log
 excerpt: "How evolving goals, better tools, and a new creative direction led to a full-site redesign."
 ---
+
+import playground from "./images/gradient_playground.mov";
+
+This site just got a full rebuild, both technically and thematically. It’s faster, more maintainable, and much better aligned with how I want to write, share, and build.
+
+# Why Redesign the Site?
+
+The old site worked fine as a portfolio. It was clean, minimal, and focused on showcasing projects. But as my goals shifted, the format started to feel restrictive. I wanted the site to feel more like a living system, something I could grow into, not just look back on.
+
+Some specific motivations:
+
+- The tone was overly formal and tailored for recruiters, not real readers
+- I had nowhere to put notes, small writeups, or informal thoughts
+- The tech stack was bloated and annoying to update
+- The layout was too rigid to support different content types
+
+So I redesigned it entirely from scratch.
+
+---
+
+# Rebuilt the Stack
+
+The site is now built with [Astro](https://astro.build/), a modern static site generator with zero-JS by default. The new architecture emphasizes performance, modularity, and ease of content authoring.
+
+## Highlights
+
+- **No client-side JS** by default: everything is statically rendered
+- **Markdown + content collections**: strongly typed content organization
+- **Cleaner file structure**: component logic and layouts are isolated and reusable
+- **Fast builds**: optimized for long-term maintainability and speed
+
+---
+
+# New Content Structure
+
+### `blog/`
+
+Longer-form, technical or well-structured writeups. These follow a more rigorous tone.
+
+### `projects/`
+
+These are the highlights of things I’ve built, but without the fluff.
+
+### `musings/`
+
+This is the biggest addition.
+
+Not everything I write needs to be a finished essay. The *Musings* section is a place for half-formed ideas, experiments, personal observations, or lightweight notes. It reflects a shift from trying to “publish” to just writing more openly, a space for thoughts that don't fit anywhere else.
+
+If you’re here for the thinking behind the work, this is probably where it lives now.
+
+---
+
+# Updated Tone, Voice, and Feel
+
+This redesign isn’t just about the words on the page, but it’s about how the whole site *feels* to interact with and the theme it presents for who I am.
+
+The old version was rigid and minimal to a fault. It got out of the way, but it also felt flat and a little lifeless. The new version reflects a broader shift in intention: it’s more personal, more expressive, just more fun to use, and oh so very Patrick.
+
+## Visual Language
+
+The site now uses a more modern, expressive design system:
+
+- **Rounded corners**, **soft shadows**, and **intentional whitespace**
+- **Typography** with more character and hierarchy
+- **Subtle motion** to make the site feel alive and responsive
+
+These choices help create a sense of rhythm and warmth, even on static pages.
+
+---
+
+# Component Highlights
+
+I want to highlight some particular elements of the site that feel especially refined.
+
+## Code Blocks
+
+Many of my posts rely on conveying the ability to interpret and replicate coding projects I have done, the density of information that can be expressed in a small chunk of code can be overwhelming when you weren't the one who wrote it, so code block clarity is imperative.
+
+This makes code-heavy posts easier to read and more structured to write. With new file names, better highlighting, output lines for expressing code results and an inviting theme.
+
+Under the hood, it’s powered by [Shiki](https://shiki.style/) with custom logic for metadata parsing and rendering.
+
+```python output=2 file=test.py
+import numpy as np
+import matplotlib
+matplotlib.rcParams['text.usetex'] = True # [!code highlight]
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# Useful for running matplotlib on high-dpi displays
+%config InlineBackend.figure_format='retina'
+This is an output line!
+This is an output line!
+```
+
+## Gradient Playground
+
+With the prior framework it was quite hard to integrate this widget that I wrote to enable users to interact with a gradient space and build intuition about gradient descent.
+
+With the new stack, it was a welcome addition to the [gradient descent intro post](/blog/neural-net-gradient-descent#gradient-playground) where readers can now see what I was always hoping to share.
+
+<PostVideo video={playground} alt="Example Interactions"/>
+
+---
+
+# What’s Next
+
+The site’s new structure makes it easy to iterate—whether that’s adding new sections, improving performance, or shipping content faster.
+
+Expect more:
+
+- Technical deep dives
+- Lightweight `musings/` entries about tools, books, and habits
+- Design refinements and layout polish
+- Honest writing, even when unfinished
+
+---
+
+If you've visited the old version, thanks for sticking around. If you're new, welcome.
