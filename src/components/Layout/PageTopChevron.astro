@@ -13,6 +13,9 @@
   btn.addEventListener("click", (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }, 10);
   });
 
   window.addEventListener("scroll", () => {
