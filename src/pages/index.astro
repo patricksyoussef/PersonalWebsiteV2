@@ -6,40 +6,34 @@ import MusingsCard from "../components/Cards/MusingsCard.astro";
 import Hero from "../components/Hero/Hero.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
 
-import { getPublishedEntries } from "../utils";
+import { getPublishedEntries, sortEntries } from "../utils";
 
 // Fetch Pinned Posts
-let blogs = await getPublishedEntries("blog", true);
 let projects = await getPublishedEntries("projects", true);
+let blogs = await getPublishedEntries("blog", true);
 let musings = await getPublishedEntries("musings", true);
 
 // Map Posts to Components and limit the entries
-const PROJECT_LIMIT = 2; // Set the limit for projects
+const PROJECT_LIMIT = 3; // Set the limit for projects
 const BLOG_LIMIT = 2; // Set the limit for blogs
 const MUSINGS_LIMIT = 2; // Set the limit for musings
 
-const project_elems = [
-  ...projects.slice(0, PROJECT_LIMIT).map((entry) => ({
-    component: ProjectCard,
+// Combine Posts and Sort by Date
+let entries = sortEntries([...projects.slice(0, PROJECT_LIMIT), ...blogs.slice(0, BLOG_LIMIT), ...musings.slice(0, MUSINGS_LIMIT)]);
+
+// Mapping Collection to Component
+const component_map = {
+  projects: ProjectCard,
+  blog: BlogCard,
+  musings: MusingsCard,
+};
+
+const elements = [
+  ...entries.map((entry) => ({
+    component: component_map[entry.collection],
     props: { entry: entry },
   })),
 ];
-
-const blog_elems = [
-  ...blogs.slice(0, BLOG_LIMIT).map((entry) => ({
-    component: BlogCard,
-    props: { entry: entry },
-  })),
-];
-
-const musings_elems = [
-  ...musings.slice(0, MUSINGS_LIMIT).map((entry) => ({
-    component: MusingsCard,
-    props: { entry: entry },
-  })),
-];
-
-const elements = [...project_elems, ...blog_elems, ...musings_elems];
 ---
 
 <BaseLayout title="Iterating, Always">
