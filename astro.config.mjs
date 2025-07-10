@@ -5,6 +5,7 @@ import { remarkReadingTime, remarkCodeBlocks, advanceHeadings, rehypeTrimInlineC
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import preact from "@astrojs/preact";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,5 +26,7 @@ export default defineConfig({
   },
   experimental: {
     svg: true,
+    session: true,
   },
+  adapter: netlify(),
 });
