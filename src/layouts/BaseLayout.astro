@@ -21,7 +21,7 @@ const imageUrl = `${origin}${image}`;
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/seedling.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <title>{title} | Patrick Youssef</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={url.href} />
 
@@ -30,14 +30,14 @@ const imageUrl = `${origin}${image}`;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url.href} />
-    {image && <meta property="og:image" content={imageUrl} />}
+    <meta property="og:image" content={imageUrl} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:url" content={url.href} />
-    {image && <meta name="twitter:image" content={imageUrl} />}
+    <meta name="twitter:image" content={imageUrl} />
 
     <script is:inline>
       window.addEventListener("DOMContentLoaded", () => {
