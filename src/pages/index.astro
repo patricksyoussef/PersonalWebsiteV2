@@ -5,6 +5,7 @@ import ProjectCard from "../components/Cards/ProjectCard.astro";
 import MusingsCard from "../components/Cards/MusingsCard.astro";
 import Hero from "../components/Hero/Hero.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
+import heroImage from "../content/supplements/images/PatrickGhibliCircle.png";
 
 import { getPublishedEntries, sortEntries } from "../utils";
 
@@ -36,7 +37,7 @@ const elements = [
 ];
 ---
 
-<BaseLayout title="Iterating, Always">
+<BaseLayout title="Iterating, Always" ogImage={heroImage.src} ogImageAlt="Patrick Youssef illustrated in Ghibli style">
   <Hero />
   <ContentGrid elements={elements} startIdx={2} />
 </BaseLayout>
