@@ -9,6 +9,7 @@ import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://loquacious-snickerdoodle-c04dc5.netlify.app/",
   integrations: [
     tailwind({
       nesting: true,

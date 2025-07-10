@@ -10,7 +10,9 @@ import "../styles/globals.css";
 const { title, meta = {} } = Astro.props;
 const description = meta.description ?? "Welcome to my home on the web, I'm Patrick!";
 const image = meta.image;
-const url = Astro.url.href;
+const url = Astro.url;
+const origin = url.origin;
+const imageUrl = `${origin}${image}`;
 ---
 
 <!doctype html>
@@ -21,21 +23,21 @@ const url = Astro.url.href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <!-- <link rel="canonical" href={url} /> -->
+    <link rel="canonical" href={url.href} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <!-- <meta property="og:url" content={url} /> -->
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:url" content={url.href} />
+    {image && <meta property="og:image" content={imageUrl} />}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <!-- <meta name="twitter:url" content={url} /> -->
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:url" content={url.href} />
+    {image && <meta name="twitter:image" content={imageUrl} />}
 
     <script is:inline>
       window.addEventListener("DOMContentLoaded", () => {
