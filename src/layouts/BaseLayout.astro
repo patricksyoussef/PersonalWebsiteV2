@@ -10,7 +10,7 @@ import "../styles/globals.css";
 const { title, meta = {} } = Astro.props;
 const description = meta.description ?? "Welcome to my home on the web, I'm Patrick!";
 const image = meta.image;
-const url = meta.url ?? "https://patrickyoussef.com";
+const url = Astro.url.href;
 ---
 
 <!doctype html>
@@ -27,12 +27,14 @@ const url = meta.url ?? "https://patrickyoussef.com";
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
     {image && <meta property="og:image" content={image} />}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={url} />
     {image && <meta name="twitter:image" content={image} />}
 
     <script is:inline>
