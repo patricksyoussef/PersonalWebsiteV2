@@ -15,7 +15,7 @@ const frontmatter = entry.data;
 const meta = {
   title: frontmatter.title,
   description: frontmatter.excerpt ?? "",
-  image: frontmatter.cover,
+  image: frontmatter.cover.src,
 };
 
 const { Content, remarkPluginFrontmatter, headings } = await render(entry);
