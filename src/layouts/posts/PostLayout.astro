@@ -11,11 +11,27 @@ import { components } from "../../components/MDX/MDXComponents";
 
 const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;
+
+// Set site root constant (could move to config/env in future)
+const SITE_ROOT = "https://patrickyoussef.com";
+
+// Blog posts assumed to be under /blog/[slug]/, update if using other collections
+const postUrl = `${SITE_ROOT}/blog/${frontmatter.slug}/`;
+
+// Support Open Graph/social/SEO meta fields via BaseLayout meta prop
+const meta = {
+  title: frontmatter.title,
+  description: frontmatter.excerpt ?? "",
+  image: frontmatter.cover,
+  // Fall back to some default image if desired
+  url: postUrl,
+};
+
 const { Content, remarkPluginFrontmatter, headings } = await render(entry);
 let numHeadings = headings.filter((item) => item.depth === 2).length;
 ---
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={frontmatter.title} meta={meta}>
   <div class={`fade-in-fast ${contentStyle}`}>
     <Feature entry={entry} frontmatter={remarkPluginFrontmatter} extraStyle={`${featureStyle}`} />
     <div class="lg:grid lg:grid-cols-[1fr_auto_1fr]">

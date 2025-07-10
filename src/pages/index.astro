@@ -7,6 +7,12 @@ import Hero from "../components/Hero/Hero.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
 import heroImage from "../content/supplements/images/PatrickGhibliCircle.png";
 
+const meta = {
+  description: "Personal website of Patrick Youssef. Iterating, Always. Numerical computation, ML, musings, projects, and more.",
+  image: heroImage.src,
+  url: "https://patrickyoussef.com",
+};
+
 import { getPublishedEntries, sortEntries } from "../utils";
 
 // Fetch Pinned Posts
@@ -37,16 +43,7 @@ const elements = [
 ];
 ---
 
-<BaseLayout title="Iterating, Always">
-  <Fragment slot="meta">
-    <meta property="og:title" content="Iterating, Always | Patrick Youssef" />
-    <meta property="og:description" content="Hey I'm Patrick Youssef! Welcome to my home on the web." />
-    <meta property="og:image" content={heroImage.src} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Iterating, Always | Patrick Youssef" />
-    <meta name="twitter:description" content="Hey I'm Patrick Youssef! Welcome to my home on the web." />
-    <meta name="twitter:image" content={heroImage.src} />
-  </Fragment>
+<BaseLayout title="Iterating, Always" meta={meta}>
   <Hero />
   <ContentGrid elements={elements} startIdx={2} />
 </BaseLayout>
