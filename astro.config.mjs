@@ -25,9 +25,5 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
-  experimental: {
-    svg: true,
-    session: true,
-  },
   adapter: netlify(),
 });
