@@ -9,6 +9,7 @@ let aspectRatio = src.width / src.height;
   <Image
     src={src}
     widths={[720, 1200]}
+    layout="constrained"
     style={{ objectFit: "contain", aspectRatio: aspectRatio }}
     class="bg-white object-contain h-auto w-full"
     alt=""

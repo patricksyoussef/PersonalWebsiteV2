@@ -47,36 +47,3 @@ html {
         transform: translateY(0);
     }
 }
-
-.post-content > *:first-child {
-    margin-top: 0 !important;
-}
-
-.collapse-content astro-slot > *:first-child {
-    margin-top: 0.5rem !important;
-}
-
-.code-block {
-    .has-highlighted .line {
-        opacity: 0.4;
-    }
-
-    .has-highlighted .highlighted {
-        opacity: 1;
-    }
-
-    .has-highlighted .output .line {
-        opacity: 1 !important;
-    }
-
-    hr {
-        margin: 0.75rem 0 !important;
-    }
-
-    code {
-        display: block; /* makes the element a block-level element */
-        max-width: 100%; /* ensures it doesn’t exceed the parent’s width */
-        overflow-x: auto; /* enables horizontal scrolling if needed */
-        white-space: pre; /* preserves whitespace (or use pre-wrap if desired) */
-    }
-}
