@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-ASPECT_RATIO = 2.5  # width / height
+ASPECT_RATIO = 3  # width / height
 SEARCH_ROOT = Path(__file__).parent.parent / "src" / "content"
 SLIDE_STEP = 0.02  # Fraction of image size. Smaller is slower but more accurate.
 
@@ -114,8 +114,7 @@ def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
 def process_image(im_path):
     out_path = im_path.with_name(f"{im_path.stem}_crop{im_path.suffix}")
     if out_path.exists():
-        print(f"Skipping {im_path.name}: cropped variant already exists.")
-        return
+        print(f"Overwriting {im_path.name}: cropped variant already exists.")
     try:
         with Image.open(im_path) as im:
             if im.mode != 'RGB' and im.mode != 'L':
