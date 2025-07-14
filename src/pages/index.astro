@@ -7,11 +7,11 @@ import MusingsCard from "../components/Cards/MusingsCard.astro";
 import Hero from "../components/Hero/Hero.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
 import heroImage from "../content/supplements/images/PatrickGhibli.png";
-const optimizedHero = await getImage({ src: heroImage, format: "webp" });
+const optimizedCardImg = await getImage({ src: heroImage, format: "webp" });
 
 const meta = {
   description: "Personal website of Patrick Youssef. Iterating, Always. Numerical computation, ML, musings, projects, and more.",
-  image: optimizedHero.src,
+  image: optimizedCardImg.src,
 };
 
 import { getPublishedEntries, sortEntries } from "../utils";

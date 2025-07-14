@@ -1,13 +1,21 @@
 ---
+import { getImage } from "astro:assets";
 import { getPublishedEntries } from "../../utils";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogCard from "../Cards/BlogCard.astro";
 import ProjectCard from "../Cards/ProjectCard.astro";
 import MusingsCard from "../Cards/MusingsCard.astro";
 import ContentGrid from "../Layout/ContentGrid.astro";
+import heroImage from "../../content/supplements/images/PatrickGhibli.png";
+const optimizedCardImg = await getImage({ src: heroImage, format: "webp" });
 
 // Retrieve requested collection
 const { collectionName, title, subtitle, flavorText } = Astro.props;
+
+const meta = {
+  description: flavorText,
+  image: optimizedCardImg.src,
+};
 
 // Extract all blog posts from collections
 const content = await getPublishedEntries(collectionName, false);
@@ -28,7 +36,7 @@ const elems = [
 ];
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} meta={meta}>
   <div class="fade-in mx-auto max-w-base xl:max-w-wide pb-2">
     <span class="flex text-6xl lg:text-7xl mt-6 mb-2 lowercase font-serif font-medium">
       <div>{subtitle}<span class="text-accent">.</span></div>
