@@ -10,14 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.0",
-    "@astrojs/netlify": "^6.4.1",
+    "@astrojs/mdx": "^4.3.1",
+    "@astrojs/netlify": "^6.5.2",
     "@astrojs/preact": "^4.1.0",
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource-variable/dm-sans": "^5.1.0",
     "@fontsource-variable/petrona": "^5.1.0",
     "@fontsource/jetbrains-mono": "^5.2.5",
-    "astro": "^5.11.0",
+    "astro": "^5.12.2",
     "katex": "^0.16.21",
     "mdast-util-to-string": "^4.0.0",
     "preact": "^10.25.4",
