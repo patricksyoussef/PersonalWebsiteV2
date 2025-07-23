@@ -17,6 +17,15 @@ const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
         threshold: 0, // Change this to be more or less sensitive as needed
       };
 
+      const btn = document.getElementById("tocToTop");
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }, 10);
+      });
+
       let activeSection = null;
 
       const observerCallback = (entries) => {
@@ -67,9 +76,9 @@ const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
       });
     });
   </script>
-  <a href="#">
+  <button id="tocToTop">
     <h2 class="text-xl text-gray-800 mb-2">On This Page</h2>
-  </a>
+  </button>
   <ul class="flex flex-col gap-2 border-l-2 border-edge">
     {
       filteredHeadings.map((heading) => (
