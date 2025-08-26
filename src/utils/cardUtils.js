@@ -10,7 +10,7 @@ export const formatDate = (entry) => {
 };
 
 export const joinTags = (entry) => {
-  let tags = entry.data.tags;
+  const tags = entry.data.tags;
   return tags.join(" · ");
 };
 

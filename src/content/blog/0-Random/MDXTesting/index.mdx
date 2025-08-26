@@ -14,7 +14,9 @@ excerpt: "Just a way for me to test the MDX components that I expect in blog pos
 import figure8 from "./assets/figure8_anim.mp4";
 
 # Heading 1
+
 ## Heading 2
+
 ### Heading 3
 
 ### Link
@@ -22,6 +24,7 @@ import figure8 from "./assets/figure8_anim.mp4";
 [Test Link](https://google.com)
 
 ## Code
+
 ```python output=2 file=test.py
 import numpy as np
 import matplotlib
@@ -54,19 +57,18 @@ $$
 
 Testing inline math $1+1=2$ and more
 
-
 ## Collapse
 
 <Collapse title="Test Title">
-    <div>Content to be hidden</div>
-    <div>Content to be hidden</div>
-    <div>Content to be hidden</div>
-    <div>Content to be hidden</div>
-    <div>Content to be hidden</div>
+  <div>Content to be hidden</div>
+  <div>Content to be hidden</div>
+  <div>Content to be hidden</div>
+  <div>Content to be hidden</div>
+  <div>Content to be hidden</div>
 </Collapse>
 
 **Bold Text**
-*Italic Text*
+_Italic Text_
 ~~The world is flat.~~
 
 - [x] Write the press release
@@ -82,6 +84,7 @@ Inline Code `code`
 - Inline code `in` middle
 
 # Footnote
+
 Here's a sentence with a footnote. [^1]
 
 [^1]: This is the footnote.
@@ -89,14 +92,17 @@ Here's a sentence with a footnote. [^1]
 # General Layout
 
 ## Numbered List
+
 1. Test
 2. Test
 
 ## Unordered List
+
 - Test
 - Test
 
 ## Staggered List
+
 - Level 1
   - Level 2
 
@@ -106,4 +112,4 @@ Here's a sentence with a footnote. [^1]
 
 # Video
 
-<PostVideo video={figure8} alt="Wow"/>
+<PostVideo video={figure8} alt="Wow" />

@@ -28,7 +28,6 @@ $$
 \frac{\partial L}{\partial w} = \frac{-2}{N} \sum^{n}_{i=1} x_i (y_i - (wx_i + b))
 $$
 
-
 ### Computing Bias Derivative
 
 We can follow the exact same template that we get from the chain rule for the bias term as well but the derivative of the inside term will be different.

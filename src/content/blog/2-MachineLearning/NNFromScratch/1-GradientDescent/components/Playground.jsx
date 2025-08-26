@@ -86,7 +86,11 @@ export default function GradientDescentPlayground() {
     function getCanvasScale([xreal, yreal, mag]) {
       const w = xmax - xmin;
       const h = ymax - ymin;
-      return [Math.round(((xreal + w / 2) / w) * canvas.width), Math.round(((-yreal + h / 2) / h) * canvas.height), mag];
+      return [
+        Math.round(((xreal + w / 2) / w) * canvas.width),
+        Math.round(((-yreal + h / 2) / h) * canvas.height),
+        mag,
+      ];
     }
 
     function drawCircle([x, y], r, color, lineWidth) {
@@ -181,7 +185,12 @@ export default function GradientDescentPlayground() {
 
   return (
     <div className="flex flex-col gap-4 items-center w-full mx-auto py-4">
-      <canvas ref={canvasRef} width={2000} height={2000} className="shadow-md rounded-lg border border-gray-300 w-full max-w-full" />
+      <canvas
+        ref={canvasRef}
+        width={2000}
+        height={2000}
+        className="shadow-md rounded-lg border border-gray-300 w-full max-w-full"
+      />
       <div className="flex justify-between w-full">
         <div className="flex flex-wrap justify-center gap-4">
           {["hills", "valley"].map((key) => (
@@ -195,7 +204,11 @@ export default function GradientDescentPlayground() {
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
           ))}
-          <select className="px-4 py-2 rounded border font-mono" value={alpha} onChange={(e) => setAlpha(parseFloat(e.target.value))}>
+          <select
+            className="px-4 py-2 rounded border font-mono"
+            value={alpha}
+            onChange={(e) => setAlpha(parseFloat(e.target.value))}
+          >
             {[0.01, 0.1, 0.25, 0.5].map((val) => (
               <option key={val} value={val}>
                 {val}

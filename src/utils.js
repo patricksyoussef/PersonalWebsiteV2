@@ -14,7 +14,7 @@ export async function getFilteredEntries(collectionName, filters = []) {
 
 // Assume we only want published entries
 export async function getPublishedEntries(collectionName, pinned = false, dateSort = true) {
-  let filters = [isPublished, filterDrafts, ...(pinned ? [isPinned] : [])];
+  const filters = [isPublished, filterDrafts, ...(pinned ? [isPinned] : [])];
   let entities = await getFilteredEntries(collectionName, filters);
   if (dateSort) {
     entities = sortEntries(entities);

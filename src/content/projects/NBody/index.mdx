@@ -14,7 +14,7 @@ import solar_anim from "./videos/solar_anim.mp4";
 
 This post will introduce the principles behind predicting the motion of gravitationally interacting objects. Using Python, we'll implement the principles from scratch.
 
-<PostVideo video={solar_anim}/>
+<PostVideo video={solar_anim} />
 
 # Prior Knowledge
 
@@ -41,20 +41,19 @@ As with many problems, there are different methodologies behind how you may solv
 
 I'll summarize the notation used for vectors, variable assignments, and some other structures that might seem foreign but will be explained through reading the post.
 
-| Notation              | Description         | Definition                                            |
-|-----------------------|---------------------|-------------------------------------------------------|
-| $\vec{v}$             | Vector              | $\langle v_1, ..., v_n \rangle$                       |
-| $\vec{v_{12}}$        | Vector from 1 to 2  | $\vec{v_2} - \vec{v_1}$                               |
-| $\lVert\vec{v}\rVert$ | Vector Magnitude    | $\sqrt{v_1^2 + ... + v_n^2}$                          |
-| $\hat{v}$             | Unit Vector         | $\frac{\vec{v}}{\lVert\vec{v}\rVert}$                 |
-| $\vec{r}$             | Position Vector     | $\langle x, y, z \rangle$ in 3D                      |
-| $\vec{v}$             | Velocity Vector     | $\langle \dot{x}, \dot{y}, \dot{z} \rangle$ in 3D    |
-| $\vec{a}$             | Acceleration Vector | $\langle \ddot{x}, \ddot{y}, \ddot{z} \rangle$ in 3D |
-| $\dot{\vec{v}}$       | Vector Derivative   | $\frac{d\vec{v}}{dt}$                                 |
-| $X$                   | Object State        | $\begin{bmatrix}\vec{r} & \vec{v}\end{bmatrix}$  |
-| $X$                   | System State        | $\begin{bmatrix}X_1 \\ X_2\end{bmatrix} = \begin{bmatrix}\vec{r_1} & \vec{v_1} \\ \vec{r_2} & \vec{v_2}\end{bmatrix}$  |
-| $\dot{X}$             | State Derivative    | $\begin{bmatrix}\dot{X_1} \\ \dot{X_2}\end{bmatrix} = \begin{bmatrix}\vec{v_1} & \vec{a_1} \\ \vec{v_2} & \vec{a_2}\end{bmatrix}$  |
-
+| Notation              | Description         | Definition                                                                                                                        |
+| --------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| $\vec{v}$             | Vector              | $\langle v_1, ..., v_n \rangle$                                                                                                   |
+| $\vec{v_{12}}$        | Vector from 1 to 2  | $\vec{v_2} - \vec{v_1}$                                                                                                           |
+| $\lVert\vec{v}\rVert$ | Vector Magnitude    | $\sqrt{v_1^2 + ... + v_n^2}$                                                                                                      |
+| $\hat{v}$             | Unit Vector         | $\frac{\vec{v}}{\lVert\vec{v}\rVert}$                                                                                             |
+| $\vec{r}$             | Position Vector     | $\langle x, y, z \rangle$ in 3D                                                                                                   |
+| $\vec{v}$             | Velocity Vector     | $\langle \dot{x}, \dot{y}, \dot{z} \rangle$ in 3D                                                                                 |
+| $\vec{a}$             | Acceleration Vector | $\langle \ddot{x}, \ddot{y}, \ddot{z} \rangle$ in 3D                                                                              |
+| $\dot{\vec{v}}$       | Vector Derivative   | $\frac{d\vec{v}}{dt}$                                                                                                             |
+| $X$                   | Object State        | $\begin{bmatrix}\vec{r} & \vec{v}\end{bmatrix}$                                                                                   |
+| $X$                   | System State        | $\begin{bmatrix}X_1 \\ X_2\end{bmatrix} = \begin{bmatrix}\vec{r_1} & \vec{v_1} \\ \vec{r_2} & \vec{v_2}\end{bmatrix}$             |
+| $\dot{X}$             | State Derivative    | $\begin{bmatrix}\dot{X_1} \\ \dot{X_2}\end{bmatrix} = \begin{bmatrix}\vec{v_1} & \vec{a_1} \\ \vec{v_2} & \vec{a_2}\end{bmatrix}$ |
 
 # Gravity Laws
 
@@ -73,6 +72,7 @@ This equation only gives us the magnitude of the force, but it would be helpful 
 $$
 \vec{F_{12}} = F_{12} \hat{r_{12}}
 $$
+
 $$
 =\frac{G m_1 m_2}{\lVert \vec{r_2} - \vec{r_1} \rVert^2} \frac{\vec{r_2} - \vec{r_1}}{\lVert \vec{r_2} - \vec{r_1} \rVert}
 =\frac{G m_1 m_2 (\vec{r_2} - \vec{r_1})}{\lVert \vec{r_2} - \vec{r_1} \rVert^3}
@@ -93,12 +93,11 @@ $$
 \sum_{\substack{j=1 \\ j \neq i}}^n \frac{G m_i m_j (\vec{r_j} - \vec{r_i})}{\lVert \vec{r_j} - \vec{r_i} \rVert^3}
 $$
 
-In plain english, the net force on a particular body is the sum of the force equation evaluated between the body of interest and all *other* bodies. In the equation, the $j \neq i$ is what maintains that we do not calculate the attraction of a body onto itself as a body cannot attract itself and we would be dividing by 0 when calculating the force.
+In plain english, the net force on a particular body is the sum of the force equation evaluated between the body of interest and all _other_ bodies. In the equation, the $j \neq i$ is what maintains that we do not calculate the attraction of a body onto itself as a body cannot attract itself and we would be dividing by 0 when calculating the force.
 
 ## Acceleration on One Body
 
 From the net force it's pretty simple to determine the net acceleration. Using Newton's second law we can add an additional equality to our prior expression. With this we can move around some terms and determine the net acceleration.
-
 
 $$
 \vec{F_i} = m_i \vec{a_i} =
@@ -184,10 +183,10 @@ Those are familiar with big-$O$ notation may have noticed the both the implement
 Like I mentioned before, the time complexity can be a good indicator of how we would expect the runtime to scale but there are some factors in play that can make them different.
 
 - In big-$O$ we drop constants and lower order terms
-    - Ex: $O(4n^2 + n - 2)$ = $O(n^2)$
-    - Constants can be play a large role in runtime (consider $n$ vs $1000n$)
+  - Ex: $O(4n^2 + n - 2)$ = $O(n^2)$
+  - Constants can be play a large role in runtime (consider $n$ vs $1000n$)
 - We may adjust an algorithm where each "iteration" takes longer to run
-    - We reduced iteration count in our case by 50% but each iteration has more work
+  - We reduced iteration count in our case by 50% but each iteration has more work
 
 Plotting the runtimes of our two different variants we get the following graph.
 
@@ -232,7 +231,6 @@ I have been throwing around the word state a bit loosely, let's try to refine ou
 ## Structure
 
 As I mentioned, a state is merely a matrix but the structure of how its constructed and what it contains is the important part. For our physical modeling cases, the state will contain the position and velocities of all the objects where each row is the state of one object and each column is a variable of importance (think a certain position/velocity).
-
 
 $$
 X =
@@ -280,10 +278,10 @@ For simple systems, it might be easier to just build out a numerical integrator 
 
 Let's do a simple two-body example in 2D to see how this is going to play out in our code! Let's consider two bodies with the properties in the below table.
 
-| Body | Position $\vec{r}$ | Velocity $\vec{v}$ |
-| ---- | ---- | ---- |
-| 1 | $\langle 0, 0 \rangle$ | $\langle 5, 2 \rangle$ |
-| 2 | $\langle 2, 0 \rangle$ | $\langle 2, 1 \rangle$ |
+| Body | Position $\vec{r}$     | Velocity $\vec{v}$     |
+| ---- | ---------------------- | ---------------------- |
+| 1    | $\langle 0, 0 \rangle$ | $\langle 5, 2 \rangle$ |
+| 2    | $\langle 2, 0 \rangle$ | $\langle 2, 1 \rangle$ |
 
 ### State Representation
 
@@ -319,12 +317,12 @@ $$
 $$
 
 We know from before that the force for the other body in the force pair is just the negated version of this force so we can also compute the force for body 1.
+
 $$
 \vec{F_{21}}=-\frac{\langle 2, 0 \rangle}{8}
 $$
 
 As the masses are just 1, the value of the acceleration and the force are the same so we can go ahead and fill out the state derivative.
-
 
 $$
 \dot{X} =
@@ -337,6 +335,7 @@ $$
 \dot{\vec{r_2}} & \dot{\vec{v_2}}
 \end{bmatrix}
 $$
+
 $$
 =\begin{bmatrix}
 \vec{v_1} & \vec{a_1} \\
@@ -575,6 +574,7 @@ class NBody:
     def run_simulation(self, T, dt):
         pass
 ```
+
 - `init`: Initializes some of the reused variables across our class
 - `get_energy`: Returns the kinetic and potential energy of the system at a given state
 - `get_state_deriv`: Determines the state derivative of a given state
@@ -647,7 +647,6 @@ def get_energy(self, X):
 
 Take some time to really understand this section as it's the meat of the conversation today. I personally think it's much easier to understand what is happening when looking at the code.
 
-
 ```python
 def get_state_deriv(self, X):
     """
@@ -693,7 +692,7 @@ def get_state_deriv(self, X):
 
 This is a direct copy from my prior work. The purpose of the integrator is to take in a current state and advance the state to where it should be one timestep (dt) later. This of course relies on being able to compute the state derivative which is what the function we pass in as `evaluate` is needed for.
 
-Generally speaking, the RK4 integrator is a good all-around integrator for various types of problems (to me it's reliable but likely not optimal depending on the case). As an example, when simulating Hamiltonian systems (often called conservative systems) one can use special integrators that preserve the constant energy nature of these systems. I won't get into it here, but I'm just trying to imply that there isn't one *best* integrator.
+Generally speaking, the RK4 integrator is a good all-around integrator for various types of problems (to me it's reliable but likely not optimal depending on the case). As an example, when simulating Hamiltonian systems (often called conservative systems) one can use special integrators that preserve the constant energy nature of these systems. I won't get into it here, but I'm just trying to imply that there isn't one _best_ integrator.
 
 ```python
 def rk4(self, X, dt, evaluate):
@@ -719,7 +718,6 @@ def rk4(self, X, dt, evaluate):
 ## Running the Simulation
 
 Now that we have all the requisite functions defined, we can go ahead and piece it together here in the main simulation call. As we are using a class to hold all of our information, I added some assertions to the start to ensure we have the required arguments to execute a simulation.
-
 
 ```python
 def run_simulation(self, T, dt):

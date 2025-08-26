@@ -13,7 +13,11 @@ export default function CollapseSrc({ title, defaultOpen = false, children }) {
   return (
     <div class="my-5 border border-edge rounded-content py-3 px-5 mb-4 bg-darken shadow-md">
       {/* Clickable Header */}
-      <button class="cursor-pointer flex items-center justify-between w-full text-left" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
+      <button
+        class="cursor-pointer flex items-center justify-between w-full text-left"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+      >
         <h4 class="!m-0 font-medium">{title}</h4>
         <span class={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">

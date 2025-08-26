@@ -2,7 +2,7 @@
 published: false
 ---
 
-This is just a short refresher so if you more of a dive in I would recommend looking at the [*Mathematics for Machine Learning*](https://mml-book.github.io/) book, it's one of my favorites!
+This is just a short refresher so if you more of a dive in I would recommend looking at the [_Mathematics for Machine Learning_](https://mml-book.github.io/) book, it's one of my favorites!
 
 ### Derivatives
 
@@ -26,7 +26,7 @@ Given the derivative we can see that the sensitivity of the change depends on th
 
 For all intensive purposes, the process of determining partial derivatives is the same as for normal derivatives with some small tweaks. The most important of which is how we treat a function of multiple variables and how we differentiate.
 
-Let's consider a function $f$ where $f(x, y)$ which means it depends on multiple variables. Considering this, we can take two different derivatives, one with respect to each of input variables which are called *partial derivatives*. To compute these derivatives we hold all other variables as constants when integrating with respect to one.
+Let's consider a function $f$ where $f(x, y)$ which means it depends on multiple variables. Considering this, we can take two different derivatives, one with respect to each of input variables which are called _partial derivatives_. To compute these derivatives we hold all other variables as constants when integrating with respect to one.
 
 $$
 f(x, y) = 2xy + x + y

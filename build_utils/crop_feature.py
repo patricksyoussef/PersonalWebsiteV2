@@ -1,10 +1,11 @@
 """
-Entropy-based cropping for 'feature_' images in src/content.
+Entropy-based cropping and optimization for 'feature_' images in src/content.
 
 - Recursively finds images prefixed with feature_*
-- Crops to 2.25:1 aspect ratio using entropy-based crop (manual sliding window)
+- Crops to 3:1 aspect ratio using entropy-based crop (manual sliding window)
+- Compresses and optimizes images for web
 - Saves as [original_name]_crop.[ext] next to original
-- Preserves original format
+- Preserves original format but optimizes file size
 
 Dependencies:
     pip install pillow numpy
@@ -111,17 +112,84 @@ def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
     return im.crop(best_crop)
 
 
+def optimize_image(im, format_type):
+    """Optimize image based on format type."""
+    # Resize if too large (max width 1200px for feature images)
+    if im.width > 1200:
+        ratio = 1200 / im.width
+        new_height = int(im.height * ratio)
+        im = im.resize((1200, new_height), Image.Resampling.LANCZOS)
+    
+    return im
+
+
+def get_save_options(format_type, file_size_kb):
+    """Get optimal save options based on format and current file size."""
+    if format_type == 'JPEG':
+        # Adjust quality based on file size
+        if file_size_kb > 300:
+            quality = 75
+        elif file_size_kb > 150:
+            quality = 85
+        else:
+            quality = 95
+            
+        return {
+            'format': 'JPEG',
+            'quality': quality,
+            'optimize': True,
+            'progressive': True
+        }
+    elif format_type == 'PNG':
+        return {
+            'format': 'PNG',
+            'optimize': True,
+            'compress_level': 6
+        }
+    elif format_type == 'WEBP':
+        return {
+            'format': 'WEBP',
+            'quality': 85,
+            'optimize': True
+        }
+    else:
+        return {'format': format_type, 'optimize': True}
+
+
 def process_image(im_path):
     out_path = im_path.with_name(f"{im_path.stem}_crop{im_path.suffix}")
+    
+    # Get original file size for comparison
+    original_size_kb = im_path.stat().st_size / 1024
+    
     if out_path.exists():
         print(f"Overwriting {im_path.name}: cropped variant already exists.")
+    
     try:
         with Image.open(im_path) as im:
-            if im.mode != 'RGB' and im.mode != 'L':
+            if im.mode not in ['RGB', 'L']:
                 im = im.convert('RGB')
+            
+            # Crop using entropy-based method
             cropped = entropy_crop_to_aspect(im, ASPECT_RATIO)
-            cropped.save(out_path, format=im.format)
-            print(f"Cropped: {im_path} -> {out_path}")
+            
+            # Optimize the cropped image
+            optimized = optimize_image(cropped, im.format)
+            
+            # Get save options based on format and size
+            save_options = get_save_options(im.format, original_size_kb)
+            
+            # Save optimized image
+            optimized.save(out_path, **save_options)
+            
+            # Calculate compression ratio
+            new_size_kb = out_path.stat().st_size / 1024
+            compression_ratio = (original_size_kb - new_size_kb) / original_size_kb * 100
+            
+            print(f"Processed: {im_path.name}")
+            print(f"  Original: {original_size_kb:.1f}KB -> Optimized: {new_size_kb:.1f}KB")
+            print(f"  Compression: {compression_ratio:.1f}%")
+            
     except Exception as e:
         print(f"Error processing {im_path}: {e}")
 

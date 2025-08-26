@@ -1,5 +1,4 @@
 ---
-
 published: true
 title: What is Logistic Regression?
 slug: logistic-regression-intro
@@ -49,11 +48,11 @@ $$
 
 # Forward Propagation
 
-The forward propagation step is where we take an example day $X_i$ and pass it through our model to yield a prediction $\hat{y_i}$. We need a signal of how *important* each of the input signals is to whether it rained and in which direction it pushes our guess.
+The forward propagation step is where we take an example day $X_i$ and pass it through our model to yield a prediction $\hat{y_i}$. We need a signal of how _important_ each of the input signals is to whether it rained and in which direction it pushes our guess.
 
 The importance as I called it is more aptly called the weight, we store a weight value for each of our input values (humidity and temperature). A positive weight implies that an increase in the input signal corresponds to a higher likelihood of predicting true. Across all our possible inputs, it's easier to combine all the weights into one vector $W$.
 
-We may need to shift our baseline as well, to do this we include an offset that in a way sets our *start* for where we start allowing our inputs to change off of, called the bias $b$.
+We may need to shift our baseline as well, to do this we include an offset that in a way sets our _start_ for where we start allowing our inputs to change off of, called the bias $b$.
 
 Lastly, we need a way of "squashing" the signal down to yes and no. This is best done as a probability where 0 says definetely not, and a 1 is very confident. We want to take the loudest of voice, and quietest of whispers and clamp them to a range we actually know how to handle. This is done with the sigmoid function $\sigma$.
 
@@ -238,7 +237,7 @@ $$
 C = \frac{1}{N}\sum_{i=1}^{N} \mathcal{L}_i
 $$
 
-The cost gives us an idea of how we are doing *overall* against all of our data.
+The cost gives us an idea of how we are doing _overall_ against all of our data.
 
 We want to find a way to reduce this to the lowest value possible. To do so, we use an optimization method called gradient descent.
 
@@ -383,7 +382,7 @@ Accuracy on test: 0.969
 
 ## Overfitting
 
-A problem that we see in machine learning a lot called overfitting. The model only sees the training data set, and with a sufficiently large model and enough training the model can learn to match the input training data *too* well. When this happen, the performance of the model on the unseen or "test" data regresses, so we want to stop earlier than this stage.
+A problem that we see in machine learning a lot called overfitting. The model only sees the training data set, and with a sufficiently large model and enough training the model can learn to match the input training data _too_ well. When this happen, the performance of the model on the unseen or "test" data regresses, so we want to stop earlier than this stage.
 
 When looking at the costs of both the training and test data during training we see that the minimum cost for test data happens well before the end of training. Past this point the model is overfitting to the training data so we see that cost reducing, but this provides no value to us because the test and unseen data in the future is ALL that matters.
 

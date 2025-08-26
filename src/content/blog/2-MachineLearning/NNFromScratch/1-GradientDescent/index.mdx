@@ -10,14 +10,13 @@ excerpt: "The first in a series where I introduce how to implement gradient desc
 pinned: true
 ---
 
-import SeriesIntro from "../SeriesIntro.md"
-import PartialDeriv from "./asides/PartialDeriv.md"
-import LinearRegressionGrad from "./asides/LinearRegressionGrad.md"
+import SeriesIntro from "../SeriesIntro.md";
+import PartialDeriv from "./asides/PartialDeriv.md";
+import LinearRegressionGrad from "./asides/LinearRegressionGrad.md";
 
-import Playground from "./components/Playground.jsx"
+import Playground from "./components/Playground.jsx";
 
-
-<SeriesIntro/>
+<SeriesIntro />
 
 # Introduction
 
@@ -37,7 +36,7 @@ There are a few concepts that you should know before coming into this post, in g
 Before we step into how we use the gradient to help in our optimization problem, let's first build some understanding around the gradient. For those who are unfamiliar with partial derivatives or want a refresher you can take a look at the aside below.
 
 <Collapse title="Partial Derivative Refresher">
-    <PartialDeriv/>
+  <PartialDeriv />
 </Collapse>
 
 ## Gradient Intuition
@@ -109,7 +108,7 @@ In a convex function, there is only one minima and that implies it's the global 
 
 import grad from "./videos/grad.mp4";
 
-<PostVideo video={grad} alt="Simple Convex Example"/>
+<PostVideo video={grad} alt="Simple Convex Example" />
 
 In the video, the blue represents the partial derivative $\partial f / \partial x$ so with descent we expect to go opposite this direction as we change the value of x with the negative of the gradient.
 
@@ -119,7 +118,7 @@ Let's consider a function where there are multiple minimas, in particular we hav
 
 import grad_problem from "./videos/grad_problem.mp4";
 
-<PostVideo video={grad_problem} alt="Multiple Minima Example"/>
+<PostVideo video={grad_problem} alt="Multiple Minima Example" />
 
 ### Resolutions
 
@@ -128,7 +127,6 @@ In practice, we don't know what the loss landscape looks like for large models. 
 Just to give you an idea what these more complicated landscapes look like, consider [this work](https://arxiv.org/abs/1712.09913) done to try to visualize them! Mind you, in most applications the number of inputs variables is larger than we can visualize so this is an attempt at visualizing.
 
 ![Neural Net Loss Landscape](./images/noshort.png)
-
 
 # Hill Descent
 
@@ -147,6 +145,7 @@ Why is height the right equation to minimize? Well consider that whatever functi
 $$
 \frac{\partial f}{\partial x} = \cos(x) \sin(y)
 $$
+
 $$
 \frac{\partial f}{\partial y} = \sin(x) \cos(y)
 $$
@@ -175,15 +174,15 @@ Let's go ahead and take a look at the hills example realized! What you can see i
 
 import hill_descent from "./videos/hill_descent.mp4";
 
-<PostVideo video={hill_descent} aspectRatio={1.818} alt="Various Hill Descent"/>
+<PostVideo video={hill_descent} aspectRatio={1.818} alt="Various Hill Descent" />
 
 They all reach minimums which is what we expect! Something to note is that you can see that depending on where the points start they have a destined minimum they'll end up in, in other landscapes this may mean that a point will terminate at a local not a global minima!
 
 ### Gradient Field
 
-We can evaluate the gradient at a grid of points across the space we're in. We know that the gradient produces a vector over $x$ and $y$ so we can plot the gradient as an arrow pointing in the gradient direction. This grid of arrows is called a *gradient vector field*.
+We can evaluate the gradient at a grid of points across the space we're in. We know that the gradient produces a vector over $x$ and $y$ so we can plot the gradient as an arrow pointing in the gradient direction. This grid of arrows is called a _gradient vector field_.
 
-Plotting the paths from before over the vector field we can see that the path the points take almost exactly follows the opposite of the gradient which makes sense! The gradient points in the direction of greatest *increase* so when we descend we follow the opposite of the gradient to achieve the path of greatest *decrease*. We could just as easily follow the gradient if we wanted to maximize a function called gradient ascent but this isn't nearly as common.
+Plotting the paths from before over the vector field we can see that the path the points take almost exactly follows the opposite of the gradient which makes sense! The gradient points in the direction of greatest _increase_ so when we descend we follow the opposite of the gradient to achieve the path of greatest _decrease_. We could just as easily follow the gradient if we wanted to maximize a function called gradient ascent but this isn't nearly as common.
 
 ![Gradient Field with Paths](./images/grad_path.jpg)
 
@@ -246,7 +245,7 @@ $$
 $$
 
 <Collapse title="Derivation of Gradients">
-    <LinearRegressionGrad/>
+  <LinearRegressionGrad />
 </Collapse>
 
 With these gradients, we can execute gradient descent by updating our model parameters by their associated gradients evaluated at each iteration.
@@ -269,7 +268,7 @@ What you can see in the video below is the loss landscape on the left and the hi
 
 import loss_travel from "./videos/loss_travel.mp4";
 
-<PostVideo video={loss_travel} aspectRatio={1.666} alt="Loss Curve for Linear Dataset"/>
+<PostVideo video={loss_travel} aspectRatio={1.666} alt="Loss Curve for Linear Dataset" />
 
 One way to think about this is that the position of the point $(w,b)$ defines a line that will have a corresponding height that is the current loss. By traversing down the loss landscape we find the $(w,b)$ such that the corresponding loss in minimal.
 
@@ -287,7 +286,7 @@ The visualization here is similar to the prior but just with the parabolic data.
 
 import loss_travel_parabola from "./videos/loss_travel_parabola.mp4";
 
-<PostVideo video={loss_travel_parabola} aspectRatio={1.666} alt="Loss Curve for Quadratic Dataset"/>
+<PostVideo video={loss_travel_parabola} aspectRatio={1.666} alt="Loss Curve for Quadratic Dataset" />
 
 ## Comparing Losses
 
@@ -295,12 +294,12 @@ You may have noticed that both examples reach the minimum which would indicate t
 
 Not quite, in fact there is a concept called the [bias/variance tradeoff](https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html). The general idea of this is that there are two extremes that result in poor performance.
 
-- **High Bias**: The model is too *inflexible* to model the data correctly
-    - Models is too simple to adequately capture the patterns in the data
-    - This is where we are, there is no world where a line will correctly fit a parabola
-- **High Variance**: The model is too *flexible* to generalize the data correctly
-    - Model is too complex and starts fitting to patterns that aren't "real"
-    - Issue where the model fits to noise and doesn't generalize the data well
+- **High Bias**: The model is too _inflexible_ to model the data correctly
+  - Models is too simple to adequately capture the patterns in the data
+  - This is where we are, there is no world where a line will correctly fit a parabola
+- **High Variance**: The model is too _flexible_ to generalize the data correctly
+  - Model is too complex and starts fitting to patterns that aren't "real"
+  - Issue where the model fits to noise and doesn't generalize the data well
 
 Somewhere in the middle there is a goldilocks region where the model is flexible enough to encompass the complexity of the data but not so flexible that it starts [overfitting](https://en.wikipedia.org/wiki/Overfitting).
 
@@ -488,11 +487,11 @@ plt.show()
 As with anything, I learned this method through applying it but also external resources. I wanted to highlight a few that have helped me and might help you!
 
 - [3Blue1Brown](https://youtu.be/IHZwWFHWa-w)
-    - Math educator who essentially started a new genre of how math is taught, amazing!
+  - Math educator who essentially started a new genre of how math is taught, amazing!
 - [Cyril Stachniss](https://youtu.be/4F0_V_0OO2Q)
-    - Generally a great producer of robotics lectures.
+  - Generally a great producer of robotics lectures.
 - [Math for Machine Learning](https://mml-book.github.io/)
-    - Freely available textbooks that is a great reference for purposeful mathematics!
+  - Freely available textbooks that is a great reference for purposeful mathematics!
 
 # Closing
 

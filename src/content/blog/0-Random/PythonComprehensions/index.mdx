@@ -1,5 +1,4 @@
 ---
-
 published: true
 title: Comprehensions in Python
 slug: python-comprehensions
@@ -64,7 +63,6 @@ It's pretty simple to also extend this condition format into our comprehensions.
 
 One trend you may have noticed is that the parts of the statement that make up the comprehension after the expression are just the line by line read of our iterative variant.
 
-
 ```python
 # Iterative Variant
 my_list = []
@@ -77,7 +75,7 @@ If you were to unravel the highlighted lines of the above, you'd get the equival
 
 ## Aside On Nested Comprehensions
 
-Although nested comprehensions exist to emulate nested loops, I would *highly* recommend you stay away from them. In the same mantra of generally avoiding nested loops, I find that the intense one-liners you can achieve through nested comprehensions stray away from the core principles of readability and simplicity that we strive so hard for.
+Although nested comprehensions exist to emulate nested loops, I would _highly_ recommend you stay away from them. In the same mantra of generally avoiding nested loops, I find that the intense one-liners you can achieve through nested comprehensions stray away from the core principles of readability and simplicity that we strive so hard for.
 
 ## Examples
 
@@ -143,7 +141,6 @@ We can call functions or really execute any bit of code as the expression! Often
 
 Given a list of names, create a new list where every name is capitalized.
 
-
 ```python output=2
 # List of Names
 names = ["james", "charlotte", "Patrick", "elaine"]
@@ -179,7 +176,7 @@ Let's work through a simple example and see why generators are AWESOME. Let's co
 - Initialize a list to store the results
 - Iterate through the numbers and append the square of each number
 
-Seems simple enough! The issue is each number in our original list produces a square that has to be stored in the new list which can create a big memory problem. It's easy to begin creating variations of an *already large* list and use up memory unnecessarily.
+Seems simple enough! The issue is each number in our original list produces a square that has to be stored in the new list which can create a big memory problem. It's easy to begin creating variations of an _already large_ list and use up memory unnecessarily.
 
 For our example, the generator would be an object that essentially evaluates "when I am called, I will iterate over the list of numbers and return the squared result for each number one at a time". We never store all of the results at once, which is a good thing if you only need the results at runtime but not if you want to keep the results.
 

@@ -20,7 +20,12 @@ const slug = `/projects/${entry.data.slug}`;
       tagColor="bg-blue-100 text-blue-700 border-blue-200"
     />
     <div class="overflow-clip rounded-cards">
-      <Image src={entry.data.cover} widths={[240, 540, 720]} alt="" class="max-h-20 object-cover object-center h-full w-full" />
+      <Image
+        src={entry.data.cover}
+        widths={[240, 540, 720]}
+        alt=""
+        class="max-h-20 object-cover object-center h-full w-full"
+      />
     </div>
   </div>
 </ContentCard>

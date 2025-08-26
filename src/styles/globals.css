@@ -3,47 +3,47 @@
 @tailwind utilities;
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .hero {
-    .projects:hover {
-        @apply decoration-blue-500;
-    }
-    .blog:hover {
-        @apply decoration-amber-300;
-    }
-    .musings:hover {
-        @apply decoration-emerald-400;
-    }
+  .projects:hover {
+    @apply decoration-blue-500;
+  }
+  .blog:hover {
+    @apply decoration-amber-300;
+  }
+  .musings:hover {
+    @apply decoration-emerald-400;
+  }
 }
 
 .hero > *:first-child {
-    margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 .drop-in {
-    opacity: 0;
-    transform: translateY(-15px);
-    animation: fadeInUp 0.5s forwards;
-    animation-delay: calc(var(--anim-idx) * 0.1s);
+  opacity: 0;
+  transform: translateY(-15px);
+  animation: fadeInUp 0.5s forwards;
+  animation-delay: calc(var(--anim-idx) * 0.1s);
 }
 
 .fade-in {
-    opacity: 0;
-    animation: fadeInUp 1s forwards;
-    animation-delay: calc(var(--anim-idx) * 0.1s);
+  opacity: 0;
+  animation: fadeInUp 1s forwards;
+  animation-delay: calc(var(--anim-idx) * 0.1s);
 }
 
 .fade-in-fast {
-    opacity: 0;
-    animation: fadeInUp 0.25s forwards;
-    animation-delay: calc(var(--anim-idx) * 0.1s);
+  opacity: 0;
+  animation: fadeInUp 0.25s forwards;
+  animation-delay: calc(var(--anim-idx) * 0.1s);
 }
 
 @keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
