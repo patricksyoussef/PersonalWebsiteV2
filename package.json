@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.1",
-    "@astrojs/netlify": "^6.5.2",
     "@astrojs/preact": "^4.1.0",
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource-variable/dm-sans": "^5.1.0",
