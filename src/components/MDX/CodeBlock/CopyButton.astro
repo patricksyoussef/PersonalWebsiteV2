@@ -1,8 +1,8 @@
 ---
+import CopyIcon from "./copy.svg";
 import CopyButtonSrc from "./CopyButtonSrc.jsx";
 
 const { code } = Astro.props;
-import CopyIcon from "./copy.svg";
 ---
 
 <CopyButtonSrc code={code} client:load><CopyIcon width={"1rem"} /></CopyButtonSrc>

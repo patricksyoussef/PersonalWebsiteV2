@@ -1,12 +1,12 @@
 ---
 import { getImage } from "astro:assets";
-import { getPublishedEntries } from "../../utils";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BlogCard from "../Cards/BlogCard.astro";
-import ProjectCard from "../Cards/ProjectCard.astro";
-import MusingsCard from "../Cards/MusingsCard.astro";
-import ContentGrid from "../Layout/ContentGrid.astro";
 import heroImage from "../../content/supplements/images/PatrickGhibli.png";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPublishedEntries } from "../../utils";
+import BlogCard from "../Cards/BlogCard.astro";
+import MusingsCard from "../Cards/MusingsCard.astro";
+import ProjectCard from "../Cards/ProjectCard.astro";
+import ContentGrid from "../Layout/ContentGrid.astro";
 const optimizedCardImg = await getImage({ src: heroImage, format: "webp" });
 
 // Retrieve requested collection

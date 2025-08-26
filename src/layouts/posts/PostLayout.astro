@@ -1,14 +1,14 @@
 ---
 import { getImage } from "astro:assets";
-import BaseLayout from "../BaseLayout.astro";
+import { render } from "astro:content";
+import "katex/dist/katex.min.css";
 import Feature from "../../components/Layout/Feature.astro";
-import Prose from "../../components/MDX/Prose.astro";
 import PageTopChevron from "../../components/Layout/PageTopChevron.astro";
 import TableOfContents from "../../components/Layout/TableOfContents.astro";
-import { render } from "astro:content";
-import "../styles/post_base.css";
-import "katex/dist/katex.min.css";
 import { components } from "../../components/MDX/MDXComponents";
+import Prose from "../../components/MDX/Prose.astro";
+import BaseLayout from "../BaseLayout.astro";
+import "../styles/post_base.css";
 
 const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
 const frontmatter = entry.data;

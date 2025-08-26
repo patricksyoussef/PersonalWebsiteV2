@@ -1,12 +1,14 @@
 ---
 import { getImage } from "astro:assets";
-import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogCard from "../components/Cards/BlogCard.astro";
-import ProjectCard from "../components/Cards/ProjectCard.astro";
 import MusingsCard from "../components/Cards/MusingsCard.astro";
+import ProjectCard from "../components/Cards/ProjectCard.astro";
 import Hero from "../components/Hero/Hero.astro";
 import ContentGrid from "../components/Layout/ContentGrid.astro";
 import heroImage from "../content/supplements/images/PatrickGhibli.png";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPublishedEntries, sortEntries } from "../utils";
+
 const optimizedCardImg = await getImage({ src: heroImage, format: "webp" });
 
 const meta = {
@@ -14,8 +16,6 @@ const meta = {
     "Personal website of Patrick Youssef. Iterating, Always. Numerical computation, ML, musings, projects, and more.",
   image: optimizedCardImg.src,
 };
-
-import { getPublishedEntries, sortEntries } from "../utils";
 
 // Fetch Pinned Posts
 let projects = await getPublishedEntries("projects", true);

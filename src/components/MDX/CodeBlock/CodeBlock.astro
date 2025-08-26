@@ -1,7 +1,7 @@
 ---
 const { code, lang, meta } = Astro.props;
-import { hastToHtml, codeToHast } from "shiki";
 import { transformerNotationHighlight } from "@shikijs/transformers";
+import { hastToHtml, codeToHast } from "shiki";
 import { parseKeyValuePairs } from "../../../utils.js";
 const theme = "catppuccin-mocha";
 import CopyButton from "./CopyButton.astro";

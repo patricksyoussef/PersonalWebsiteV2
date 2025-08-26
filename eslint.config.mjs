@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
 import astroEslint from "eslint-plugin-astro";
+import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 
 export default [
@@ -11,6 +12,7 @@ export default [
     files: ["src/**/*.{js,mjs,cjs,ts,tsx}"],
     plugins: {
       "@typescript-eslint": typescriptEslint,
+      import: importPlugin,
       "jsx-a11y": jsxA11y,
     },
     languageOptions: {
@@ -40,6 +42,26 @@ export default [
       "prefer-const": "error",
       "no-var": "error",
 
+      // Import sorting rules
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin", // Node built-ins
+            "external", // npm packages
+            "internal", // Internal modules
+            "parent", // Parent directories
+            "sibling", // Same directory
+            "index", // Index files
+          ],
+          "newlines-between": "never",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
+
       // Accessibility rules
       "jsx-a11y/alt-text": "error",
       "jsx-a11y/anchor-has-content": "error",
@@ -48,6 +70,9 @@ export default [
   },
   {
     files: ["src/**/*.astro"],
+    plugins: {
+      import: importPlugin,
+    },
     languageOptions: {
       parser: astroEslint.parser,
       parserOptions: {
@@ -58,6 +83,19 @@ export default [
     rules: {
       // Disable some rules that don't make sense for Astro files
       "no-undef": "off",
+
+      // Enable import sorting for Astro files
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+          "newlines-between": "never",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
     },
   },
   {

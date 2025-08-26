@@ -1,8 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import ContentCard from "./ContentCard.astro";
-import CommonContent from "./CommonContent.astro";
 import { joinTags } from "../../utils/cardUtils";
+import CommonContent from "./CommonContent.astro";
+import ContentCard from "./ContentCard.astro";
 
 const { entry } = Astro.props;
 const slug = `/projects/${entry.data.slug}`;
