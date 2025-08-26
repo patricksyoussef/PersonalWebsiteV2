@@ -114,11 +114,12 @@ def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
 
 def optimize_image(im, format_type):
     """Optimize image based on format type."""
-    # Resize if too large (max width 1200px for feature images)
-    if im.width > 1200:
-        ratio = 1200 / im.width
+    # Only resize if extremely large (max width 2000px for feature images)
+    # This preserves quality for high-DPI displays while preventing massive files
+    if im.width > 2000:
+        ratio = 2000 / im.width
         new_height = int(im.height * ratio)
-        im = im.resize((1200, new_height), Image.Resampling.LANCZOS)
+        im = im.resize((2000, new_height), Image.Resampling.LANCZOS)
     
     return im
 
@@ -126,11 +127,11 @@ def optimize_image(im, format_type):
 def get_save_options(format_type, file_size_kb):
     """Get optimal save options based on format and current file size."""
     if format_type == 'JPEG':
-        # Adjust quality based on file size
-        if file_size_kb > 300:
-            quality = 75
-        elif file_size_kb > 150:
+        # Less aggressive quality settings for better visual quality
+        if file_size_kb > 1000:
             quality = 85
+        elif file_size_kb > 500:
+            quality = 90
         else:
             quality = 95
             
