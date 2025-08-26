@@ -6,7 +6,6 @@ import "@fontsource/jetbrains-mono";
 import Header from "../components/Header/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/globals.css";
-import { ClientRouter } from "astro:transitions";
 
 const { title, meta = {} } = Astro.props;
 const description = meta.description ?? "Welcome to my home on the web, I'm Patrick!";
@@ -39,8 +38,6 @@ const imageUrl = `${origin}${image}`;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:url" content={url.href} />
     <meta name="twitter:image" content={imageUrl} />
-
-    <ClientRouter />
 
     <script is:inline>
       window.addEventListener("DOMContentLoaded", () => {
