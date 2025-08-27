@@ -1,12 +1,328 @@
 ---
 pinned: true
-published: false
+published: true
 title: Python for the Real World
 slug: production-python-tips
 date: 2025-04-25
-cover: images/feature_python_snake.jpg
+cover: images/feature_python_snake_crop.jpg
 category: Build Log
-excerpt: "Tips, habits, and hard-won lessons for writing Python that’s maintainable and understandable."
+excerpt: "Tips, habits, and hard-won lessons for writing Python that's maintainable and understandable."
 ---
 
-Old outline was just bad, pending for now...
+I've been writing Python professionally for about a decade, and somewhere along the way I stopped apologizing for it. Not because Python is perfect, but because I realized most criticisms miss the point.
+
+Yes, Python is slower than C++. Yes, the GIL exists. But Python's real strength is letting you focus on solving problems instead of fighting the language. Here are the patterns and tools that make Python code work well in production.
+
+## The Tooling That Actually Matters
+
+### Ruff: One Tool to Rule Them All
+
+I used to have a dozen different formatting and linting tools. Then Ruff replaced basically all of them:
+
+```toml
+# pyproject.toml
+[tool.ruff]
+line-length = 88
+select = [
+    "E", "W",  # Style
+    "F",       # Errors  
+    "I",       # Import sorting
+    "B",       # Common mistakes
+    "S",       # Security
+]
+```
+
+```bash
+# Old way (8+ seconds)
+black . && isort . && flake8 && bandit -r .
+
+# Ruff way (0.2 seconds)
+ruff format . && ruff check --fix .
+```
+
+The speed difference is ridiculous, and it catches actual bugs, not just style nitpicks.
+
+## Language Features That Changed Everything
+
+### Dataclasses: Goodbye Boilerplate
+
+Before:
+```python
+class User:
+    def __init__(self, name: str, email: str):
+        self.name = name
+        self.email = email
+    
+    def __repr__(self):
+        return f"User(name='{self.name}', email='{self.email}')"
+    
+    def __eq__(self, other):
+        # ... 5 more lines of boilerplate
+```
+
+After:
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class User:
+    name: str
+    email: str
+    tags: List[str] = field(default_factory=list)  # Proper mutable default
+    
+    def __post_init__(self):
+        if "@" not in self.email:
+            raise ValueError(f"Invalid email: {self.email}")
+```
+
+Dataclasses generate `__init__`, `__repr__`, `__eq__`, and more automatically. Use `@dataclass(frozen=True)` for immutable objects.
+
+### Type Hints That Actually Help
+
+Types aren't just documentation - they catch bugs and enable better IDE support:
+
+```python
+from typing import Literal, Protocol
+
+# Literal types prevent typos
+LogLevel = Literal["debug", "info", "warning", "error"]
+
+def log(message: str, level: LogLevel = "info"):
+    print(f"[{level.upper()}] {message}")
+
+# Protocols define interfaces without inheritance
+class Drawable(Protocol):
+    def draw(self) -> str: ...
+
+def render(shape: Drawable) -> str:
+    return shape.draw()  # Works with any object that has draw()
+```
+
+## Understanding the GIL (Briefly)
+
+The Global Interpreter Lock prevents true parallelism for CPU-bound work. But most Python code is I/O-bound, where the GIL doesn't matter:
+
+```python
+# This is fast because GIL is released during network I/O
+import threading
+import requests
+
+def fetch_url(url):
+    return requests.get(url).status_code
+
+# 5 URLs sequentially: ~5 seconds
+# 5 URLs with threads: ~1 second
+
+# For CPU-bound work, use multiprocessing instead
+from multiprocessing import Pool
+
+with Pool() as pool:
+    results = pool.map(cpu_intensive_task, data)  # Bypasses GIL
+```
+
+**Reality check**: In a decade of Python, the GIL has been my bottleneck maybe 3 times. Network and database calls matter way more.
+
+## Error Handling That Tells Stories
+
+Don't just raise generic exceptions - create meaningful hierarchies:
+
+```python
+class APIError(Exception):
+    pass
+
+class RateLimitError(APIError):
+    def __init__(self, message: str, retry_after: int):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+# Usage
+try:
+    call_api()
+except RateLimitError as e:
+    logger.warning(f"Rate limited, retry in {e.retry_after}s")
+    schedule_retry()
+except APIError as e:
+    logger.error(f"API failed: {e}")
+```
+
+### Logging That Scales
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+logger = logging.getLogger(__name__)
+
+def process_file(path):
+    logger.info(f"Processing {path}")
+    try:
+        # do work
+        logger.debug(f"File size: {path.stat().st_size}")
+        return True
+    except Exception:
+        logger.exception(f"Failed to process {path}")
+        return False
+```
+
+Use DEBUG for diagnostics, INFO for normal flow, WARNING for recoverable issues, ERROR for failures.
+
+## Context Managers and Decorators
+
+### Context Managers: Guaranteed Cleanup
+
+```python
+from contextlib import contextmanager
+import time
+
+@contextmanager
+def timer(description):
+    start = time.time()
+    try:
+        yield
+    finally:
+        print(f"{description}: {time.time() - start:.3f}s")
+
+# Usage
+with timer("Database query"):
+    expensive_operation()
+```
+
+### Decorators for Cross-Cutting Concerns
+
+```python
+import functools
+import time
+
+def retry(max_attempts=3):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    if attempt == max_attempts - 1:
+                        raise
+                    time.sleep(2 ** attempt)  # Exponential backoff
+        return wrapper
+    return decorator
+
+@retry(max_attempts=3)
+def unreliable_api_call():
+    # Will retry with backoff on failure
+    pass
+```
+
+## Testing With Pytest
+
+Pytest makes testing actually pleasant:
+
+```python
+import pytest
+
+@pytest.mark.parametrize("email,valid", [
+    ("alice@example.com", True),
+    ("invalid-email", False),
+])
+def test_email_validation(email, valid):
+    if valid:
+        user = User("Alice", email)
+        assert user.email == email
+    else:
+        with pytest.raises(ValueError):
+            User("Alice", email)
+
+@pytest.fixture
+def temp_database():
+    db = create_test_database()
+    yield db
+    db.cleanup()
+
+def test_user_creation(temp_database):
+    user = create_user("Alice", temp_database)
+    assert user.name == "Alice"
+```
+
+## Language Tricks I Actually Use
+
+### The Walrus Operator (Python 3.8+)
+```python
+# Old way
+data = expensive_computation()
+if data:
+    process(data)
+
+# New way
+if data := expensive_computation():
+    process(data)
+
+# Great for loops
+while chunk := file.read(8192):
+    process_chunk(chunk)
+```
+
+### F-String Magic
+```python
+name = "Alice"
+balance = 1234.567
+
+print(f"Hello, {name}!")
+print(f"Balance: ${balance:,.2f}")      # Balance: $1,234.57
+print(f"{balance=:.2f}")               # balance=1234.57 (debug mode)
+```
+
+### Pathlib Over os.path
+```python
+from pathlib import Path
+
+# Old way
+import os
+path = os.path.join("data", "users", "alice.json")
+
+# New way  
+path = Path("data") / "users" / "alice.json"
+content = path.read_text()  # So much cleaner
+```
+
+### Collections Module Gems
+```python
+from collections import defaultdict, Counter
+
+# No more KeyError
+counts = defaultdict(int)
+for word in words:
+    counts[word] += 1
+
+# Even better for counting
+letter_counts = Counter("hello world")
+print(letter_counts.most_common(2))  # [('l', 3), ('o', 2)]
+```
+
+### Enums for Constants
+```python
+from enum import Enum, auto
+
+class Status(Enum):
+    PENDING = auto()
+    APPROVED = auto()
+    REJECTED = auto()
+
+# Type-safe, no more magic strings
+if order.status == Status.PENDING:
+    process_order()
+```
+
+## Wrapping Up
+
+Python's strength isn't speed or elegance - it's maintainability. Six months from now, when you need to debug or extend your code, you'll actually understand what you were thinking.
+
+The GIL rarely matters. Dataclasses eliminate boilerplate. Type hints catch bugs. Ruff keeps code consistent. Good logging saves your sanity at 2 AM.
+
+Use what makes sense, ignore the rest, and remember: readable code beats clever code every time.
+
+Now go write some Python that your future self will thank you for! 🐍
