@@ -8,17 +8,23 @@ Entropy-based cropping and optimization for 'feature_' images in src/content.
 - Preserves original format but optimizes file size
 
 Dependencies:
-    pip install pillow numpy
+    pip install pillow numpy scipy
 """
 
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
+from scipy import ndimage
 
-ASPECT_RATIO = 3  # width / height
+ASPECT_RATIO = 3.5  # width / height
 SEARCH_ROOT = Path(__file__).parent.parent / "src" / "content"
 SLIDE_STEP = 0.02  # Fraction of image size. Smaller is slower but more accurate.
+
+# Scoring weights for composite region evaluation
+ENTROPY_WEIGHT = 0.2      # Information content
+EDGE_WEIGHT = 0.4         # Structure/object boundaries
+CENTER_BIAS_WEIGHT = 0.4  # Preference for center regions
 
 
 def get_feature_images(root):
@@ -40,6 +46,54 @@ def shannon_entropy(data):
     return entropy
 
 
+def edge_strength(im_crop):
+    """
+    Compute edge strength using Sobel operator.
+
+    Args:
+        im_crop: np.ndarray of shape (h, w) for grayscale or (h, w, c) for color.
+    Returns:
+        float: normalized edge strength
+    """
+    if im_crop.ndim == 3:
+        # Convert to grayscale for edge detection
+        gray = np.dot(im_crop[...,:3], [0.2989, 0.5870, 0.1140])
+    else:
+        gray = im_crop
+
+    # Sobel edge detection
+    sobel_x = ndimage.sobel(gray, axis=1)
+    sobel_y = ndimage.sobel(gray, axis=0)
+    edge_magnitude = np.sqrt(sobel_x**2 + sobel_y**2)
+
+    return np.mean(edge_magnitude)
+
+
+def center_bias_weight(crop_box, img_width, img_height):
+    """
+    Calculate center bias weight - regions closer to center get higher scores.
+
+    Args:
+        crop_box: (left, top, right, bottom)
+        img_width, img_height: original image dimensions
+    Returns:
+        float: center bias weight (0-1, where 1 is center)
+    """
+    left, top, right, bottom = crop_box
+    crop_center_x = (left + right) / 2
+    crop_center_y = (top + bottom) / 2
+
+    img_center_x = img_width / 2
+    img_center_y = img_height / 2
+
+    # Calculate distance from center as fraction of image size
+    max_distance = np.sqrt((img_width/2)**2 + (img_height/2)**2)
+    distance = np.sqrt((crop_center_x - img_center_x)**2 + (crop_center_y - img_center_y)**2)
+
+    # Convert to weight (closer to center = higher weight)
+    return 1 - (distance / max_distance)
+
+
 def image_entropy(im_crop):
     """
     Compute the mean entropy over all channels of an image crop (numpy array).
@@ -59,9 +113,38 @@ def image_entropy(im_crop):
         return 0.
 
 
+def composite_score(im_crop, crop_box, img_width, img_height):
+    """
+    Calculate composite score combining entropy, edge strength, and center bias.
+
+    Args:
+        im_crop: numpy array of cropped region
+        crop_box: (left, top, right, bottom)
+        img_width, img_height: original image dimensions
+    Returns:
+        float: composite score
+    """
+    entropy = image_entropy(im_crop)
+    edges = edge_strength(im_crop)
+    center_bias = center_bias_weight(crop_box, img_width, img_height)
+
+    # Normalize entropy (typical range 0-8)
+    entropy_norm = min(entropy / 8.0, 1.0)
+
+    # Normalize edge strength (empirically determined range)
+    edge_norm = min(edges / 50.0, 1.0)
+
+    score = (ENTROPY_WEIGHT * entropy_norm +
+             EDGE_WEIGHT * edge_norm +
+             CENTER_BIAS_WEIGHT * center_bias)
+
+    return score
+
+
 def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
     """
-    Crops the largest region at given aspect ratio and highest entropy using a sliding window.
+    Crops the largest region at given aspect ratio using composite scoring.
+    Combines entropy, edge detection, and center bias for better region selection.
 
     Args:
         im: PIL.Image
@@ -85,10 +168,10 @@ def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
         for top in range(0, max_row + 1, max(1, int(step * h_img))):
             crop_box = (0, top, w_img, top + win_h)
             crop_arr = im_arr[top:top + win_h, :, ...]
-            entropy = image_entropy(crop_arr)
-            regions.append((entropy, crop_box))
+            score = composite_score(crop_arr, crop_box, w_img, h_img)
+            regions.append((score, crop_box))
             if debug:
-                print(f"Horizontal window top={top}: entropy={entropy:.4f}")
+                print(f"Horizontal window top={top}: score={score:.4f}")
 
     # Vertical crop: fix height, slide window horizontally
     if crop_w2 <= w_img:
@@ -97,18 +180,18 @@ def entropy_crop_to_aspect(im, aspect_ratio, step=SLIDE_STEP, debug=False):
         for left in range(0, max_col + 1, max(1, int(step * w_img))):
             crop_box = (left, 0, left + win_w, h_img)
             crop_arr = im_arr[:, left:left + win_w, ...]
-            entropy = image_entropy(crop_arr)
-            regions.append((entropy, crop_box))
+            score = composite_score(crop_arr, crop_box, w_img, h_img)
+            regions.append((score, crop_box))
             if debug:
-                print(f"Vertical window left={left}: entropy={entropy:.4f}")
+                print(f"Vertical window left={left}: score={score:.4f}")
 
     if not regions:
         raise ValueError("Image is too small for desired aspect ratio crop.")
 
-    # Select the window with the highest entropy
-    best_entropy, best_crop = max(regions, key=lambda x: x[0])
+    # Select the window with the highest composite score
+    best_score, best_crop = max(regions, key=lambda x: x[0])
     if debug:
-        print(f"Best crop: {best_crop}, entropy={best_entropy:.4f}")
+        print(f"Best crop: {best_crop}, score={best_score:.4f}")
     return im.crop(best_crop)
 
 
@@ -120,7 +203,7 @@ def optimize_image(im, format_type):
         ratio = 3500 / im.width
         new_height = int(im.height * ratio)
         im = im.resize((3500, new_height), Image.Resampling.LANCZOS)
-    
+
     return im
 
 
@@ -136,7 +219,7 @@ def get_save_options(format_type, file_size_kb):
         else:
             # For files under 1MB, use maximum quality
             quality = 98
-            
+
         return {
             'format': 'JPEG',
             'quality': quality,
@@ -161,38 +244,38 @@ def get_save_options(format_type, file_size_kb):
 
 def process_image(im_path):
     out_path = im_path.with_name(f"{im_path.stem}_crop{im_path.suffix}")
-    
+
     # Get original file size for comparison
     original_size_kb = im_path.stat().st_size / 1024
-    
+
     if out_path.exists():
         print(f"Overwriting {im_path.name}: cropped variant already exists.")
-    
+
     try:
         with Image.open(im_path) as im:
             if im.mode not in ['RGB', 'L']:
                 im = im.convert('RGB')
-            
+
             # Crop using entropy-based method
             cropped = entropy_crop_to_aspect(im, ASPECT_RATIO)
-            
+
             # Optimize the cropped image
             optimized = optimize_image(cropped, im.format)
-            
+
             # Get save options based on format and size
             save_options = get_save_options(im.format, original_size_kb)
-            
+
             # Save optimized image
             optimized.save(out_path, **save_options)
-            
+
             # Calculate compression ratio
             new_size_kb = out_path.stat().st_size / 1024
             compression_ratio = (original_size_kb - new_size_kb) / original_size_kb * 100
-            
+
             print(f"Processed: {im_path.name}")
             print(f"  Original: {original_size_kb:.1f}KB -> Optimized: {new_size_kb:.1f}KB")
             print(f"  Compression: {compression_ratio:.1f}%")
-            
+
     except Exception as e:
         print(f"Error processing {im_path}: {e}")
 
