@@ -57,11 +57,30 @@ if (n > 0) {
 
   // Only merge if both exist
   if (preMain && preOutput) {
-    // Insert <hr> in preMain
     preMain.children.push({
       type: "element",
-      tagName: "hr",
-      children: [],
+      tagName: "div",
+      properties: { className: ["output-inline"] },
+      children: [
+        {
+          type: "element",
+          tagName: "hr",
+          properties: { className: ["output-hr"] },
+          children: [],
+        },
+        {
+          type: "element",
+          tagName: "span",
+          properties: { className: ["output-label"] },
+          children: [{ type: "text", value: "output" }],
+        },
+        {
+          type: "element",
+          tagName: "hr",
+          properties: { className: ["output-hr"] },
+          children: [],
+        },
+      ],
     });
 
     // Add a custom "output" class to each line in preOutput
@@ -93,3 +112,21 @@ const highlightedCode = hastToHtml(hastCode);
   </div>
   <div class="not-prose text-[0.75rem] md:text-[0.9rem] leading-[1.5]" set:html={highlightedCode} />
 </div>
+
+<style is:global>
+  .output-inline {
+    display: flex;
+    align-items: center;
+  }
+  .output-hr {
+    border: 0;
+    border-top: 1px solid currentColor;
+    margin: 0.25rem 0;
+    flex: 1 1 auto;
+  }
+  .output-label {
+    display: inline-block;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+</style>
