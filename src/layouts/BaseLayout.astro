@@ -59,14 +59,12 @@ const imageUrl = `${origin}${image}`;
       });
     </script>
   </head>
-  <body class="bg-background font-sans max-w-[100vw]">
+  <body class="bg-background font-sans min-h-screen min-w-[100vw] grid grid-rows-[auto_1fr_auto]">
     <div class="h-2 bg-accent"></div>
     <div class="mx-4 md:mx-10">
-      <div class="w-full mx-auto">
-        <Header />
-        <slot />
-        <Footer />
-      </div>
+      <Header />
+      <slot />
     </div>
+    <Footer />
   </body>
 </html>
