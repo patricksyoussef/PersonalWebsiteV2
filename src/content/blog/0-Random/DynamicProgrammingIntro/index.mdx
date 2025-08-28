@@ -14,7 +14,7 @@ Dynamic programming used to be my nemesis in coding interviews. I'd see "optimal
 
 Once you understand the reasoning patterns, DP problems become much more approachable. This post breaks down the step-by-step thinking process that turns intimidating problems into manageable solutions. Whether you're prepping for interviews or just want to understand how these algorithms work, we'll start with Fibonacci and build up to the classic problems you'll encounter on LeetCode and in technical interviews.
 
-## Recognize When You Need Dynamic Programming
+# Recognize When You Need Dynamic Programming
 
 Before diving into fancy terminology, here's when you should reach for DP:
 
@@ -28,7 +28,7 @@ The technical terms matter too:
 
 But here's the practical test: if your recursive solution is painfully slow and you're recalculating things, DP can probably help.
 
-## The Problem: Why Fibonacci Breaks Your Computer
+# The Problem: Why Fibonacci Breaks Your Computer
 
 Fibonacci seems innocent enough - each number is just the sum of the two before it. The recursive solution looks clean and mirrors the mathematical definition perfectly:
 
@@ -49,7 +49,7 @@ To better understand the execution order, here's an animated view showing how th
 
 ![Fibonacci Animation](images/fib_5_anim.gif)
 
-## The Performance Disaster (And How to Fix It)
+# The Performance Disaster (And How to Fix It)
 
 The performance difference isn't just bad - it's catastrophically bad:
 
@@ -62,11 +62,11 @@ Here are some real numbers that'll make you appreciate memoization:
 
 I once accidentally left `fib(45)` running and came back an hour later to a still-spinning CPU fan. The memoized version would have finished before I finished typing the command.
 
-## The Systematic Approach That Demystifies DP
+# The Systematic Approach That Demystifies DP
 
 This is the exact framework I use to tackle any DP problem, whether it's in an interview or on LeetCode:
 
-### Step 1: Think Recursively First
+## Step 1: Think Recursively First
 
 Don't worry about DP yet. Just think: "How can I break this into smaller versions of the same problem?"
 
@@ -75,7 +75,7 @@ This step is crucial because DP problems are fundamentally recursive problems wi
 - What are my base cases?
 - What choices am I making at each step?
 
-### Step 2: Write Out the Recurrence Relation
+## Step 2: Write Out the Recurrence Relation
 
 This is where the magic happens. For Fibonacci:
 ```
@@ -84,7 +84,7 @@ fib(n) = fib(n-1) + fib(n-2)
 
 In interviews, I always write this out clearly. It shows you understand how the problem breaks down and gives you something concrete to implement.
 
-### Step 3: Nail Down Your Base Cases
+## Step 3: Nail Down Your Base Cases
 
 Base cases are where recursion stops. Missing these or getting them wrong will crash your solution:
 ```python
@@ -92,7 +92,7 @@ if n < 2:
     return n  # fib(0) = 0, fib(1) = 1
 ```
 
-### Step 4: Code the Naive Recursive Solution
+## Step 4: Code the Naive Recursive Solution
 
 Get the basic version working first. Don't optimize yet:
 
@@ -105,11 +105,11 @@ def fib(n):
 
 Test it on small inputs. If this doesn't work, neither will the DP version.
 
-### Step 5: Recognize the Inefficiency
+## Step 5: Recognize the Inefficiency
 
 Run your naive solution on larger inputs. When it gets slow, you've found your overlapping subproblems. That's your cue that memoization will help.
 
-### Step 6: Add Memoization
+## Step 6: Add Memoization
 
 Now optimize by storing results you've already computed:
 
@@ -125,7 +125,7 @@ def fib(n, memo={}):
     return memo[n]
 ```
 
-### The Critical Insight: State Definition
+## The Critical Insight: State Definition
 
 Here's what trips up most people: your function parameters must completely describe the current state of your problem.
 
@@ -133,15 +133,15 @@ For Fibonacci, just `n` tells us everything we need to know. But for more comple
 
 This is crucial for interviews because it shows you understand the problem structure at a deep level.
 
-## Key Principles for DP Success
+# Key Principles for DP Success
 
 1. **Complete State Encoding**: Your function parameters must fully describe the current state of the problem
 2. **State Implies Position**: Given the state, you should know exactly where you are in the problem
 3. **Reusable States**: When you describe your state, you can save and reuse the solution
 
-## Beyond Fibonacci: More Examples
+# Beyond Fibonacci: More Examples
 
-### Climbing Stairs
+## Climbing Stairs
 
 How many ways can you climb n stairs if you can take 1 or 2 steps at a time?
 
@@ -158,7 +158,7 @@ def climb_stairs(n):
 
 Notice the pattern? It's the same as Fibonacci! This illustrates how many DP problems share similar structures.
 
-### Coin Change: A Classic Interview Problem
+## Coin Change: A Classic Interview Problem
 
 This is one of the most common DP problems you'll see. The key insight: for any amount, try every coin and take the best result.
 
@@ -189,7 +189,7 @@ def coin_change(coins, amount, memo={}):
 
 The pattern is always the same: try all choices, take the best result.
 
-### Minimum Path Sum
+## Minimum Path Sum
 
 Find the minimum sum path from top-left to bottom-right in a grid (you can only move right or down):
 
@@ -218,7 +218,7 @@ def min_path_sum(grid, memo={}):
 
 This example shows how DP applies to 2D problems where you need to explore multiple paths to find the optimal solution.
 
-### 0/1 Knapsack Problem
+## 0/1 Knapsack Problem
 
 One of the most famous DP problems: given items with weights and values, maximize value while staying within a weight capacity.
 
@@ -256,7 +256,7 @@ print(f"Maximum value: {knapsack(weights, values, capacity)}")  # Output: 9
 
 The key insight: at each item, we have two choices (take or skip), and we want the maximum value from either choice. The state is defined by `(current_item_index, remaining_capacity)`.
 
-### Longest Common Subsequence (LCS)
+## Longest Common Subsequence (LCS)
 
 Find the length of the longest subsequence common to two strings. This is fundamental for diff algorithms, DNA analysis, and text comparison.
 
@@ -289,7 +289,7 @@ print(f"LCS length: {lcs_length(text1, text2)}")  # Output: 3 (ADH)
 
 This problem showcases the power of 2D state spaces in DP. The state `(i, j)` represents comparing `text1[i:]` with `text2[j:]`.
 
-## The Magic of Memoization
+# The Magic of Memoization
 
 The dramatic speedup comes from eliminating redundant calculations. In our Fibonacci example:
 
@@ -298,11 +298,11 @@ The dramatic speedup comes from eliminating redundant calculations. In our Fibon
 
 That's not a typo - the memoized version can handle much larger inputs in a fraction of the time!
 
-## Top-Down vs Bottom-Up: Two Approaches to DP
+# Top-Down vs Bottom-Up: Two Approaches to DP
 
 So far we've been using **top-down memoization** (recursive + caching). There's also **bottom-up tabulation** which builds solutions iteratively:
 
-### Bottom-Up Fibonacci
+## Bottom-Up Fibonacci
 
 ```python
 def fib_bottom_up(n):
@@ -319,7 +319,7 @@ def fib_bottom_up(n):
     return dp[n]
 ```
 
-### Bottom-Up Knapsack
+## Bottom-Up Knapsack
 
 ```python
 def knapsack_bottom_up(weights, values, capacity):
@@ -340,16 +340,16 @@ def knapsack_bottom_up(weights, values, capacity):
     return dp[n][capacity]
 ```
 
-### When to Use Each Approach
+## When to Use Each Approach
 
 - **Top-down (memoization)**: More intuitive, easier to code, handles sparse state spaces well
 - **Bottom-up (tabulation)**: Better space optimization potential, no recursion stack overhead, easier to optimize
 
-## Space Optimization Techniques
+# Space Optimization Techniques
 
 Many DP problems can be optimized to use much less memory:
 
-### Space-Optimized Fibonacci
+## Space-Optimized Fibonacci
 Since we only need the previous two values, we don't need the entire array:
 
 ```python
@@ -367,7 +367,7 @@ def fib_optimized(n):
 
 **Space complexity**: O(n) → O(1)
 
-### Space-Optimized Knapsack
+## Space-Optimized Knapsack
 Since each row only depends on the previous row, we can use just two arrays:
 
 ```python
@@ -391,7 +391,7 @@ def knapsack_space_optimized(weights, values, capacity):
 
 **Space complexity**: O(n × capacity) → O(capacity)
 
-### Even More Optimization
+## Even More Optimization
 For knapsack, we can use just one array if we iterate backwards:
 
 ```python
@@ -406,7 +406,7 @@ def knapsack_single_array(weights, values, capacity):
     return dp[capacity]
 ```
 
-## When to Use Dynamic Programming
+# When to Use Dynamic Programming
 
 DP is ideal when you encounter:
 - **Recursive problems** with overlapping subproblems
@@ -414,16 +414,16 @@ DP is ideal when you encounter:
 - **Counting problems** (number of ways to do something)
 - **Decision problems** that can be broken into subproblems
 
-## Common DP Patterns
+# Common DP Patterns
 
 1. **Linear DP**: Problems that depend on previous states (like Fibonacci)
 2. **Grid DP**: Problems involving 2D grids or matrices
 3. **Tree DP**: Problems involving tree structures
 4. **Interval DP**: Problems involving ranges or intervals
 
-## Common Pitfalls and How to Avoid Them
+# Common Pitfalls and How to Avoid Them
 
-### 1. Incomplete State Definition
+## 1. Incomplete State Definition
 **Problem**: Your state doesn't fully capture the problem's current situation.
 
 ```python
@@ -436,7 +436,7 @@ def min_path_sum_wrong(grid, memo={}):
 
 **Solution**: Include all necessary information in your state.
 
-### 2. Mutable Default Arguments
+## 2. Mutable Default Arguments
 **Problem**: Using `memo={}` as default parameter creates shared state across function calls.
 
 ```python
@@ -451,7 +451,7 @@ def fib(n, memo=None):
     # ...
 ```
 
-### 3. Forgetting Base Cases
+## 3. Forgetting Base Cases
 **Problem**: Missing or incorrect base cases lead to infinite recursion.
 
 ```python
@@ -463,7 +463,7 @@ def climb_stairs_wrong(n):
     return climb_stairs_wrong(n-1) + climb_stairs_wrong(n-2)
 ```
 
-### 4. State Explosion
+## 4. State Explosion
 **Problem**: Too many state variables making the solution inefficient.
 
 **Solution**:
@@ -471,7 +471,7 @@ def climb_stairs_wrong(n):
 - Look for patterns to reduce dimensions
 - Consider mathematical relationships between variables
 
-### 5. Not Handling Edge Cases
+## 5. Not Handling Edge Cases
 **Problem**: Forgetting negative inputs, empty arrays, or boundary conditions.
 
 ```python
@@ -485,7 +485,7 @@ def knapsack_robust(weights, values, capacity):
     # Now implement the main logic...
 ```
 
-## Master the Pattern, Master DP
+# Master the Pattern, Master DP
 
 The beauty of DP is that once you understand the reasoning pattern, you can tackle any problem systematically. Here's the mental framework that works:
 
@@ -500,7 +500,7 @@ The biggest breakthrough for me was realizing that DP problems aren't about memo
 
 Whether you're preparing for interviews or just want to understand these algorithms, practice this framework on different problems. Start with the classics, understand the reasoning, and you'll find that even complex DP problems become approachable puzzles rather than intimidating obstacles.
 
-## Practice Problems to Try Next
+# Practice Problems to Try Next
 
 - **House Robber**: Maximize money robbed without robbing adjacent houses
 - **Edit Distance**: Minimum operations to transform one string to another
