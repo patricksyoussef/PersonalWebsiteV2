@@ -6,55 +6,63 @@ date: 2025-07-22
 cover: images/memorization_comparison.png
 pinned: true
 tags: [Deep Learning, Positional Encoding]
-excerpt: "This will need a bit rewrite before it's ready"
+excerpt: "Exploring why neural networks struggle with fine details and how positional encoding provides a solution through my investigation of spectral bias in coordinate-based representations."
 ---
 
-Neural networks exhibit a well-documented spectral bias toward learning low-frequency functions, fundamentally limiting their ability to represent high-frequency details in coordinate-based tasks. This work presents a systematic investigation of positional encoding strategies for neural image memorization, with quantitative analysis demonstrating performance improvements of up to **15.82 dB PSNR** over vanilla coordinate networks. We introduce a novel learnable frequency encoding that adapts the spectral representation during training, and provide comprehensive experimental validation across multiple encoding variants.
+Ever wonder why neural networks seem to struggle with fine details? I got curious about this after diving into the world of neural radiance fields (NeRF) and noticed how positional encoding seemed almost magical in its ability to help networks learn sharp, detailed images. 
 
-**Key Contributions:**
-- Systematic comparison of three positional encoding strategies with rigorous PSNR evaluation
-- Introduction of learnable frequency positional encoding with adaptive spectral optimization
-- Comprehensive ablation study demonstrating the critical role of frequency decomposition in neural coordinate representations
-- Open-source PyTorch implementation with reproducible experimental framework
+This post explores my investigation into **spectral bias** - a fascinating limitation where neural networks prefer to learn smooth, blurry representations over sharp, detailed ones. Through some experimentation with different encoding strategies, I discovered performance improvements of up to **15+ dB PSNR** when teaching networks to "see" high-frequency details.
 
-## Introduction
+**What we'll explore:**
+- Why neural networks are naturally biased toward learning blurry images
+- How positional encoding acts like giving the network "reading glasses" for fine details  
+- Three different approaches to encoding spatial information and how they compare
+- A learnable encoding variant that adapts to the specific image content
 
-The ability of neural networks to learn coordinate-based representations has emerged as a fundamental challenge in computer vision and graphics. While Multi-Layer Perceptrons (MLPs) are universal function approximators in theory, they suffer from **spectral bias** - an inherent tendency to learn smooth, low-frequency functions that fail to capture sharp edges and fine textures [Rahaman et al., 2019; Basri et al., 2020].
+## What Got Me Curious
 
-This limitation became particularly apparent with the success of Neural Radiance Fields (NeRF) [Mildenhall et al., 2020], which demonstrated that coordinate-based neural representations could achieve photorealistic 3D scene reconstruction when equipped with appropriate inductive biases. The critical enabler? **Positional encoding** - a technique that maps low-dimensional coordinates to high-dimensional sinusoidal representations, effectively providing the network with a frequency basis for learning complex spatial patterns.
+I first encountered this problem while trying to understand why NeRF (Neural Radiance Fields) needed something called "positional encoding" to work properly. The basic idea seemed simple enough - teach a neural network to map image coordinates (x, y) to color values (R, G, B). Feed it a coordinate like (100, 150) and it should learn to output the correct color at that pixel.
 
-## Problem Formulation: Understanding Spectral Bias
+But here's the weird part: when I tried this without any special tricks, the networks produced these incredibly blurry, oversmoothed images. It was like looking at everything through frosted glass. Even after training for hours, fine details just wouldn't appear. This wasn't just a "needs more training" problem - there seemed to be something fundamentally limiting about how these networks learn spatial patterns.
 
-**Spectral bias** represents a fundamental limitation in coordinate-based neural networks. Given a mapping task from input coordinates **x** ∈ ℝᵈ to output values **y** ∈ ℝᵏ, standard MLPs preferentially learn low-frequency components of the target function, resulting in oversmoothed representations that fail to capture sharp discontinuities and fine-scale features.
+This limitation has a name: **spectral bias**. Neural networks have an inherent preference for learning smooth, low-frequency functions over sharp, high-frequency ones. It's like they're naturally nearsighted when it comes to fine details.
 
-### Theoretical Foundation
+## Understanding Spectral Bias
 
-The spectral bias phenomenon can be understood through the lens of neural tangent kernel (NTK) theory. During early training stages, MLPs behave similarly to kernel methods with specific spectral properties that favor smooth functions. This bias manifests as:
+So what exactly is spectral bias? Think of it this way: when you ask a neural network to learn an image, it naturally wants to start with the "big picture" - the overall colors, major shapes, and gradual transitions. These are low-frequency patterns. The fine details like sharp edges, textures, and small patterns are high-frequency components.
 
-1. **Rapid convergence** on low-frequency components (coarse features)
-2. **Slow or absent learning** of high-frequency components (fine details)
-3. **Systematic underestimation** of sharp edges and texture patterns
+### Why Does This Happen?
 
-### Empirical Validation
+The mathematical explanation involves neural tangent kernel theory, but here's the intuitive version: during training, neural networks find it much easier to fit smooth curves than jagged ones. It's like trying to draw with a thick marker versus a fine-tip pen - the thick marker naturally creates smoother lines.
 
-Our experimental validation using a 256×256 natural image demonstrates this bias quantitatively. The vanilla coordinate MLP (Input Only) achieves only **23.05 dB PSNR**, with visible artifacts including:
+This bias shows up in three key ways:
+
+1. **Quick wins on the obvious stuff** - Networks rapidly learn overall colors and shapes
+2. **Struggle with fine details** - Sharp edges and textures take forever to learn (if they learn at all)
+3. **Everything looks a bit blurry** - Sharp transitions get systematically softened
+
+### Seeing It In Action
+
+To really understand this problem, I ran some experiments with a 256×256 image. When I trained a basic coordinate network (what I call "Input Only"), the results were pretty disappointing - only **23.05 dB PSNR**. The artifacts were obvious:
 
 ![Systematic comparison of all encoding strategies showing spectral bias and positional encoding benefits](images/final_comparison_grid.png)
 
-**Spectral bias demonstration**: Top row shows Input Only (23.05 dB) vs Encoding Only (32.07 dB). Bottom row shows Input+Encoding (38.26 dB) vs Original, demonstrating progressive improvement with positional encoding strategies.
+**The difference is striking**: You can see how the basic approach (top left) produces a blurry mess, while adding positional encoding progressively improves the quality. The Input+Encoding approach (bottom left) gets remarkably close to the original.
 
-- **Global color shift**: Inability to precisely match color distributions
-- **Edge blurring**: Loss of sharp architectural boundaries
-- **Texture degradation**: Failure to represent fine surface details
-- **Geometric distortion**: Systematic smoothing of structural elements
+- **Colors are off**: The network can't quite nail the color balance
+- **Everything's soft**: Sharp edges become blurry boundaries  
+- **Lost textures**: Fine surface details just disappear
+- **Smoother than reality**: The network systematically softens everything
 
-This performance deficit represents a critical limitation for applications requiring high-fidelity coordinate-based representations, from neural rendering to implicit surface modeling.
+This isn't just an academic curiosity - if you want to use neural networks for anything requiring sharp, detailed representations (like 3D rendering or high-quality image processing), you need to solve this problem.
 
-## Methodology: Positional Encoding Strategies
+## The Solution: Positional Encoding
 
-### Mathematical Framework
+### The Core Idea
 
-Positional encoding addresses spectral bias through explicit frequency decomposition. Given input coordinates **x** ∈ ℝᵈ, we define the positional encoding **γ(x)** as:
+So how do we fix this? The breakthrough insight is to give the network explicit access to different frequency components. Instead of just feeding it raw coordinates like (x, y), we transform these coordinates into a rich representation that includes various sine and cosine patterns at different frequencies.
+
+Here's the mathematical recipe. For input coordinates **x**, we create a positional encoding **γ(x)** like this:
 
 ```
 γ(x) = [sin(2^0 · 2π · x), cos(2^0 · 2π · x),
@@ -63,65 +71,67 @@ Positional encoding addresses spectral bias through explicit frequency decomposi
         sin(2^(L-1) · 2π · x), cos(2^(L-1) · 2π · x)]
 ```
 
-where **L** denotes the number of frequency bands. This transformation creates a **2Ld**-dimensional representation that provides the network with explicit access to multi-scale periodic basis functions.
+where **L** is the number of frequency bands. This transforms our simple 2D coordinate into a much richer representation - think of it as giving the network a whole toolkit of different "spatial frequencies" to work with.
 
-### Experimental Design
+### Three Approaches to Test
 
-We systematically evaluate three distinct encoding strategies to isolate the contributions of different representational components:
+I wanted to understand exactly what was helping, so I tested three different strategies:
 
-1. **Input Only (IO)**: Direct coordinate mapping **f(x, y) → RGB**
-2. **Encoding Only (EO)**: Pure positional encoding **f(γ(x, y)) → RGB**
-3. **Input + Encoding (IE)**: Hybrid approach **f([x, y, γ(x, y)]) → RGB**
+1. **Input Only (IO)**: Just feed raw coordinates directly - the baseline approach **f(x, y) → RGB**
+2. **Encoding Only (EO)**: Only use the positional encoding, no raw coordinates **f(γ(x, y)) → RGB** 
+3. **Input + Encoding (IE)**: Combine both - give the network everything **f([x, y, γ(x, y)]) → RGB**
 
-### Frequency Band Design Principles
+### Why These Specific Frequencies?
 
-The 2π scaling factor and exponential frequency progression are critical for optimal performance:
+The choice of frequencies isn't random - there's some clever math behind it:
 
-**Wavelength Coverage**: For coordinates normalized to [-1, 1], the 2π scaling ensures each frequency 2ⁱ completes exactly 2ⁱ full periods across the input domain, providing hierarchical spatial resolution from coarse (2⁰ = 1 cycle) to fine (2⁹ = 512 cycles).
+**Coverage across scales**: I use frequencies like 1, 2, 4, 8, 16... cycles across the image. This gives us both coarse patterns (1-2 cycles) and fine details (256+ cycles). It's like having both a wide-angle lens and a macro lens for different spatial scales.
 
-**Orthogonal Basis Construction**: The sin/cos pair at each frequency provides orthogonal basis functions, enabling the network to learn arbitrary phase relationships and amplitude modulations at each spatial scale.
+**Sine and cosine pairs**: At each frequency, I use both sin and cos. This lets the network learn any kind of wave pattern at that frequency - it's not locked into just sine waves or just cosine waves.
 
-**Aliasing Prevention**: The geometric frequency progression 2⁰, 2¹, 2², ..., 2⁹ ensures non-overlapping spectral coverage, preventing frequency aliasing that could degrade reconstruction quality.
+**No gaps in frequency space**: The doubling pattern (1, 2, 4, 8...) ensures we don't miss any important frequency ranges that might be crucial for the image.
 
-For our 2D coordinate inputs with L=10 frequency bands, this creates a 40-dimensional sinusoidal encoding (2 coordinates × 10 frequencies × 2 trigonometric functions).
+With 2D coordinates and 10 frequency bands, this explodes our input from 2 dimensions to 42 dimensions (2 coordinates × 10 frequencies × 2 trig functions + 2 original coordinates). That's a lot more information for the network to work with!
 
 ![Positional encoding visualization showing sinusoidal functions at different frequencies](images/positional_encoding_simple.png)
 
-**Positional encoding breakdown**: Sinusoidal functions at exponentially spaced frequencies combine to create a unique high-dimensional vector representation that enables multi-scale spatial reasoning.
+**The encoding toolkit**: Each frequency gives the network access to spatial patterns at different scales. Combined, they create a rich representation that can capture both coarse and fine image details.
 
-## Implementation and Architecture
+## Implementation Details
 
-### Network Architecture
+### Network Setup
 
-To ensure fair comparison across encoding strategies, all models employ identical MLP architectures:
+To make sure I was comparing apples to apples, I kept the network architecture identical across all three approaches:
 
-- **Depth**: 8 fully connected layers
-- **Width**: 256 hidden units per layer
-- **Activation**: ReLU (preserving NeRF compatibility)
-- **Normalization**: None (avoiding potential frequency interference)
-- **Regularization**: No dropout (deterministic coordinate mapping)
+- **Depth**: 8 fully connected layers  
+- **Width**: 256 neurons per layer
+- **Activation**: ReLU (same as what NeRF uses)
+- **No batch norm**: Didn't want to interfere with the frequency patterns
+- **No dropout**: These are deterministic mappings, so no need for regularization
 
-### Training Configuration
+### Training Setup
 
-**Optimization**: AdamW optimizer with β₁=0.9, β₂=0.999, weight decay=1e-4
-**Loss Function**: Mean Squared Error (MSE) between predicted and ground truth RGB values
-**Learning Rate**: 1e-3 with exponential decay (γ=0.95 every 50 epochs)
-**Batch Size**: Full dataset (256×256 = 65,536 coordinate-color pairs)
-**Training Duration**: 200 epochs for systematic comparison, extended to 400 epochs for convergence analysis
+Here's how I trained the networks:
 
-### Novel Contribution: Learnable Positional Encoding
+- **Optimizer**: AdamW (the reliable workhorse)
+- **Loss**: Simple mean squared error between predicted and actual RGB values  
+- **Learning Rate**: Started at 0.001, then gradually decayed it down
+- **Batch Size**: Used the full image (all 65k pixels) each time
+- **Training Time**: 200 epochs for initial comparison, then extended to 400 to see final performance
 
-Beyond standard fixed-frequency encoding, we introduce **Learnable Positional Encoding (LPE)**, where frequency parameters are optimized during training:
+### A Fun Experiment: Learnable Frequencies
+
+Here's where I got a bit creative. Instead of fixing the frequencies at 1, 2, 4, 8, etc., what if the network could learn which frequencies work best for this specific image?
 
 ```python
-# Fixed frequencies (standard)
+# Standard approach (fixed)
 freqs_fixed = 2^i * 2π for i ∈ [0, L-1]
 
-# Learnable frequencies (novel)
-freqs_learned = θᵢ (initialized as 2^i * 2π, then optimized)
+# My experiment (learnable)  
+freqs_learned = θᵢ (starts as 2^i * 2π, but can change during training)
 ```
 
-This adaptive approach allows the network to discover optimal frequency distributions specific to the target image's spectral content, potentially improving reconstruction quality beyond fixed geometric progressions.
+The idea is simple: start with the usual frequency pattern, but let the network adjust these values as it learns. Maybe some images need more emphasis on certain frequency ranges, or maybe the standard doubling pattern isn't optimal for all content.
 
 ![Neural network architecture diagram showing the three model variants](images/final_comparison_grid.png)
 
@@ -156,214 +166,218 @@ class PositionalEncoding(nn.Module):
         return encoding
 ```
 
-## Results and Analysis
+## What I Found
 
-### Quantitative Performance Evaluation
+### The Numbers Tell a Story
 
-We conducted systematic experiments across multiple training durations and evaluated reconstruction quality using Peak Signal-to-Noise Ratio (PSNR), the standard metric for image quality assessment.
+I measured image quality using PSNR (Peak Signal-to-Noise Ratio) - higher numbers mean better reconstruction. Here's what happened:
 
-#### Primary Results (200 Epoch Training):
-- **Input Only (IO)**: 23.05 dB PSNR
-- **Encoding Only (EO)**: 31.40 dB PSNR (+8.35 dB improvement)
-- **Input + Encoding (IE)**: 35.87 dB PSNR (+12.82 dB improvement)
+#### After 200 epochs of training:
+- **Input Only**: 23.05 dB (the blurry baseline)
+- **Encoding Only**: 31.40 dB (+8.35 dB better!) 
+- **Input + Encoding**: 35.87 dB (+12.82 dB better!)
 
-#### Extended Training Analysis (400 Epoch Training):
-- **Input Only**: 22.92 dB PSNR (performance plateau)
-- **Encoding Only**: 32.07 dB PSNR (continued improvement)
-- **Input + Encoding**: 38.26 dB PSNR (+15.34 dB over baseline)
+#### After letting them train longer (400 epochs):
+- **Input Only**: 22.92 dB (actually got slightly worse - it had plateaued)
+- **Encoding Only**: 32.07 dB (kept improving slowly)
+- **Input + Encoding**: 38.26 dB (+15+ dB improvement over baseline!)
 
-### Statistical Significance
+### What Do These Numbers Mean?
 
-The performance improvements represent substantial quality gains:
-- **8+ dB improvement** indicates visible quality enhancement
-- **12+ dB improvement** represents dramatic perceptual improvement
-- **15+ dB improvement** approaches near-perfect reconstruction for natural images
+To put this in perspective:
+- **8+ dB gain** means you can clearly see the difference
+- **12+ dB gain** is a dramatic improvement - night and day difference  
+- **15+ dB gain** is getting close to perfect reconstruction
 
 ![PSNR training curves comparing all three model variants over 200 epochs](images/psnr_plot.png)
 
-**Training dynamics**: PSNR evolution demonstrates clear performance hierarchy. Input Only plateaus early (~23 dB), Encoding Only shows steady improvement (32+ dB), while Input+Encoding achieves optimal performance (38+ dB) through complementary low and high-frequency learning.
+**Learning curves**: You can see how Input Only hits a wall early and stops improving, while the encoding approaches keep getting better throughout training. The hybrid approach gets the best of both worlds.
 
 ![2x2 grid showing systematic comparison of all encoding strategies with quantitative PSNR metrics](images/final_comparison_grid.png)
 
-**Reconstruction quality comparison**: Visual and quantitative evaluation after 400 epochs. Input Only (22.92 dB) shows severe spectral bias artifacts. Encoding Only (32.07 dB) captures fine details but lacks low-frequency accuracy. Input+Encoding (38.26 dB) achieves near-perfect reconstruction combining both frequency ranges.
+**The final results**: After full training, the differences are stark. Input Only (22.92 dB) produces a blurry mess due to spectral bias. Encoding Only (32.07 dB) gets the fine details but struggles with overall structure. Input+Encoding (38.26 dB) nails both the big picture and the details.
 
-### Temporal Learning Dynamics
+### Watching the Networks Learn
 
-Training animations provide crucial insights into the learning process across different encoding strategies:
+One of the coolest parts of this project was watching how differently each approach learns over time:
 
-**Training Animation Analysis**:
+**Training Animations**:
 
-The training process reveals distinct learning patterns across encoding strategies. Two key animations demonstrate these dynamics:
+I created a couple of animations that show the learning process in real-time:
 
-1. **Comparative Learning Dynamics** ([training_animation.mp4](images/training_animation.mp4)): Side-by-side training progression showing all three encoding strategies simultaneously
-2. **Training with Quantitative Analysis** ([training_animation_with_plots.mp4](images/training_animation_with_plots.mp4)): Learning progression with real-time PSNR tracking and loss curves
+1. **Side-by-side comparison** ([training_animation.mp4](images/training_animation.mp4)): You can watch all three approaches learning simultaneously
+2. **Training with live metrics** ([training_animation_with_plots.mp4](images/training_animation_with_plots.mp4)): Same training process but with PSNR numbers updating in real-time
 
-### Learning Pattern Analysis
+### What I Observed
 
-**Input Only (IO)**:
-- **Rapid early convergence** to global color distribution (epochs 1-10)
-- **Performance plateau** around 23 dB with no improvement beyond epoch 50
-- **Systematic failure** to learn high-frequency spatial patterns
-- **Spectral bias manifestation**: smooth, oversmoothed reconstructions
+**Input Only**: 
+- Learns the basic color scheme super quickly (first 10 epochs)
+- Then basically gives up - plateaus around 23 dB and stays there
+- Never figures out how to do fine details, no matter how long you train it
+- Everything stays frustratingly blurry
 
-**Encoding Only (EO)**:
-- **Progressive detail emergence** from coarse to fine spatial scales
-- **Multi-stage learning** with different frequency bands activating sequentially
-- **Continued improvement** throughout training duration (no early plateau)
-- **High-frequency specialization** with excellent texture reproduction
+**Encoding Only**:
+- Really interesting learning progression - details emerge gradually
+- You can actually see different frequency patterns "turning on" at different stages
+- Keeps improving throughout training, never seems to give up
+- Gets amazing fine details but sometimes misses the big picture
 
-**Input + Encoding (IE)**:
-- **Optimal learning trajectory** combining benefits of both approaches
-- **Fast initial convergence** (inherited from raw coordinate learning)
-- **Sustained improvement** (inherited from frequency decomposition)
-- **Balanced representation** achieving both global accuracy and local detail
+**Input + Encoding**:
+- Gets the best of both worlds - fast early learning plus sustained improvement
+- Inherits the quick color learning from raw coordinates
+- Inherits the detail learning ability from the encoding
+- The combination is greater than the sum of its parts
 
-## Theoretical Analysis: Why Positional Encoding Works
+## Why This Actually Works
 
-### Spectral Decomposition Theory
+### The Big Picture
 
-Positional encoding succeeds by providing an explicit **frequency basis** that circumvents the spectral bias inherent in standard MLPs. The theoretical foundation rests on three key principles:
+The reason positional encoding is so effective comes down to one key insight: instead of making the network figure out how to create high-frequency patterns from scratch, we give it those patterns ready-made. It's like the difference between asking someone to build a piano and asking them to play one.
 
-#### 1. Explicit Frequency Basis Construction
+#### 1. Making the Hard Part Easy
 
-Standard MLPs must **learn** to represent high-frequency functions through composition of smooth activations. Positional encoding **provides** these frequencies explicitly:
-
-```
-Standard MLP: f(x) ≈ Σᵢ wᵢ σ(Wᵢx + bᵢ)  [implicit frequency learning]
-With PE:      f(γ(x)) ≈ Σᵢ wᵢ σ(Wᵢγ(x) + bᵢ) [explicit frequency basis]
-```
-
-#### 2. Multi-Scale Representational Hierarchy
-
-The geometric frequency progression 2⁰, 2¹, ..., 2⁹ creates a **logarithmic frequency ladder** that spans multiple spatial scales:
-
-- **Low frequencies (2⁰, 2¹)**: Global structure, color gradients
-- **Mid frequencies (2², 2³, 2⁴)**: Object boundaries, large-scale textures
-- **High frequencies (2⁵-2⁹)**: Fine details, sharp edges, surface textures
-
-#### 3. Linear Combination Principle
-
-The network learns optimal **linear combinations** of these basis functions, effectively performing learned Fourier decomposition:
+Here's the fundamental difference:
 
 ```
-Reconstruction ≈ Σᵢ aᵢ sin(2ⁱπx) + bᵢ cos(2ⁱπx)
+Standard approach: Network has to learn f(x) ≈ Σᵢ wᵢ σ(Wᵢx + bᵢ)  
+                  [Figure out how to make sharp patterns from smooth pieces]
+
+With encoding:     Network learns f(γ(x)) ≈ Σᵢ wᵢ σ(Wᵢγ(x) + bᵢ) 
+                  [Use pre-built sharp patterns as building blocks]
 ```
 
-This approach transforms the difficult problem of learning high-frequency functions into the simpler problem of learning appropriate coefficients for a fixed frequency basis.
+#### 2. A Full Toolkit of Spatial Scales
+
+The 1, 2, 4, 8, 16... frequency progression gives the network access to patterns at every spatial scale it might need:
+
+- **Low frequencies (1, 2 cycles)**: Overall colors and gradients across the whole image
+- **Medium frequencies (4, 8, 16 cycles)**: Object edges and major texture patterns  
+- **High frequencies (32-512 cycles)**: Fine details, sharp transitions, surface textures
+
+#### 3. Mix and Match  
+
+The network's job becomes much simpler: instead of figuring out how to create complex spatial patterns, it just needs to learn the right recipe for mixing these pre-made ingredients:
+
+```
+Final image ≈ a₁×sin(1×πx) + b₁×cos(1×πx) + a₂×sin(2×πx) + b₂×cos(2×πx) + ...
+```
+
+It's like having a well-stocked spice cabinet - the network just needs to learn the right proportions to create the dish it wants.
 
 ![Visual demonstration of positional encoding's multi-scale frequency decomposition](images/positional_encoding_simple.png)
 
-**Frequency decomposition visualization**: Positional encoding provides explicit access to multiple spatial scales through sinusoidal basis functions, enabling the network to compose complex patterns through learned linear combinations.
+**The encoding toolkit in action**: Each frequency provides the network with ready-made patterns at different spatial scales. The network's job is to learn the right combination of these patterns to recreate the target image.
 
-## Broader Impact and Applications
+## Where This Matters Beyond Image Memorization
 
-### Connection to Neural Radiance Fields (NeRF)
+### The NeRF Connection
 
-Our findings directly validate and extend the theoretical foundation underlying NeRF's breakthrough performance in 3D scene representation. NeRF maps 5D coordinates (3D position + 2D viewing direction) to colors and densities—without positional encoding, it produces severely oversmoothed "cloudy" reconstructions with **spectral bias artifacts identical to our Input Only baseline**.
+This exploration actually helped me understand why NeRF (Neural Radiance Fields) needs positional encoding to work. NeRF does something very similar - it maps 5D coordinates (3D position + viewing direction) to colors and opacity values. Without positional encoding, NeRF produces those characteristic "cloudy" reconstructions that look exactly like my Input Only baseline.
 
-The **15+ dB PSNR improvement** we demonstrate in 2D image memorization directly translates to the quality gains that enabled NeRF's photorealistic 3D reconstructions. This connection establishes positional encoding as a fundamental requirement rather than an architectural choice for coordinate-based neural representations.
+The 15+ dB improvement I found in 2D image memorization directly explains the quality leap that made NeRF's photorealistic 3D scenes possible. It turns out positional encoding isn't just a neat trick - it's a fundamental requirement for any coordinate-based neural representation that needs fine details.
 
-### Coordinate-Based Neural Representation Applications
+### Other Cool Applications
 
-Our systematic analysis has implications across the emerging field of **Implicit Neural Representations (INRs)**:
+This technique has broader implications for the whole field of coordinate-based neural networks:
 
-**Computer Graphics**:
-- **Neural texture synthesis**: UV coordinate mapping with learned frequency decomposition
-- **Procedural geometry**: 3D coordinate encoding for implicit surface representations
-- **Animation and deformation**: Spatiotemporal coordinate networks
+**Graphics and Animation**:
+- Neural textures that can represent fine surface details
+- 3D shape modeling with crisp edges and surfaces
+- Animation systems that preserve fine details during deformation
 
-**Computer Vision**:
-- **Neural image compression**: Coordinate-based image representations with adaptive bit allocation
-- **Super-resolution**: Multi-scale frequency learning for detail enhancement
-- **Video processing**: Spatiotemporal coordinate networks for compression and synthesis
+**Image and Video Processing**:
+- Neural image compression that keeps sharp edges
+- Super-resolution that actually creates believable fine details
+- Video processing that maintains temporal consistency
 
-**Scientific Computing**:
-- **Physics simulations**: Coordinate-based PDE solving with frequency-aware representations
-- **Medical imaging**: High-fidelity 3D/4D reconstruction from sparse measurements
+**Scientific Applications**:
+- Physics simulations with better boundary conditions
+- Medical imaging reconstruction from limited data
+- Any application where you need to map coordinates to some property with fine spatial detail
 
-## Implementation Guidelines and Best Practices
+## Practical Tips If You Want to Try This
 
-### Hyperparameter Selection
+### What I Learned About Settings
 
-**Frequency Band Count (L)**: Our experiments demonstrate L=10 as optimal for 256×256 images, providing sufficient detail capture without overfitting. Scale empirically: L ∝ log₂(resolution).
+**Number of frequency bands**: I used 10 bands for 256×256 images, which worked well. For different image sizes, a rough rule is more bands for higher resolution - maybe start with L ≈ log₂(image_width).
 
-**Raw Coordinate Inclusion**: The Input+Encoding approach consistently outperforms pure encoding strategies by **3-6 dB PSNR**. Always concatenate raw coordinates for optimal performance.
+**Always include raw coordinates**: The Input+Encoding combo beats pure encoding by 3-6 dB every time. Don't skip the original coordinates.
 
-**Architecture Considerations**: Positional encoding increases input dimensionality from d to d(1 + 2L). For 2D coordinates with L=10: 2 → 42 dimensions. Plan network capacity accordingly.
+**Plan for bigger inputs**: Positional encoding explodes your input size. My 2D coordinates went from 2 dimensions to 42! Make sure your network can handle the extra input size.
 
-### Computational Trade-offs
+### Trade-offs to Consider
 
-**Memory Scaling**: O(2Ld) encoding dimensionality vs O(1) raw coordinates
-**Convergence Speed**: 2-3× faster convergence with positional encoding
-**Final Quality**: 15+ dB PSNR improvement justifies computational overhead
+**Memory**: You'll use more memory due to the larger input representation
+**Speed**: Networks converge 2-3x faster with encoding, so training time might actually decrease
+**Quality**: The 15+ dB improvement is usually worth the extra computational cost
 
-## Conclusions and Future Work
+## What I Learned from This Exploration
 
-### Primary Contributions
+### Key Takeaways
 
-This systematic investigation establishes **positional encoding as a fundamental requirement** for high-fidelity coordinate-based neural representations. Our key findings:
+This investigation really clarified why positional encoding is so crucial for coordinate-based neural networks. Here's what stood out:
 
-1. **Quantitative validation**: 15+ dB PSNR improvements demonstrate dramatic quality enhancement
-2. **Systematic comparison**: Three encoding strategies reveal complementary benefits of raw coordinates and frequency decomposition
-3. **Learnable frequencies**: Novel adaptive encoding approach for image-specific spectral optimization
-4. **Theoretical foundation**: Explicit frequency basis construction explains NeRF's success and broader INR performance
+1. **The numbers don't lie**: 15+ dB improvements are dramatic - this isn't just a minor optimization
+2. **Combining approaches works best**: Raw coordinates + encoding beats either approach alone
+3. **Learnable frequencies are promising**: Networks can adapt their frequency preferences to specific content
+4. **It explains a lot**: This helps explain why NeRF and other coordinate networks need positional encoding to work
 
-### Research Impact
+### What This Means for the Field
 
-These results have significant implications for the coordinate-based neural representation field:
+I think this exploration highlights a few important points:
 
-- **Establishes performance benchmarks** for positional encoding evaluation
-- **Validates theoretical predictions** from spectral bias literature
-- **Provides implementation guidelines** for practitioners
-- **Opens research directions** in adaptive and learnable frequency strategies
+- Spectral bias is a real limitation that affects any coordinate-based network
+- The solution isn't just theoretical - it has practical, measurable benefits
+- There's still room to improve on the standard fixed-frequency approach
+- The principles extend beyond just image memorization to 3D, video, and scientific applications
 
-### Future Directions
+### Where I'd Like to Explore Next
 
-**Adaptive Frequency Selection**: Developing algorithms to automatically determine optimal frequency bands based on image content and target quality.
+**Smarter frequency selection**: Can we automatically figure out which frequencies matter most for different types of content? Maybe natural images need different frequency distributions than architectural scenes.
 
-**Multi-Scale Positional Encoding**: Hierarchical encoding strategies that adapt frequency importance during training progression.
+**Adaptive encodings**: What if the encoding could change its emphasis on different frequencies as training progresses? Start with coarse patterns and gradually add finer details.
 
-**Cross-Domain Validation**: Extending systematic evaluation to 3D scenes, video sequences, and scientific data representations.
+**Beyond images**: I'd love to see how these principles apply to 3D scenes, video sequences, or scientific data where spatial detail matters.
 
-The dramatic performance improvements demonstrated here—from 23 dB to 38+ dB PSNR—represent more than incremental gains. They reflect a fundamental shift in how neural networks can represent high-frequency spatial information, with implications extending far beyond single image memorization to the broader future of coordinate-based neural representations.
+The jump from 23 dB to 38+ dB PSNR isn't just a nice improvement - it represents a fundamental shift in what's possible with coordinate-based neural networks. This exploration convinced me that understanding and addressing spectral bias is crucial for anyone working with neural representations of spatial data.
 
-## Research Summary
+## Quick Summary
 
-**Key Findings:**
+**What I discovered:**
 
-- **Problem Identified**: Spectral bias prevents neural networks from learning high-frequency coordinate mappings
-- **Solution Validated**: Positional encoding provides explicit frequency basis, improving reconstruction quality by 15+ dB PSNR
-- **Novel Contribution**: Learnable frequency adaptation and systematic three-way encoding comparison
-- **Practical Impact**: Implementation guidelines and performance benchmarks for coordinate-based neural representations
-- **Theoretical Insight**: Explicit frequency decomposition explains and enables high-fidelity neural coordinate networks
+- **The problem**: Neural networks have a built-in bias toward learning blurry, low-frequency patterns
+- **The solution**: Positional encoding gives networks explicit access to high-frequency building blocks
+- **The results**: 15+ dB PSNR improvements - the difference between useless and amazing
+- **The insight**: It's easier to teach a network to combine pre-made patterns than to create them from scratch
+- **The implications**: This principle applies to any coordinate-based neural representation task
 
-## Reproducibility and Open Science
+## Code and Reproducibility
 
-### Code Repository
+### What's Available
 
-Complete experimental framework available with:
+I've tried to make this work as reproducible as possible. The code includes:
 
-**Core Implementation**:
-- Modular positional encoding module (`src/mlpmem/model/encoding.py`)
-- Three model variants with identical MLP architecture
-- Learnable frequency positional encoding (novel contribution)
+**Core Components**:
+- Clean positional encoding implementation (`src/mlpmem/model/encoding.py`)
+- All three model variants (Input Only, Encoding Only, Input+Encoding)
+- The learnable frequency experiment
 
-**Experimental Infrastructure**:
-- Hydra-based configuration management for systematic experiments
-- Automated PSNR tracking and visualization pipeline
-- Training animation generation with quantitative overlays
-- Comprehensive test suite ensuring implementation correctness
+**Experimental Setup**:
+- Configuration files for all experiments
+- Scripts to generate the training animations
+- PSNR tracking and visualization tools
+- Tests to make sure everything works correctly
 
-**Reproducibility Guarantees**:
-- Fixed random seeds for deterministic results
-- Detailed hyperparameter specifications
-- Hardware requirements and dependency versions
-- Expected runtime and memory usage documentation
+**Reproducibility Details**:
+- Fixed random seeds so you get the same results
+- Complete hyperparameter settings
+- Hardware and software requirements
+- Expected training times and memory usage
 
-### Data Availability
+### Dataset and Results
 
-- **Training image**: UCSD CSE Quad (256×256, representative natural scene)
-- **Experimental outputs**: Complete training logs, checkpoints, and visualizations
-- **Performance metrics**: Raw PSNR values and training curves in standard formats
+- **Test image**: A 256×256 photo of the UCSD CSE building (good mix of architecture and natural elements)
+- **All outputs**: Training logs, model checkpoints, generated images, and training curves
+- **Raw metrics**: All the PSNR numbers and loss curves in standard formats
 
-This work exemplifies **open science principles** with complete reproducibility, systematic evaluation, and practical implementation guidance for the coordinate-based neural representation research community.
+The goal is to make it easy for anyone to reproduce these results or build on this work for their own coordinate-based neural network projects.
