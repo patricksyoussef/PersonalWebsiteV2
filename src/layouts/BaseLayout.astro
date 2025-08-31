@@ -6,7 +6,6 @@ import "@fontsource/jetbrains-mono";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header/Header.astro";
 import "../styles/globals.css";
-import colors from "tailwindcss/colors";
 
 const { title, meta = {} } = Astro.props;
 const description = meta.description ?? "Welcome to my home on the web, I'm Patrick!";
@@ -41,7 +40,7 @@ const imageUrl = `${origin}${image}`;
     <meta name="twitter:image" content={imageUrl} />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content={colors.blue[600]} />
+    <meta name="theme-color" content="#FCFBF9" />
 
     <script is:inline>
       window.addEventListener("DOMContentLoaded", () => {
