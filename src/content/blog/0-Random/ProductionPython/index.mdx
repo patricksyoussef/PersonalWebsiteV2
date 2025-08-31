@@ -4,7 +4,7 @@ published: true
 title: Python for the Real World
 slug: production-python-tips
 date: 2025-04-25
-cover: images/feature_python_snake_crop.jpg
+cover: images/python_snake.jpg
 category: Build Log
 excerpt: "Tips, habits, and hard-won lessons for writing Python that's maintainable and understandable."
 ---
@@ -105,7 +105,7 @@ class User:
     email: str
     tags: list[str] = field(default_factory=list)  # Safe mutable defaults
     created_at: float = field(default_factory=time.time)
-    
+
     def __post_init__(self) -> None:  # Custom validation
         if "@" not in self.email:
             raise ValueError(f"Invalid email: {self.email}")
@@ -196,7 +196,7 @@ class Settings(BaseSettings):
     database_url: str  # Required - fails fast if missing
     debug: bool = False
     max_workers: int = 4
-    
+
     class Config:
         env_file = ".env"
 
@@ -281,7 +281,7 @@ def test_retry_logic(mock_get):
         Mock(status_code=500),  # First call fails
         Mock(status_code=200, json=lambda: {"data": "success"})
     ]
-    
+
     result = fetch_with_retry("https://api.example.com")
     assert result["data"] == "success"
     assert mock_get.call_count == 2  # Verify it retried
@@ -328,10 +328,10 @@ Implementing Python's "magic methods" makes your classes behave like built-in ty
 class Vector:
     def __init__(self, x: float, y: float):
         self.x, self.y = x, y
-    
+
     def __add__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x + other.x, self.y + other.y)
-    
+
     def __repr__(self) -> str:
         return f"Vector({self.x}, {self.y})"
 
@@ -353,10 +353,10 @@ import textwrap
 def generate_email():
     return textwrap.dedent("""
         Dear User,
-        
+
         Your account has been updated.
         Please log in to verify.
-        
+
         Best regards,
         The Team
     """).strip()
