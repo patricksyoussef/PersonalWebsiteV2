@@ -1,36 +1,36 @@
 ---
 published: true
-title: Dynamic Programming is Easy
+title: Dynamic Programming is Ez
 slug: dynamic-programming
-date: 2022-10-02
+date: 2024-10-02
 cover: images/coin_change_5.png
 tags: ["Algorithms", "Dynamic Programming", "Optimization"]
 category: "Algorithms"
-excerpt: "Master dynamic programming with step-by-step examples, from Fibonacci to advanced problems like knapsack and LCS."
+excerpt: "Master dynamic programming with step-by-step examples, starting from Fibonacci."
 pinned: true
 ---
 
-Dynamic programming used to be my nemesis in coding interviews. I'd see "optimal substructure" and "overlapping subproblems" and immediately panic. Then I realized DP isn't some mystical algorithm - it's just a systematic way to avoid doing the same work twice.
+Dynamic programming is a common nemesis in coding interviews. People see "optimal substructure" and "overlapping subproblems" and immediately panic. I realized DP isn't the dark arts, it's just a systematic way to avoid doing the same work twice.
 
-Once you understand the reasoning patterns, DP problems become much more approachable. This post breaks down the step-by-step thinking process that turns intimidating problems into manageable solutions. Whether you're prepping for interviews or just want to understand how these algorithms work, we'll start with Fibonacci and build up to the classic problems you'll encounter on LeetCode and in technical interviews.
+Once you understand the reasoning patterns, DP problems become much more approachable. This post breaks down the step-by-step thinking that turns intimidating problems into manageable solutions. Whether you're prepping for interviews or just want to understand how these algorithms work, we'll start with Fibonacci and build up to the classic problems you'll encounter on LeetCode and in technical interviews.
 
-# Recognize When You Need Dynamic Programming
+# Recognize When You Need It
 
 Before diving into fancy terminology, here's when you should reach for DP:
 
-- You're solving the same subproblems over and over (like calculating `fib(3)` multiple times)
-- You're making choices that affect future choices (like choosing items for a knapsack)
-- The brute force solution has exponential time complexity but feels like it shouldn't
+- You're solving the same subproblems over and over (`fib(3)` multiple times)
+- You're making choices that affect future choices (items in knapsack)
+- The brute force solution is exponential but *feels* like it shouldn't be
 
 The technical terms matter too:
 1. **Overlapping subproblems**: You keep solving the same smaller problems
 2. **Optimal substructure**: The best solution uses best solutions to smaller problems
 
-But here's the practical test: if your recursive solution is painfully slow and you're recalculating things, DP can probably help.
+But here's the practical test: if your recursive solution is painfully slow and you're recalculating things, DP can probably help mitigate the repetition.
 
-# The Problem: Why Fibonacci Breaks Your Computer
+# Why Fibonacci Breaks Your Computer
 
-Fibonacci seems innocent enough - each number is just the sum of the two before it. The recursive solution looks clean and mirrors the mathematical definition perfectly:
+Fibonacci seems innocent enough, each number is just the sum of the two before it. The recursive solution looks clean and mirrors the mathematical definition perfectly:
 
 ```python
 def fib(n):
@@ -39,38 +39,61 @@ def fib(n):
     return fib(n-1) + fib(n-2)
 ```
 
-This works great for small numbers. `fib(5)` runs instantly. `fib(10)` is fine. But try `fib(40)` and go make coffee - you'll be waiting a while. Here's why this innocent-looking function becomes a computational nightmare:
+This works great for small numbers. `fib(5)` runs instantly. `fib(10)` is fine. But try `fib(40)` and go make coffee because you'll be waiting a while.
 
-![Fibonacci Call Tree](images/fib_5.png)
+We need to consider why the problem scales exponentially when intuitively it shouldn't? If I asked you to calculate `fib(5)` by hand, you'd probably do a sliding window of size 2 starting with 0 and 1 and going from there on paper.
 
-Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` twice and `fib(2)` three times. This redundancy grows exponentially as n increases.
+```
+fib(5) = fib(4) + fib(3)
+fib(4) = fib(3) + fib(2)
+fib(3) = fib(2) + fib(1)
+fib(2) = fib(1) + fib(0)
+fib(1) = 1
+fib(0) = 0
+```
 
-To better understand the execution order, here's an animated view showing how the recursive calls unfold:
+Which feels entirely linear no? But it's not. The recursive solution is actually exponential because it recalculates the same subproblems over and over again.
 
-![Fibonacci Animation](images/fib_5_anim.gif)
+To better understand the execution order, here's how the recursive calls unfold:
 
-# The Performance Disaster (And How to Fix It)
+![Fibonacci Call Order](images/fib_5_anim.gif)
 
-The performance difference isn't just bad - it's catastrophically bad:
+We see that the tree is height `n` and for each node, we calculate 2 other function calls. This in turn means we will have `2^n` total function calls, exponentially growing with `n`.
+
+TODO: Some way of showing how this expands like crazy
+
+Follow the call order again, consider how many times we hit a call that we've already solved before. What if we could just save the results of these calls and return them and avoid traversing down paths we've already seen before?
+
+![Fibonacci Memoization](images/fib_5.png)
+
+Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` twice and `fib(2)` three times. This redundancy grows exponentially as n increases, consider what this looks like for `fib(8)`.
+
+![Fibonacci Memoization](images/fib_8.png)
+
+All the grey nodes are calculations we get to avoid because we saved the results of prior problems and time we save! In practice, we linearized an exponential solution. I'll detail more about how to implement this, but for now just know it's called **memoization**.
+
+# The Performance Disaster
+
+The performance difference isn't just bad, it's catastrophically bad:
 
 ![Performance Comparison](images/fib_comp_log.png)
 
 Here are some real numbers that'll make you appreciate memoization:
-- `fib(25)`: **150,000+ function calls** vs **49 calls** (3,000x improvement)
-- `fib(35)`: **~30 seconds** vs **microseconds**
-- `fib(40)`: **several minutes** vs **still microseconds**
+- `fib(25)`: 242,785 function calls vs 49 calls (5,000x improvement)
+- `fib(35)`: ~30 seconds vs microseconds
+- `fib(40)`: several minutes vs still microseconds
 
-I once accidentally left `fib(45)` running and came back an hour later to a still-spinning CPU fan. The memoized version would have finished before I finished typing the command.
+# Demystifying DP
 
-# The Systematic Approach That Demystifies DP
-
-This is the exact framework I use to tackle any DP problem, whether it's in an interview or on LeetCode:
+This is the how I tackle DP problems for interviews, LeetCode, or [Project Euler](https://projecteuler.net/).
 
 ## Step 1: Think Recursively First
 
-Don't worry about DP yet. Just think: "How can I break this into smaller versions of the same problem?"
+Don't worry about DP yet.
 
-This step is crucial because DP problems are fundamentally recursive problems with optimizations. If you can't solve it recursively, you can't solve it with DP. Focus on:
+Just think: "How can I break this into smaller versions of the same problem?"
+
+This step is crucial because DP problems are fundamentally recursive problems with optimizations. If you can't solve it recursively, you can't solve it with DP.
 - What smaller subproblems do I need to solve?
 - What are my base cases?
 - What choices am I making at each step?
@@ -84,7 +107,7 @@ fib(n) = fib(n-1) + fib(n-2)
 
 In interviews, I always write this out clearly. It shows you understand how the problem breaks down and gives you something concrete to implement.
 
-## Step 3: Nail Down Your Base Cases
+## Step 3: The Base Cases
 
 Base cases are where recursion stops. Missing these or getting them wrong will crash your solution:
 ```python
@@ -92,7 +115,7 @@ if n < 2:
     return n  # fib(0) = 0, fib(1) = 1
 ```
 
-## Step 4: Code the Naive Recursive Solution
+## Step 4: Naive Recursive Solution
 
 Get the basic version working first. Don't optimize yet:
 
@@ -218,44 +241,6 @@ def min_path_sum(grid, memo={}):
 
 This example shows how DP applies to 2D problems where you need to explore multiple paths to find the optimal solution.
 
-## 0/1 Knapsack Problem
-
-One of the most famous DP problems: given items with weights and values, maximize value while staying within a weight capacity.
-
-```python
-def knapsack(weights, values, capacity):
-    n = len(weights)
-
-    def dp(i, remaining_capacity, memo={}):
-        # Base case: no items left or no capacity
-        if i == n or remaining_capacity == 0:
-            return 0
-
-        if (i, remaining_capacity) in memo:
-            return memo[(i, remaining_capacity)]
-
-        # Option 1: Skip current item
-        skip = dp(i + 1, remaining_capacity, memo)
-
-        # Option 2: Take current item (if it fits)
-        take = 0
-        if weights[i] <= remaining_capacity:
-            take = values[i] + dp(i + 1, remaining_capacity - weights[i], memo)
-
-        memo[(i, remaining_capacity)] = max(skip, take)
-        return memo[(i, remaining_capacity)]
-
-    return dp(0, capacity)
-
-# Example usage
-weights = [1, 3, 4, 5]
-values = [1, 4, 5, 7]
-capacity = 7
-print(f"Maximum value: {knapsack(weights, values, capacity)}")  # Output: 9
-```
-
-The key insight: at each item, we have two choices (take or skip), and we want the maximum value from either choice. The state is defined by `(current_item_index, remaining_capacity)`.
-
 ## Longest Common Subsequence (LCS)
 
 Find the length of the longest subsequence common to two strings. This is fundamental for diff algorithms, DNA analysis, and text comparison.
@@ -288,202 +273,6 @@ print(f"LCS length: {lcs_length(text1, text2)}")  # Output: 3 (ADH)
 ```
 
 This problem showcases the power of 2D state spaces in DP. The state `(i, j)` represents comparing `text1[i:]` with `text2[j:]`.
-
-# The Magic of Memoization
-
-The dramatic speedup comes from eliminating redundant calculations. In our Fibonacci example:
-
-- **Without memoization**: `fib(40)` takes ~31 seconds
-- **With memoization**: `fib(1000)` takes ~225 nanoseconds
-
-That's not a typo - the memoized version can handle much larger inputs in a fraction of the time!
-
-# Top-Down vs Bottom-Up: Two Approaches to DP
-
-So far we've been using **top-down memoization** (recursive + caching). There's also **bottom-up tabulation** which builds solutions iteratively:
-
-## Bottom-Up Fibonacci
-
-```python
-def fib_bottom_up(n):
-    if n < 2:
-        return n
-
-    # Build table from bottom up
-    dp = [0] * (n + 1)
-    dp[1] = 1
-
-    for i in range(2, n + 1):
-        dp[i] = dp[i-1] + dp[i-2]
-
-    return dp[n]
-```
-
-## Bottom-Up Knapsack
-
-```python
-def knapsack_bottom_up(weights, values, capacity):
-    n = len(weights)
-    # dp[i][w] = max value using first i items with capacity w
-    dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]
-
-    for i in range(1, n + 1):
-        for w in range(capacity + 1):
-            # Don't take item i-1
-            dp[i][w] = dp[i-1][w]
-
-            # Take item i-1 if it fits
-            if weights[i-1] <= w:
-                take_value = values[i-1] + dp[i-1][w - weights[i-1]]
-                dp[i][w] = max(dp[i][w], take_value)
-
-    return dp[n][capacity]
-```
-
-## When to Use Each Approach
-
-- **Top-down (memoization)**: More intuitive, easier to code, handles sparse state spaces well
-- **Bottom-up (tabulation)**: Better space optimization potential, no recursion stack overhead, easier to optimize
-
-# Space Optimization Techniques
-
-Many DP problems can be optimized to use much less memory:
-
-## Space-Optimized Fibonacci
-Since we only need the previous two values, we don't need the entire array:
-
-```python
-def fib_optimized(n):
-    if n < 2:
-        return n
-
-    prev2, prev1 = 0, 1
-    for i in range(2, n + 1):
-        current = prev1 + prev2
-        prev2, prev1 = prev1, current
-
-    return prev1
-```
-
-**Space complexity**: O(n) → O(1)
-
-## Space-Optimized Knapsack
-Since each row only depends on the previous row, we can use just two arrays:
-
-```python
-def knapsack_space_optimized(weights, values, capacity):
-    n = len(weights)
-    prev = [0] * (capacity + 1)
-    curr = [0] * (capacity + 1)
-
-    for i in range(n):
-        for w in range(capacity + 1):
-            curr[w] = prev[w]  # Don't take item i
-
-            if weights[i] <= w:
-                take_value = values[i] + prev[w - weights[i]]
-                curr[w] = max(curr[w], take_value)
-
-        prev, curr = curr, prev  # Swap arrays
-
-    return prev[capacity]
-```
-
-**Space complexity**: O(n × capacity) → O(capacity)
-
-## Even More Optimization
-For knapsack, we can use just one array if we iterate backwards:
-
-```python
-def knapsack_single_array(weights, values, capacity):
-    dp = [0] * (capacity + 1)
-
-    for i in range(len(weights)):
-        # Iterate backwards to avoid using updated values
-        for w in range(capacity, weights[i] - 1, -1):
-            dp[w] = max(dp[w], dp[w - weights[i]] + values[i])
-
-    return dp[capacity]
-```
-
-# When to Use Dynamic Programming
-
-DP is ideal when you encounter:
-- **Recursive problems** with overlapping subproblems
-- **Optimization problems** (finding minimum/maximum values)
-- **Counting problems** (number of ways to do something)
-- **Decision problems** that can be broken into subproblems
-
-# Common DP Patterns
-
-1. **Linear DP**: Problems that depend on previous states (like Fibonacci)
-2. **Grid DP**: Problems involving 2D grids or matrices
-3. **Tree DP**: Problems involving tree structures
-4. **Interval DP**: Problems involving ranges or intervals
-
-# Common Pitfalls and How to Avoid Them
-
-## 1. Incomplete State Definition
-**Problem**: Your state doesn't fully capture the problem's current situation.
-
-```python
-# WRONG: Missing position information
-def min_path_sum_wrong(grid, memo={}):
-    if len(grid) == 1 and len(grid[0]) == 1:
-        return grid[0][0]
-    # Missing: which cell are we at?
-```
-
-**Solution**: Include all necessary information in your state.
-
-## 2. Mutable Default Arguments
-**Problem**: Using `memo={}` as default parameter creates shared state across function calls.
-
-```python
-# WRONG: Shared memo across calls
-def fib(n, memo={}):  # Same memo for all calls!
-    # ...
-
-# RIGHT: Create fresh memo for each call
-def fib(n, memo=None):
-    if memo is None:
-        memo = {}
-    # ...
-```
-
-## 3. Forgetting Base Cases
-**Problem**: Missing or incorrect base cases lead to infinite recursion.
-
-```python
-# WRONG: Missing base case for n=1
-def climb_stairs_wrong(n):
-    if n == 0:
-        return 1
-    # What happens when n=1?
-    return climb_stairs_wrong(n-1) + climb_stairs_wrong(n-2)
-```
-
-## 4. State Explosion
-**Problem**: Too many state variables making the solution inefficient.
-
-**Solution**:
-- Question each state variable: is it really necessary?
-- Look for patterns to reduce dimensions
-- Consider mathematical relationships between variables
-
-## 5. Not Handling Edge Cases
-**Problem**: Forgetting negative inputs, empty arrays, or boundary conditions.
-
-```python
-def knapsack_robust(weights, values, capacity):
-    if not weights or not values or capacity <= 0:
-        return 0  # Handle edge cases first
-
-    if len(weights) != len(values):
-        raise ValueError("Weights and values must have same length")
-
-    # Now implement the main logic...
-```
 
 # Master the Pattern, Master DP
 
