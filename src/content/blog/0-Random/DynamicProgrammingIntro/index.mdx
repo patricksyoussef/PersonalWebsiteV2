@@ -20,9 +20,10 @@ Before diving into fancy terminology, here's when you should reach for DP:
 
 - You're solving the same subproblems over and over (`fib(3)` multiple times)
 - You're making choices that affect future choices (items in knapsack)
-- The brute force solution is exponential but *feels* like it shouldn't be
+- The brute force solution is exponential but _feels_ like it shouldn't be
 
 The technical terms matter too:
+
 1. **Overlapping subproblems**: You keep solving the same smaller problems
 2. **Optimal substructure**: The best solution uses best solutions to smaller problems
 
@@ -79,6 +80,7 @@ The performance difference isn't just bad, it's catastrophically bad:
 ![Performance Comparison](images/fib_comp_log.png)
 
 Here are some real numbers that'll make you appreciate memoization:
+
 - `fib(25)`: 242,785 function calls vs 49 calls (5,000x improvement)
 - `fib(35)`: ~30 seconds vs microseconds
 - `fib(40)`: several minutes vs still microseconds
@@ -94,6 +96,7 @@ Don't worry about DP yet.
 Just think: "How can I break this into smaller versions of the same problem?"
 
 This step is crucial because DP problems are fundamentally recursive problems with optimizations. If you can't solve it recursively, you can't solve it with DP.
+
 - What smaller subproblems do I need to solve?
 - What are my base cases?
 - What choices am I making at each step?
@@ -101,6 +104,7 @@ This step is crucial because DP problems are fundamentally recursive problems wi
 ## Step 2: Write Out the Recurrence Relation
 
 This is where the magic happens. For Fibonacci:
+
 ```
 fib(n) = fib(n-1) + fib(n-2)
 ```
@@ -110,6 +114,7 @@ In interviews, I always write this out clearly. It shows you understand how the 
 ## Step 3: The Base Cases
 
 Base cases are where recursion stops. Missing these or getting them wrong will crash your solution:
+
 ```python
 if n < 2:
     return n  # fib(0) = 0, fib(1) = 1
@@ -188,6 +193,7 @@ This is one of the most common DP problems you'll see. The key insight: for any 
 ![Coin Change Tree](images/coin_change_5.png)
 
 **Reasoning process:**
+
 1. **State**: What amount do I need to make? (That's our parameter)
 2. **Choices**: I can use any coin that doesn't exceed the current amount
 3. **Recurrence**: `min_coins(amount) = 1 + min(min_coins(amount - coin) for each coin)`
