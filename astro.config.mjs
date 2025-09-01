@@ -13,7 +13,7 @@ import preact from "@astrojs/preact";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://loquacious-snickerdoodle-c04dc5.netlify.app/",
+  site: "https://patrickyoussef.com",
   integrations: [
     tailwind({
       nesting: true,
