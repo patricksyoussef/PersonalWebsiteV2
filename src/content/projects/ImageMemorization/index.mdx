@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 title: Image Memorization
 slug: image-memorization
 date: 2025-07-22
@@ -9,13 +9,14 @@ tags: [Deep Learning, Positional Encoding]
 excerpt: "Exploring why neural networks struggle with fine details and how positional encoding provides a solution through my investigation of spectral bias in coordinate-based representations."
 ---
 
-Ever wonder why neural networks seem to struggle with fine details? I got curious about this after diving into the world of neural radiance fields (NeRF) and noticed how positional encoding seemed almost magical in its ability to help networks learn sharp, detailed images. 
+Ever wonder why neural networks seem to struggle with fine details? I got curious about this after diving into the world of neural radiance fields (NeRF) and noticed how positional encoding seemed almost magical in its ability to help networks learn sharp, detailed images.
 
 This post explores my investigation into **spectral bias** - a fascinating limitation where neural networks prefer to learn smooth, blurry representations over sharp, detailed ones. Through some experimentation with different encoding strategies, I discovered performance improvements of up to **15+ dB PSNR** when teaching networks to "see" high-frequency details.
 
 **What we'll explore:**
+
 - Why neural networks are naturally biased toward learning blurry images
-- How positional encoding acts like giving the network "reading glasses" for fine details  
+- How positional encoding acts like giving the network "reading glasses" for fine details
 - Three different approaches to encoding spatial information and how they compare
 - A learnable encoding variant that adapts to the specific image content
 
@@ -50,7 +51,7 @@ To really understand this problem, I ran some experiments with a 256×256 image.
 **The difference is striking**: You can see how the basic approach (top left) produces a blurry mess, while adding positional encoding progressively improves the quality. The Input+Encoding approach (bottom left) gets remarkably close to the original.
 
 - **Colors are off**: The network can't quite nail the color balance
-- **Everything's soft**: Sharp edges become blurry boundaries  
+- **Everything's soft**: Sharp edges become blurry boundaries
 - **Lost textures**: Fine surface details just disappear
 - **Smoother than reality**: The network systematically softens everything
 
@@ -78,7 +79,7 @@ where **L** is the number of frequency bands. This transforms our simple 2D coor
 I wanted to understand exactly what was helping, so I tested three different strategies:
 
 1. **Input Only (IO)**: Just feed raw coordinates directly - the baseline approach **f(x, y) → RGB**
-2. **Encoding Only (EO)**: Only use the positional encoding, no raw coordinates **f(γ(x, y)) → RGB** 
+2. **Encoding Only (EO)**: Only use the positional encoding, no raw coordinates **f(γ(x, y)) → RGB**
 3. **Input + Encoding (IE)**: Combine both - give the network everything **f([x, y, γ(x, y)]) → RGB**
 
 ## Why These Specific Frequencies?
@@ -103,7 +104,7 @@ With 2D coordinates and 10 frequency bands, this explodes our input from 2 dimen
 
 To make sure I was comparing apples to apples, I kept the network architecture identical across all three approaches:
 
-- **Depth**: 8 fully connected layers  
+- **Depth**: 8 fully connected layers
 - **Width**: 256 neurons per layer
 - **Activation**: ReLU (same as what NeRF uses)
 - **No batch norm**: Didn't want to interfere with the frequency patterns
@@ -114,7 +115,7 @@ To make sure I was comparing apples to apples, I kept the network architecture i
 Here's how I trained the networks:
 
 - **Optimizer**: AdamW (the reliable workhorse)
-- **Loss**: Simple mean squared error between predicted and actual RGB values  
+- **Loss**: Simple mean squared error between predicted and actual RGB values
 - **Learning Rate**: Started at 0.001, then gradually decayed it down
 - **Batch Size**: Used the full image (all 65k pixels) each time
 - **Training Time**: 200 epochs for initial comparison, then extended to 400 to see final performance
@@ -127,7 +128,7 @@ Here's where I got a bit creative. Instead of fixing the frequencies at 1, 2, 4,
 # Standard approach (fixed)
 freqs_fixed = 2^i * 2π for i ∈ [0, L-1]
 
-# My experiment (learnable)  
+# My experiment (learnable)
 freqs_learned = θᵢ (starts as 2^i * 2π, but can change during training)
 ```
 
@@ -173,11 +174,13 @@ class PositionalEncoding(nn.Module):
 I measured image quality using PSNR (Peak Signal-to-Noise Ratio) - higher numbers mean better reconstruction. Here's what happened:
 
 ### After 200 epochs of training:
+
 - **Input Only**: 23.05 dB (the blurry baseline)
-- **Encoding Only**: 31.40 dB (+8.35 dB better!) 
+- **Encoding Only**: 31.40 dB (+8.35 dB better!)
 - **Input + Encoding**: 35.87 dB (+12.82 dB better!)
 
 ### After letting them train longer (400 epochs):
+
 - **Input Only**: 22.92 dB (actually got slightly worse - it had plateaued)
 - **Encoding Only**: 32.07 dB (kept improving slowly)
 - **Input + Encoding**: 38.26 dB (+15+ dB improvement over baseline!)
@@ -185,8 +188,9 @@ I measured image quality using PSNR (Peak Signal-to-Noise Ratio) - higher number
 ## What Do These Numbers Mean?
 
 To put this in perspective:
+
 - **8+ dB gain** means you can clearly see the difference
-- **12+ dB gain** is a dramatic improvement - night and day difference  
+- **12+ dB gain** is a dramatic improvement - night and day difference
 - **15+ dB gain** is getting close to perfect reconstruction
 
 ![PSNR training curves comparing all three model variants over 200 epochs](images/psnr_plot.png)
@@ -210,19 +214,22 @@ I created a couple of animations that show the learning process in real-time:
 
 ## What I Observed
 
-**Input Only**: 
+**Input Only**:
+
 - Learns the basic color scheme super quickly (first 10 epochs)
 - Then basically gives up - plateaus around 23 dB and stays there
 - Never figures out how to do fine details, no matter how long you train it
 - Everything stays frustratingly blurry
 
 **Encoding Only**:
+
 - Really interesting learning progression - details emerge gradually
 - You can actually see different frequency patterns "turning on" at different stages
 - Keeps improving throughout training, never seems to give up
 - Gets amazing fine details but sometimes misses the big picture
 
 **Input + Encoding**:
+
 - Gets the best of both worlds - fast early learning plus sustained improvement
 - Inherits the quick color learning from raw coordinates
 - Inherits the detail learning ability from the encoding
@@ -239,10 +246,10 @@ The reason positional encoding is so effective comes down to one key insight: in
 Here's the fundamental difference:
 
 ```
-Standard approach: Network has to learn f(x) ≈ Σᵢ wᵢ σ(Wᵢx + bᵢ)  
+Standard approach: Network has to learn f(x) ≈ Σᵢ wᵢ σ(Wᵢx + bᵢ)
                   [Figure out how to make sharp patterns from smooth pieces]
 
-With encoding:     Network learns f(γ(x)) ≈ Σᵢ wᵢ σ(Wᵢγ(x) + bᵢ) 
+With encoding:     Network learns f(γ(x)) ≈ Σᵢ wᵢ σ(Wᵢγ(x) + bᵢ)
                   [Use pre-built sharp patterns as building blocks]
 ```
 
@@ -251,10 +258,10 @@ With encoding:     Network learns f(γ(x)) ≈ Σᵢ wᵢ σ(Wᵢγ(x) + bᵢ)
 The 1, 2, 4, 8, 16... frequency progression gives the network access to patterns at every spatial scale it might need:
 
 - **Low frequencies (1, 2 cycles)**: Overall colors and gradients across the whole image
-- **Medium frequencies (4, 8, 16 cycles)**: Object edges and major texture patterns  
+- **Medium frequencies (4, 8, 16 cycles)**: Object edges and major texture patterns
 - **High frequencies (32-512 cycles)**: Fine details, sharp transitions, surface textures
 
-### 3. Mix and Match  
+### 3. Mix and Match
 
 The network's job becomes much simpler: instead of figuring out how to create complex spatial patterns, it just needs to learn the right recipe for mixing these pre-made ingredients:
 
@@ -281,16 +288,19 @@ The 15+ dB improvement I found in 2D image memorization directly explains the qu
 This technique has broader implications for the whole field of coordinate-based neural networks:
 
 **Graphics and Animation**:
+
 - Neural textures that can represent fine surface details
 - 3D shape modeling with crisp edges and surfaces
 - Animation systems that preserve fine details during deformation
 
 **Image and Video Processing**:
+
 - Neural image compression that keeps sharp edges
 - Super-resolution that actually creates believable fine details
 - Video processing that maintains temporal consistency
 
 **Scientific Applications**:
+
 - Physics simulations with better boundary conditions
 - Medical imaging reconstruction from limited data
 - Any application where you need to map coordinates to some property with fine spatial detail
@@ -358,17 +368,20 @@ The jump from 23 dB to 38+ dB PSNR isn't just a nice improvement - it represents
 I've tried to make this work as reproducible as possible. The code includes:
 
 **Core Components**:
+
 - Clean positional encoding implementation (`src/mlpmem/model/encoding.py`)
 - All three model variants (Input Only, Encoding Only, Input+Encoding)
 - The learnable frequency experiment
 
 **Experimental Setup**:
+
 - Configuration files for all experiments
 - Scripts to generate the training animations
 - PSNR tracking and visualization tools
 - Tests to make sure everything works correctly
 
 **Reproducibility Details**:
+
 - Fixed random seeds so you get the same results
 - Complete hyperparameter settings
 - Hardware and software requirements
