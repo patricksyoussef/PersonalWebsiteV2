@@ -61,15 +61,13 @@ To better understand the execution order, here's how the recursive calls unfold:
 
 We see that the tree is height `n` and for each node, we calculate 2 other function calls. This in turn means we will have `2^n` total function calls, exponentially growing with `n`.
 
-TODO: Some way of showing how this expands like crazy
-
 Follow the call order again, consider how many times we hit a call that we've already solved before. What if we could just save the results of these calls and return them and avoid traversing down paths we've already seen before?
 
-![Fibonacci Memoization](images/fib_5.png)
+![Call Tree for fib(5)](images/fib_5.png)
 
-Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` twice and `fib(2)` three times. This redundancy grows exponentially as n increases, consider what this looks like for `fib(8)`.
+Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` and `fib(2)` twice. This redundancy grows exponentially as n increases, consider what this looks like for `fib(8)`.
 
-![Fibonacci Memoization](images/fib_8.png)
+![Call Tree for fib(8)](images/fib_8.png)
 
 All the grey nodes are calculations we get to avoid because we saved the results of prior problems and time we save! In practice, we linearized an exponential solution. I'll detail more about how to implement this, but for now just know it's called **memoization**.
 
@@ -103,17 +101,17 @@ This step is crucial because DP problems are fundamentally recursive problems wi
 
 ## Step 2: Write Out the Recurrence Relation
 
-This is where the magic happens. For Fibonacci:
+All DP problems can be solved with recursion, I opt to only look at these solutions in this post to generalize the process. The recurrence relation is the formula that describes how to compute the solution to a problem using the solutions to its subproblems.
 
-```
-fib(n) = fib(n-1) + fib(n-2)
-```
+$$
+\text{fib}(n) = \text{fib}(n-1) + \text{fib}(n-2)
+$$
 
 In interviews, I always write this out clearly. It shows you understand how the problem breaks down and gives you something concrete to implement.
 
 ## Step 3: The Base Cases
 
-Base cases are where recursion stops. Missing these or getting them wrong will crash your solution:
+Base cases are where recursion stops. It defines the bounds of the problem, exceptions, etc. that terminate the recursive call order. For `fib` this means that we never compute any input less than 0, and we implicitly know the solution for 0 and 1.
 
 ```python
 if n < 2:
@@ -124,183 +122,197 @@ if n < 2:
 
 Get the basic version working first. Don't optimize yet:
 
-```python
+```python output=1
 def fib(n):
     if n < 2:
         return n
     return fib(n-1) + fib(n-2)
+
+print(f"Expecting 5 for the solution to fib(5), got: {fib(5)}")
+Expecting 5 for the solution to fib(5), got: 5
 ```
 
 Test it on small inputs. If this doesn't work, neither will the DP version.
 
+```python output=1
+from time import perf_counter
+
+def test_fib(n):
+    start = perf_counter()
+    result = fib(n)
+    elapsed_ms = (perf_counter() - start) * 1_000
+    print(f"fib({n}) = {result}, time taken: {elapsed_ms:.6f} milliseconds")
+
+test_fib(25)
+
+fib(25) = 75025, time taken: 9.768667 milliseconds
+```
+
 ## Step 5: Recognize the Inefficiency
 
-Run your naive solution on larger inputs. When it gets slow, you've found your overlapping subproblems. That's your cue that memoization will help.
+Run your naive solution on larger inputs. When it gets slow, you've found your overlapping subproblems. That's your cue that memoization will help. In interviews if you have a plenty fast solution at this point, you can opt to mention DP but it may not be needed.
 
 ## Step 6: Add Memoization
 
-Now optimize by storing results you've already computed:
+Now optimize by storing results you've already computed, we're simply going to use a dictionary to store the results of each function call keyed by the function inputs.
 
-```python
+```python output=1
 def fib(n, memo={}):
+    # If we've saved the result for this input before, return it
     if n in memo:
         return memo[n]
 
+    # Still need to handle base cases
     if n < 2:
         return n
 
+    # Save the result for later
     memo[n] = fib(n-1, memo) + fib(n-2, memo)
     return memo[n]
+
+test_fib(25) # We expect this to be much faster
+
+fib(25) = 75025, time taken: 0.010667 milliseconds
 ```
+
+Compared to our naive solution, we see a time reduction from 9.77 ms to ~0.01 ms.
 
 ## The Critical Insight: State Definition
 
-Here's what trips up most people: your function parameters must completely describe the current state of your problem.
+Here's what trips up most people, your function parameters _must_ completely describe the current state of your problem i.e. implies everything to condition your execution.
 
 For Fibonacci, just `n` tells us everything we need to know. But for more complex problems, you might need multiple parameters. The test is: given just the parameters, can you solve the problem from that point without any additional information?
 
-This is crucial for interviews because it shows you understand the problem structure at a deep level.
+The important intution for both DP and the naive recursive solution is this actually, without this understanding you cannot even solve it naively which means if you have a naive solution, you have the ability to convert it to a DP solution trivially!
 
-# Key Principles for DP Success
-
-1. **Complete State Encoding**: Your function parameters must fully describe the current state of the problem
-2. **State Implies Position**: Given the state, you should know exactly where you are in the problem
-3. **Reusable States**: When you describe your state, you can save and reuse the solution
+This is crucial for interviews because it shows you understand the problem deeply.
 
 # Beyond Fibonacci: More Examples
 
-## Climbing Stairs
+Let's look at two more classic DP problems to see how the same systematic approach applies, goal for you is to try this on your own before looking at the solution.
 
-How many ways can you climb n stairs if you can take 1 or 2 steps at a time?
+## Coin Change
 
-```python
-def climb_stairs(n):
-    if n < 0:
-        return 0
-    elif n == 0:  # Reached the top!
-        return 1
+You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
 
-    # Take steps
-    return climb_stairs(n-1) + climb_stairs(n-2)
+Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+You may assume that you have an infinite number of each kind of coin.
+
+<Collapse title="Solution, don't cheat!">
+
+**Recurrence Relation**
+
+For any amount, try every available coin and take the best result. Consider the height of the tree as the number of coins chosen.
+
+```
+coin_change(amount) = 1 + min(coin_change(amount - coin) for each valid coin)
 ```
 
-Notice the pattern? It's the same as Fibonacci! This illustrates how many DP problems share similar structures.
+**Base cases**
 
-## Coin Change: A Classic Interview Problem
+Some simple base cases to guard the operation of the algorithm.
 
-This is one of the most common DP problems you'll see. The key insight: for any amount, try every coin and take the best result.
+```python
+if amount < 0: # If amount is negative, it's impossible to make change
+    return float('inf')
+if amount == 0: # If amount is zero, no coins are needed
+    return 0
+```
 
-![Coin Change Tree](images/coin_change_5.png)
+**Memoized Solution**
 
-**Reasoning process:**
-
-1. **State**: What amount do I need to make? (That's our parameter)
-2. **Choices**: I can use any coin that doesn't exceed the current amount
-3. **Recurrence**: `min_coins(amount) = 1 + min(min_coins(amount - coin) for each coin)`
+Pretty simple extensions of the prior assertions.
 
 ```python
 def coin_change(coins, amount, memo={}):
-    if amount < 0:
-        return float('inf')  # Invalid - can't make negative amounts
-    if amount == 0:
-        return 0  # Base case - need 0 coins for amount 0
     if amount in memo:
         return memo[amount]
+    if amount < 0:
+        return float('inf')
+    if amount == 0:
+        return 0
 
-    best_count = float('inf')
+    min_coins = float('inf')
     for coin in coins:
-        coin_count = coin_change(coins, amount - coin, memo) + 1
-        best_count = min(best_count, coin_count)
+        min_coins = min(min_coins, coin_change(coins, amount - coin, memo) + 1)
 
-    memo[amount] = best_count
+    memo[amount] = min_coins
     return memo[amount]
 ```
 
-The pattern is always the same: try all choices, take the best result.
+**Example Call Tree**
+
+Running this for `coin_change([1,2,3], 5)`, we can see just how much we save.
+
+![](images/coin_change_5.png)
+
+</Collapse>
 
 ## Minimum Path Sum
 
-Find the minimum sum path from top-left to bottom-right in a grid (you can only move right or down):
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
 
-![Minimum Path Sum Tree](images/min_path_sum.png)
+Note: You can only move either down or right at any point in time.
+
+<Collapse title="Solution, don't cheat!">
+
+**Recurrence Relation**
+
+From any cell, the minimum path equals the cell's value plus the minimum of the two possible next steps. Consider how we explore right and down paths.
+
+```
+min_path(r, c) = grid[r][c] + min(min_path(r+1, c), min_path(r, c+1))
+```
+
+**Base cases**
+
+Some simple base cases to guard the operation of the algorithm.
+
+```python
+if r >= m or c >= n: # Out of bounds, invalid path
+    return float('inf')
+if r == m-1 and c == n-1: # Reached destination
+    return grid[r][c]
+```
+
+**Memoized Solution**
+
+Pretty simple extensions of the prior assertions.
 
 ```python
 def min_path_sum(grid, memo={}):
     m, n = len(grid), len(grid[0])
 
-    def step(r, c, memo):
+    def solve(r, c):
         if (r, c) in memo:
             return memo[(r, c)]
-
-        if r == m or c == n:
+        if r >= m or c >= n:
             return float('inf')
-
-        if (r + 1, c + 1) == (m, n):  # Reached bottom-right
+        if r == m-1 and c == n-1:
             return grid[r][c]
 
-        grid_val = grid[r][c]
-        memo[(r, c)] = min(step(r + 1, c, memo), step(r, c + 1, memo)) + grid_val
+        memo[(r, c)] = grid[r][c] + min(solve(r+1, c), solve(r, c+1))
         return memo[(r, c)]
 
-    return step(0, 0, memo)
+    return solve(0, 0)
 ```
 
-This example shows how DP applies to 2D problems where you need to explore multiple paths to find the optimal solution.
+**Example Call Tree**
 
-## Longest Common Subsequence (LCS)
+Running this for a 3x3 grid, we can see just how much we save.
 
-Find the length of the longest subsequence common to two strings. This is fundamental for diff algorithms, DNA analysis, and text comparison.
+![](images/min_path_sum.png)
 
-```python
-def lcs_length(text1, text2):
-    def dp(i, j, memo={}):
-        # Base case: reached end of either string
-        if i == len(text1) or j == len(text2):
-            return 0
-
-        if (i, j) in memo:
-            return memo[(i, j)]
-
-        # If characters match, include in LCS
-        if text1[i] == text2[j]:
-            memo[(i, j)] = 1 + dp(i + 1, j + 1, memo)
-        else:
-            # Try both: advance in text1 or text2
-            memo[(i, j)] = max(dp(i + 1, j, memo), dp(i, j + 1, memo))
-
-        return memo[(i, j)]
-
-    return dp(0, 0)
-
-# Example usage
-text1 = "ABCDGH"
-text2 = "AEDFHR"
-print(f"LCS length: {lcs_length(text1, text2)}")  # Output: 3 (ADH)
-```
-
-This problem showcases the power of 2D state spaces in DP. The state `(i, j)` represents comparing `text1[i:]` with `text2[j:]`.
-
-# Master the Pattern, Master DP
-
-The beauty of DP is that once you understand the reasoning pattern, you can tackle any problem systematically. Here's the mental framework that works:
-
-1. **Think recursively first** - break the problem down before optimizing
-2. **Write the recurrence clearly** - this becomes your roadmap
-3. **Get the base cases right** - these are your foundation
-4. **Code the naive version** - prove your logic works
-5. **Add memoization** - eliminate redundant work
-6. **Define state carefully** - your parameters must capture everything needed
-
-The biggest breakthrough for me was realizing that DP problems aren't about memorizing solutions - they're about recognizing patterns and applying a systematic thinking process.
-
-Whether you're preparing for interviews or just want to understand these algorithms, practice this framework on different problems. Start with the classics, understand the reasoning, and you'll find that even complex DP problems become approachable puzzles rather than intimidating obstacles.
+</Collapse>
 
 # Practice Problems to Try Next
 
-- **House Robber**: Maximize money robbed without robbing adjacent houses
-- **Edit Distance**: Minimum operations to transform one string to another
-- **Longest Increasing Subsequence**: Find longest strictly increasing subsequence
-- **Palindrome Partitioning**: Minimum cuts to partition string into palindromes
-- **Maximum Product Subarray**: Find contiguous subarray with maximum product
+- **[Tribonacci](https://leetcode.com/problems/n-th-tribonacci-number/)**: Find the nth number in the Tribonacci sequence
+- **[Unique Paths](https://leetcode.com/problems/unique-paths/)**: Count the number of unique paths from top-left to bottom-right
+- **[House Robber](https://leetcode.com/problems/house-robber/)**: Maximize money robbed without robbing adjacent houses
+- **[LCS](https://leetcode.com/problems/longest-common-subsequence/)**: Find longest common subsequence between two strings
 
 The next time you encounter a problem that seems to require exploring multiple paths or making optimal choices at each step, ask yourself: "Could this benefit from dynamic programming?" The answer might just transform an impossible problem into a trivial one.
+
+![](images/dp_meme.png)

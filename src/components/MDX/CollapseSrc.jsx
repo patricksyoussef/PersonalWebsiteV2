@@ -11,7 +11,7 @@ export default function CollapseSrc({ title, defaultOpen = false, children }) {
   }, [isOpen]);
 
   return (
-    <div class="my-5 border border-edge rounded-content py-3 px-5 mb-4 bg-darken shadow-md">
+    <div class="my-3 border border-edge rounded-content py-3 px-5 mb-4 bg-darken shadow-md">
       {/* Clickable Header */}
       <button
         class="cursor-pointer flex items-center justify-between w-full text-left"
