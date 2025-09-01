@@ -1,13 +1,21 @@
 ---
-const { title } = Astro.props;
+const { title, number } = Astro.props;
 ---
 
-<hr />
-<div>
-  <div class="italic text-[2.25em] md:text-[2.75em] font text-center lowercase tracking-tight">
-    <p class="m-0">{title}</p>
+<div class="poem-container my-16 first:mt-8">
+  <div class="flex items-center justify-center gap-4 mb-8">
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-full"></div>
+    {number && <span class="text-gray-600 text-2xl font-light tracking-widest uppercase">{number}</span>}
+    <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-full"></div>
   </div>
-  <div class="italic">
-    <slot />
+
+  <div class="relative">
+    <div class="italic text-[2.25em] md:text-[2.75em] font text-center lowercase tracking-tight mb-8 text-gray-800">
+      <p class="m-0">{title}</p>
+    </div>
+
+    <div class="prose prose-lg max-w-4xl mx-auto text-gray-700 leading-relaxed mb-12">
+      <slot />
+    </div>
   </div>
 </div>
