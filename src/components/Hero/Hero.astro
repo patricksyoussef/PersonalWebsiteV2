@@ -7,19 +7,17 @@ const entry = await getEntry("supplements", "hero");
 const { Content } = await render(entry);
 ---
 
-<div
-  class="mx-auto drop-in max-w-base xl:max-w-wide grid grid-cols-1 md:grid-cols-[2fr_1fr] xl:md:grid-cols-[2fr_1.1fr] my-2 md:my-8"
->
-  <div
-    class="prose fade-in text-[1.55rem] md:text-3xl lg:text-4xl xl:text-[2.5rem] md:pr-[1.15em] font-serif text-extralight"
-  >
-    <div class="prose-p:my-0 md:prose-p:font-light md:prose-a:font-normal prose-p:leading-[1.1]">
-      <div class="hero space-y-6 prose-a:transition prose-a:decoration-transparent hover:prose-a:decoration-accent">
-        <Content />
+<div class="mx-auto drop-in fade-in max-w-base xl:max-w-wide my-6 md:my-8 font-serif">
+  <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr] xl:md:grid-cols-[2fr_1.1fr]">
+    <div class="prose text-[1.55rem] md:text-3xl lg:text-4xl xl:text-[2.5rem] md:pr-[1.15em] text-extralight">
+      <div class="prose-p:my-0 prose-p:font-light prose-a:font-normal prose-p:leading-[1.25] md:prose-p:leading-[1.1]">
+        <div class="hero space-y-6 prose-a:transition prose-a:decoration-transparent hover:prose-a:decoration-accent">
+          <Content />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="fade-in hidden md:flex items-center" style="--anim-idx: 1">
-    <Image src={image} width={800} alt="" class="rounded-full shadow-xl" />
+    <div class="fade-in hidden md:flex items-center" style="--anim-idx: 1">
+      <Image src={image} width={800} alt="" class="rounded-full shadow-xl" />
+    </div>
   </div>
 </div>
