@@ -12,7 +12,7 @@ pinned: true
 
 Dynamic programming is a common nemesis in coding interviews. People see "optimal substructure" and "overlapping subproblems" and immediately panic. I realized DP isn't the dark arts, it's just a systematic way to avoid doing the same work twice.
 
-Once you understand the reasoning patterns, DP problems become much more approachable. This post breaks down the step-by-step thinking that turns intimidating problems into manageable solutions. Whether you're prepping for interviews or just want to understand how these algorithms work, we'll start with Fibonacci and build up to the classic problems you'll encounter on LeetCode and in technical interviews.
+Once you understand the reasoning patterns, DP problems become much more approachable. This post breaks down the step-by-step thinking that turns intimidating problems into manageable solutions.
 
 # Recognize When You Need It
 
@@ -65,7 +65,7 @@ Follow the call order again, consider how many times we hit a call that we've al
 
 ![Call Tree for fib(5)](images/fib_5.png)
 
-Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` and `fib(2)` twice. This redundancy grows exponentially as n increases, consider what this looks like for `fib(8)`.
+Notice the blue nodes? Those represent subproblems we've already solved! For `fib(5)`, we calculate `fib(3)` twice and `fib(2)` three times. This redundancy grows exponentially as n increases, consider what this looks like for `fib(8)`.
 
 ![Call Tree for fib(8)](images/fib_8.png)
 
