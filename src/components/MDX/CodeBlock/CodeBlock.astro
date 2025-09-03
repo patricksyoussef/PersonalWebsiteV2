@@ -3,7 +3,7 @@ const { code, lang, meta } = Astro.props;
 import { transformerNotationHighlight } from "@shikijs/transformers";
 import { hastToHtml, codeToHast } from "shiki";
 import { parseKeyValuePairs } from "../../../utils.js";
-const theme = "catppuccin-mocha";
+const theme = "catppuccin-latte";
 import CopyButton from "./CopyButton.astro";
 
 // Parse Metadata and Change Styling
@@ -98,8 +98,8 @@ if (n > 0) {
 const highlightedCode = hastToHtml(hastCode);
 ---
 
-<div class="code-block p-3 mb-10 rounded-lg bg-codeBackground shadow-md font-mono">
-  <div class="grid grid-cols-[1fr_4fr_1fr] text-white mb-1">
+<div class="code-block mb-10 rounded-xl border border-[#4c4f69] overflow-clip shadow-md bg-codeBackground font-mono">
+  <div class="grid grid-cols-[1fr_4fr_1fr] items-center px-3 py-1 text-black">
     <div class="flex flex-row space-x-2 items-center">
       <div class="rounded-full bg-[#FF605C] h-[0.75rem] aspect-square"></div>
       <div class="rounded-full bg-[#FFBD44] h-[0.75rem] aspect-square"></div>
@@ -110,7 +110,10 @@ const highlightedCode = hastToHtml(hastCode);
       <CopyButton code={codeLines} />
     </div>
   </div>
-  <div class="not-prose text-[0.75rem] md:text-[0.9rem] leading-[1.5]" set:html={highlightedCode} />
+  <div
+    class="not-prose rounded-xl p-3 text-[0.75rem] border border-[#4c4f69] m-[-1px] md:text-[0.9rem] leading-[1.5]"
+    set:html={highlightedCode}
+  />
 </div>
 
 <style is:global>

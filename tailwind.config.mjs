@@ -9,7 +9,7 @@ export default {
         background: "#FCFBF9",
         accent: colors.blue[600],
         darken: "#F9F6F2",
-        codeBackground: "#1e1e2e",
+        codeBackground: "#eff1f5",
         edge: colors.stone[300],
         extralight: colors.stone[500],
         light: colors.stone[600],

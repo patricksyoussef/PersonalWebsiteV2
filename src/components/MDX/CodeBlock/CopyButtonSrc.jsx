@@ -16,7 +16,7 @@ export default function CopyButton({ code, children }) {
   return (
     <button
       onClick={handleCopy}
-      class={`transition-all duration-200 transform ${copied ? "text-green-400 scale-110" : "text-gray-300 hover:text-white"}`}
+      class={`transition-all duration-200 transform ${copied ? "text-[#1e66f5] scale-110" : "text-gray-600 hover:text-gray-800"}`}
       aria-label="Copy code"
     >
       {children}
