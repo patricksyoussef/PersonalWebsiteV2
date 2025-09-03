@@ -849,7 +849,7 @@ Looks great! Let's dive a bit deeper and verify the orbital period and system en
 
 For the period evaluation we can make a pretty simple plot to give us confidence that this works. First, let's determine what the period is supposed to be by computing how long it would take to traverse a circle with a radius of our orbit when traveling at our initial velocity. Then we can plot how far the satellite is from the initial position, this way when we return back to where we started we'll see a minimum in our graph that should reflect a period.
 
-```python output=2
+```python output=1
 # Compute Expected Period
 # (2 * pi * r) / v
 P = 2 * np.pi * TwoBody.Xi[1,0] / TwoBody.Xi[1,3] / 60
