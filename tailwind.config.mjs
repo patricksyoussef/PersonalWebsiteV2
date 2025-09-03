@@ -54,21 +54,23 @@ export default {
             transitionDuration: "200ms",
           },
           ul: {
-            listStylePosition: "outside",
+            listStylePosition: "inside",
+            paddingLeft: "0.125rem",
+            margin: "0rem 0",
           },
           "ul > li::marker": {
             color: theme("colors.stone.600"),
           },
           ol: {
-            listStylePosition: "outside",
+            listStylePosition: "inside",
+            paddingLeft: "0.125rem",
           },
           "ol > li::marker": {
             color: theme("colors.stone.600"),
           },
           li: {
-            lineHeight: theme("lineHeight.8"),
-            marginTop: "0.25em",
-            marginBottom: "0.25em",
+            marginTop: "0rem",
+            marginBottom: "0rem",
           },
           thead: {
             borderBottomColor: theme("colors.accent"),
