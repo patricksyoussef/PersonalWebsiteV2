@@ -2,7 +2,7 @@
 const { title, number } = Astro.props;
 ---
 
-<div class="poem-container my-16 first:mt-8">
+<div class="my-16 first:mt-8">
   <div class="flex items-center justify-center gap-4 mb-8">
     <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-full"></div>
     {number && <span class="text-gray-600 text-2xl font-light tracking-widest uppercase">{number}</span>}
@@ -14,7 +14,7 @@ const { title, number } = Astro.props;
       <p class="m-0">{title}</p>
     </div>
 
-    <div class="prose prose-lg max-w-4xl mx-auto text-gray-700 leading-relaxed mb-12">
+    <div class="prose md:text-[20px] max-w-full leading-relaxed mb-12">
       <slot />
     </div>
   </div>
