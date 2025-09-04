@@ -68,16 +68,16 @@ pnpm preview
 
 ### Available Commands
 
-| Command                    | Action                                      |
-| :------------------------- | :------------------------------------------ |
-| `pnpm dev`                | Start local dev server at `localhost:4321` |
-| `pnpm build`              | Build production site to `./dist/`         |
-| `pnpm preview`            | Preview build locally before deploying     |
-| `pnpm lint`               | Run ESLint on codebase                     |
-| `pnpm lint:fix`           | Fix auto-fixable linting issues            |
-| `pnpm format`             | Format code with Prettier                  |
-| `pnpm format:check`       | Check code formatting                      |
-| `pnpm optimize-images`    | Optimize and crop feature images           |
+| Command                | Action                                     |
+| :--------------------- | :----------------------------------------- |
+| `pnpm dev`             | Start local dev server at `localhost:4321` |
+| `pnpm build`           | Build production site to `./dist/`         |
+| `pnpm preview`         | Preview build locally before deploying     |
+| `pnpm lint`            | Run ESLint on codebase                     |
+| `pnpm lint:fix`        | Fix auto-fixable linting issues            |
+| `pnpm format`          | Format code with Prettier                  |
+| `pnpm format:check`    | Check code formatting                      |
+| `pnpm optimize-images` | Optimize and crop feature images           |
 
 ## 🎨 Design Philosophy
 
@@ -100,17 +100,21 @@ pnpm preview
 ## 📝 Content Guidelines
 
 ### Blog Posts
+
 Technical content focusing on engineering insights, development practices, and lessons learned from real-world projects.
 
 ### Projects
+
 Portfolio pieces showcasing technical skills, problem-solving approaches, and meaningful impact.
 
 ### Musings
+
 Reflective writing on professional growth, navigating uncertainty, and finding meaning in technical work.
 
 ## 🚦 Performance
 
 Optimized for Core Web Vitals:
+
 - Minimal JavaScript bundle
 - Optimized images with modern formats
 - Efficient CSS with Tailwind's JIT compilation
