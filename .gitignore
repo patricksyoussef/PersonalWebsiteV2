@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 .netlify
+.claude
+.netlify
+.ropeproject
 
 # dependencies
 node_modules/

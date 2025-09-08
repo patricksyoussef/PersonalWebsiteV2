@@ -1,6 +1,12 @@
-# patrickyoussef.com
+# PatrickYoussef.com
 
 A personal website showcasing technical projects, engineering insights, and thoughtful reflections. Built with modern web technologies to be fast, accessible, and maintainable.
+
+![Site Screenshot](WebsiteSnip.png)
+
+## Build Status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d8fa6bfa-9620-4f70-afa7-b58577d373b7/deploy-status)](https://app.netlify.com/projects/loquacious-snickerdoodle-c04dc5/deploys)
 
 ## 🎯 Purpose
 
