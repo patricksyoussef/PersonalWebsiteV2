@@ -1,8 +1,11 @@
 ---
-import "@fontsource-variable/dm-sans/opsz.css";
+import "@fontsource-variable/dm-sans";
 import "@fontsource-variable/petrona";
 import "@fontsource-variable/petrona/wght-italic.css";
 import "@fontsource/jetbrains-mono";
+import dmSansWoff2 from "@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url";
+import petronaItalicWoff2 from "@fontsource-variable/petrona/files/petrona-latin-wght-italic.woff2?url";
+import petronaWoff2 from "@fontsource-variable/petrona/files/petrona-latin-wght-normal.woff2?url";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header/Header.astro";
 import "../styles/globals.css";
@@ -41,6 +44,11 @@ const imageUrl = `${origin}${image}`;
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#FCFBF9" />
+
+    <!-- Font Preloading -->
+    <link rel="preload" as="font" type="font/woff2" href={dmSansWoff2} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={petronaWoff2} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={petronaItalicWoff2} crossorigin="anonymous" />
 
     <script is:inline>
       window.addEventListener("DOMContentLoaded", () => {
