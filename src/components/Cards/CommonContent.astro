@@ -10,6 +10,7 @@ const {
   tagText = "",
   tagColor = "",
 } = Astro.props;
+const title = entry.data.shortTitle ?? entry.data.title;
 const dateString = formatDate(entry);
 const readTimeString = readTime(entry);
 ---
@@ -27,7 +28,7 @@ const readTimeString = readTime(entry);
     <div
       class={`text-2xl line-clamp-1 font-medium mt-4 transition-all duration-300 underline-offset-2 underline decoration-transparent ${titleStyle}`}
     >
-      {entry.data.title}
+      {title}
     </div>
     <div class={`text-extralight ${subTitleStyle}`}>{dateString} · {readTimeString}</div>
     <slot />

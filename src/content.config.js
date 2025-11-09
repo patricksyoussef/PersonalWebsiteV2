@@ -4,6 +4,7 @@ import { defineCollection, z } from "astro:content";
 function createBaseSchema(imageSchema = z.any().optional()) {
   return z.object({
     title: z.string(),
+    shortTitle: z.string().optional(),
     slug: z.string(),
     date: z.date(),
     description: z.string().optional(),
