@@ -10,11 +10,11 @@ const { title, number } = Astro.props;
   </div>
 
   <div class="relative">
-    <div class="italic text-[2.25em] md:text-[2.75em] font text-center lowercase tracking-tight mb-8 text-gray-800">
+    <div class="italic text-[2.25em] md:text-[2.5em] font text-center tracking-tight mb-8 text-gray-800">
       <p class="m-0">{title}</p>
     </div>
 
-    <div class="prose md:text-[20px] max-w-full leading-relaxed mb-12">
+    <div class="prose prose-p:my-5 md:text-[20px] max-w-full leading-relaxed mb-12">
       <slot />
     </div>
   </div>
