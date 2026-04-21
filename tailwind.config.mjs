@@ -85,9 +85,9 @@ export default {
             css: {
               ...defaultStyles,
               a: {
-                color: theme("colors.blue.700"),
+                color: theme("colors.accent"),
                 "&:hover": {
-                  textDecorationColor: theme("colors.blue.700"),
+                  textDecorationColor: theme("colors.accent"),
                 },
               },
             },
