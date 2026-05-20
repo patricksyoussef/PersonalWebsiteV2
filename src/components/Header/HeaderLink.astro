@@ -1,0 +1,19 @@
+---
+const { path, text } = Astro.props;
+
+const normalizePath = (value: string) => value.replace(/\/$/, "") || "/";
+const currentPath = normalizePath(Astro.url.pathname);
+const targetPath = normalizePath(path);
+const isActive = targetPath === "/" ? currentPath === "/" : currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
+---
+
+<a
+  href={path}
+  aria-current={isActive ? "page" : undefined}
+  class:list={[
+    "font-medium text-sm md:text-lg transition duration-300",
+    isActive ? "text-neutral-900" : "text-light hover:text-black",
+  ]}
+>
+  {text}
+</a>

@@ -1,9 +1,9 @@
 ---
-
+import HeaderLink from "./HeaderLink.astro";
 ---
 
 <div class="font-medium text-sm md:text-lg text-light space-x-2 md:space-x-4">
-  <a class="hover:text-black transition duration-300" href="/projects">Projects</a>
-  <a class="hover:text-black transition duration-300" href="/blog">Blog</a>
-  <a class="hover:text-black transition duration-300" href="/musings">Musings</a>
+  <HeaderLink path="/projects" text="Projects" />
+  <HeaderLink path="/blog" text="Blog" />
+  <HeaderLink path="/musings" text="Musings" />
 </div>
