@@ -1,8 +1,13 @@
 ---
 const { title, number } = Astro.props;
+const slug = String(title)
+  .toLowerCase()
+  .replace(/['"]/g, "")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "");
 ---
 
-<div class="my-16 first:mt-8">
+<div id={slug} class="my-16 first:mt-8 scroll-mt-10">
   <div class="flex items-center justify-center gap-4 mb-8">
     <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent flex-1 max-w-full"></div>
     {number && <span class="text-gray-600 text-2xl font-light tracking-widest uppercase">{number}</span>}
@@ -11,7 +16,9 @@ const { title, number } = Astro.props;
 
   <div class="relative">
     <div class="italic text-[2.25em] md:text-[2.5em] font text-center tracking-tight mb-8 text-gray-800">
-      <p class="m-0">{title}</p>
+      <a href={`#${slug}`} class="text-inherit no-underline hover:no-underline visited:text-inherit">
+        <p class="m-0">{title}</p>
+      </a>
     </div>
 
     <div class="prose prose-p:my-5 md:text-[20px] max-w-full leading-relaxed mb-12">
