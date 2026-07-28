@@ -7,16 +7,36 @@ export default {
     extend: {
       colors: {
         background: "#FCFBF9",
-        accent: colors.blue[600],
+        accent: "#1477C9",
         darken: "#F9F6F2",
         codeBackground: "#eff1f5",
         edge: colors.stone[300],
         extralight: colors.stone[500],
         light: colors.stone[600],
+        category: {
+          project: {
+            tint: "#E8F3FC",
+            border: "#B9DCF5",
+            text: "#0E5F9C",
+            mark: "#1477C9",
+          },
+          blog: {
+            tint: "#FFF4CE",
+            border: "#F2D477",
+            text: "#8A5600",
+            mark: "#E4AF22",
+          },
+          musings: {
+            tint: "#E8F7EE",
+            border: "#BCE5CB",
+            text: "#216B43",
+            mark: "#39A96B",
+          },
+        },
       },
       fontFamily: {
         sans: ['"DM Sans Variable"', ...defaultTheme.fontFamily.sans],
-        serif: ['"Petrona Variable"', ...defaultTheme.fontFamily.serif],
+        serif: ['"IBM Plex Serif Var"', ...defaultTheme.fontFamily.serif],
         mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
       },
       maxWidth: {
@@ -84,6 +104,44 @@ export default {
           post: {
             css: {
               ...defaultStyles,
+              a: {
+                color: theme("colors.accent"),
+                "&:hover": {
+                  textDecorationColor: theme("colors.accent"),
+                },
+              },
+            },
+          },
+          musing: {
+            css: {
+              ...defaultStyles,
+              p: {
+                lineHeight: "1.7",
+              },
+              li: {
+                ...defaultStyles.li,
+                lineHeight: "1.7",
+              },
+              h1: {
+                ...defaultStyles.h1,
+                fontWeight: theme("fontWeight.medium"),
+              },
+              h2: {
+                ...defaultStyles.h2,
+                fontWeight: theme("fontWeight.medium"),
+              },
+              h3: {
+                ...defaultStyles.h3,
+                fontWeight: theme("fontWeight.medium"),
+              },
+              h4: {
+                ...defaultStyles.h4,
+                fontWeight: theme("fontWeight.medium"),
+              },
+              em: {
+                fontStyle: "normal",
+                fontWeight: theme("fontWeight.medium"),
+              },
               a: {
                 color: theme("colors.accent"),
                 "&:hover": {

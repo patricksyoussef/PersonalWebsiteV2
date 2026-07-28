@@ -49,11 +49,11 @@ const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
 
       const setActiveSection = (newActiveSection) => {
         if (activeSection && activeSection !== newActiveSection) {
-          activeSection.classList.remove("font-semibold", "text-blue-600");
+          activeSection.classList.remove("font-semibold", "text-accent");
         }
 
         if (newActiveSection) {
-          newActiveSection.classList.add("font-semibold", "text-blue-600");
+          newActiveSection.classList.add("font-semibold", "text-accent");
         }
 
         activeSection = newActiveSection;

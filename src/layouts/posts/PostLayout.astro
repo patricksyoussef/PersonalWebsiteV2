@@ -10,7 +10,12 @@ import Prose from "../../components/MDX/Prose.astro";
 import BaseLayout from "../BaseLayout.astro";
 import "../styles/post_base.css";
 
-const { entry, contentStyle = "", featureStyle = "" } = Astro.props;
+const {
+  entry,
+  contentStyle = "",
+  featureStyle = "",
+  proseVariant = "post",
+} = Astro.props;
 const frontmatter = entry.data;
 const optimizedCardImg = await getImage({ src: frontmatter.cover, format: "webp", width: 1024 });
 
@@ -29,7 +34,7 @@ let numHeadings = headings.filter((item) => item.depth === 2).length;
     <Feature entry={entry} frontmatter={remarkPluginFrontmatter} extraStyle={`${featureStyle}`} />
     <div class="lg:grid lg:grid-cols-[1fr_auto_1fr]">
       <div class="hidden lg:block"></div>
-      <Prose>
+      <Prose variant={proseVariant}>
         <div class={`post-content space-y-[1.25rem] ${contentStyle}`}>
           <Content components={components} />
         </div>

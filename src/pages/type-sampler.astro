@@ -1,0 +1,134 @@
+---
+import "@fontsource-variable/literata";
+import "@fontsource-variable/literata/wght-italic.css";
+import "@fontsource-variable/newsreader";
+import "@fontsource-variable/newsreader/wght-italic.css";
+import "@fontsource-variable/noto-serif";
+import "@fontsource-variable/noto-serif/wght-italic.css";
+import "@fontsource-variable/petrona";
+import "@fontsource-variable/petrona/wght-italic.css";
+import "@fontsource-variable/source-serif-4";
+import "@fontsource-variable/source-serif-4/wght-italic.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const typefaces = [
+  {
+    name: "Source Serif 4",
+    family: '"Source Serif 4 Variable", Georgia, serif',
+    character: "Balanced · literary and composed",
+    label: "Interim",
+  },
+  {
+    name: "Petrona",
+    family: '"Petrona Variable", Georgia, serif',
+    character: "Expressive · artsy and idiosyncratic",
+    label: "Original",
+  },
+  {
+    name: "Newsreader",
+    family: '"Newsreader Variable", Georgia, serif',
+    character: "Editorial · warm and conversational",
+  },
+  {
+    name: "Literata",
+    family: '"Literata Variable", Georgia, serif',
+    character: "Bookish · textured and composed",
+  },
+  {
+    name: "Noto Serif",
+    family: '"Noto Serif Variable", Georgia, serif',
+    character: "Neutral · quiet and highly legible",
+  },
+  {
+    name: "IBM Plex Serif",
+    family: '"IBM Plex Serif Var", Georgia, serif',
+    character: "Expressive · structured and pragmatic",
+    label: "Current",
+  },
+  {
+    name: "Georgia",
+    family: 'Georgia, "Times New Roman", serif',
+    character: "Familiar · durable and understated",
+  },
+  {
+    name: "DM Sans",
+    family: '"DM Sans Variable", ui-sans-serif, sans-serif',
+    character: "Sans control · clean and direct",
+  },
+];
+---
+
+<BaseLayout
+  title="Typeface Sampler"
+  meta={{ description: "A private typeface comparison for Patrick Youssef's website." }}
+>
+  <main class="mx-auto mb-20 max-w-[900px]">
+    <header class="border-b border-stone-300 pb-10 pt-8 md:pb-14 md:pt-12">
+      <a
+        href="/musings/the-right-of-refusal"
+        class="text-sm font-medium text-stone-500 underline decoration-stone-300 underline-offset-4 transition hover:text-stone-900"
+      >
+        ← Back to The Right of Refusal
+      </a>
+      <p class="mt-10 text-xs font-semibold uppercase tracking-[0.16em] text-[#9A6541]">Private design study</p>
+      <h1 class="mt-3 text-4xl font-semibold tracking-[-0.035em] text-stone-950 md:text-5xl">Typeface sampler</h1>
+      <p class="mt-5 max-w-[62ch] text-lg leading-relaxed text-stone-600">
+        Each specimen uses the same words, size, width, and hierarchy. Read the paragraph rather than judging only the
+        title—the right face should become quieter the longer you stay with it.
+      </p>
+    </header>
+
+    <div>
+      {
+        typefaces.map((typeface, index) => (
+          <section class="border-b border-stone-300 py-12 md:py-16">
+            <div class="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 font-sans">
+              <div class="flex items-center gap-3">
+                <span class="text-xs tabular-nums text-stone-400">{String(index + 1).padStart(2, "0")}</span>
+                <h2 class="text-xl font-semibold text-stone-900">{typeface.name}</h2>
+                {typeface.label && (
+                  <span class="rounded-full bg-stone-200 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-stone-600">
+                    {typeface.label}
+                  </span>
+                )}
+              </div>
+              <p class="text-sm text-stone-500">{typeface.character}</p>
+            </div>
+
+            <article style={`font-family: ${typeface.family};`} class="max-w-[62ch] text-stone-950">
+              <p class="mb-3 text-[0.78rem] font-medium uppercase tracking-[0.12em] text-stone-500">
+                Jul 26, 2026 · 5 min read
+              </p>
+              <h3 class="text-[2.45rem] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[3rem]">
+                The Right of Refusal
+              </h3>
+
+              <blockquote class="my-9 border-l-2 border-[#77716B] py-1 pl-6 text-[1.35rem] italic leading-[1.55] text-stone-800 md:my-10 md:pl-8 md:text-[1.5rem]">
+                “They redirect you when logic has misled you with false truths.”
+              </blockquote>
+
+              <p class="text-[1.15rem] leading-[1.72]">
+                Logic is only as truthful as the premises it inherits. Give it fear disguised as prudence, shame
+                disguised as ambition, or self-abandonment disguised as love, and it will construct a convincing path
+                from them. Each step can follow cleanly from the one before it. Every sacrifice can be explained. The
+                whole thing can make perfect sense.
+              </p>
+
+              <h4 class="mb-4 mt-9 border-t border-stone-200 pt-8 text-[1.7rem] font-semibold leading-tight">
+                The Cost of Knowing
+              </h4>
+              <p class="text-[1.15rem] leading-[1.72]">
+                Logic is not the villain of this story. It is one of the few tools that lets us learn without having to
+                live every possible life.
+              </p>
+
+              <p class="mt-7 text-base tracking-[0.04em] text-stone-500">
+                Aa Bb Gg Rr &amp; — “Quiet truths require patient attention.” 0123456789
+              </p>
+            </article>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

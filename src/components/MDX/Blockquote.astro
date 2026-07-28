@@ -2,9 +2,11 @@
 const props = Astro.props;
 ---
 
-<blockquote {...props} class="flex flex-row not-prose">
-  <div class="w-[0.4rem] bg-accent rounded-l-[0.4rem]"></div>
-  <div class="p-4 w-full bg-darken border-edge border rounded-content border-l-0 rounded-l-[0px]">
+<blockquote
+  {...props}
+  class="not-prose my-10 border-l-2 border-[#77716B] py-1 pl-6 pr-2 text-stone-800 md:my-12 md:pl-8"
+>
+  <div class="font-serif text-[1.25rem] font-normal leading-[1.65] tracking-[-0.01em] md:text-[1.45rem] [&_p]:m-0">
     <slot />
   </div>
 </blockquote>

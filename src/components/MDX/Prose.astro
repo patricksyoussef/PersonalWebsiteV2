@@ -1,7 +1,10 @@
 ---
-
+const { variant = "post" } = Astro.props;
+const variantClass = variant === "musing" ? "prose-musing" : "prose-post";
 ---
 
-<div class="prose max-w-[62ch] prose-h2:!mt-8 prose-post prose-headings:scroll-mt-4 md:text-[20px] font-sans mx-auto">
+<div
+  class={`prose max-w-[62ch] prose-h2:!mt-8 ${variantClass} prose-headings:scroll-mt-4 md:text-[20px] font-sans mx-auto`}
+>
   <slot />
 </div>

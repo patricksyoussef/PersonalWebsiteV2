@@ -1,3 +1,8 @@
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource/jetbrains-mono";
+@import "@ibm/plex-serif-variable/fonts/split/woff2/IBM Plex Serif Var-Italic.css";
+@import "@ibm/plex-serif-variable/fonts/split/woff2/IBM Plex Serif Var-Roman.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,13 +13,13 @@ html {
 
 .hero {
   .projects:hover {
-    @apply decoration-blue-500;
+    @apply decoration-category-project-mark;
   }
   .blog:hover {
-    @apply decoration-amber-300;
+    @apply decoration-category-blog-mark;
   }
   .musings:hover {
-    @apply decoration-emerald-400;
+    @apply decoration-category-musings-mark;
   }
 }
 
